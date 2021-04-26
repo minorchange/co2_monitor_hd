@@ -1,44 +1,52 @@
+import uuid
+from dash_bootstrap_components._components import CardColumns
+from dash_bootstrap_components._components.Card import Card
+from dash_bootstrap_components._components.Col import Col
+import dash_daq as daq
+from datetime import datetime
+from callbacks import _update_paris_budget
+from figures import fig_emissions_measured_vs_target, fig_target_diff_year
+from data.compute_budget import get_remaining_paris_budget
+from data.target import (
+    create_target_line,
+    compare_emissions_with_target,
+    compute_new_line_targets,
+)
+from data.read_data import read_emissions
+from custom_components import collapse_button
+import plotly.express as px
+import numpy as np
+
+
+import plotly.graph_objs as go
+import pandas as pd
+from dash.dependencies import Input, Output, State
+import dash_html_components as html
+import dash_bootstrap_components as dbc
+import dash_core_components as dcc
+import dash
 import os
 
 proj_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(proj_dir)
 
 
-import dash
-import dash_core_components as dcc
-import dash_bootstrap_components as dbc
-import dash_html_components as html
-from dash.dependencies import Input, Output
-import pandas as pd
-import plotly.graph_objs as go
-import numpy as np
-import dash_core_components as dcc
-import plotly.express as px
-from data.read_data import read_emissions
-from data.create_target import create_target_line, compare_emissions_with_target
-from data.compute_budget import get_remaining_budget
-from create_figures import fig_emissions_measured_vs_target, fig_target_diff
-from callbacks import _update_paris_budget
-from datetime import datetime
-import dash_daq as daq
-
-
 # data
 df_emissions = read_emissions()
-df_t30 = create_target_line(2014, 2030, df_emissions)
-df_t50 = create_target_line(2014, 2050, df_emissions)
-df_compare_with_target = compare_emissions_with_target(df_emissions, df_t30, df_t50)
-total_emissions_kt, when_budget_is_depleted = get_remaining_budget(df_emissions)
+
+(
+    df_compare_with_target,
+    df_t30,
+    df_t50,
+    new_lin_target_30,
+    new_lin_target_50,
+    df_t30_new,
+    df_t50_new,
+) = compute_new_line_targets(df_emissions)
 
 
-# graphs
-g_emissions_vs_target = dcc.Graph(
-    id="g_emissions_vs_target",
-    figure=fig_emissions_measured_vs_target(df_emissions, df_t30, df_t50),
-)
-
-g_compare_abs = dcc.Graph(
-    id="gcomp_abs", figure=fig_target_diff(df_compare_with_target)
+total_emissions_kt, when_paris_budget_is_depleted = get_remaining_paris_budget(
+    df_emissions
 )
 
 
@@ -59,32 +67,40 @@ def update_paris_budget(n):
     return _update_paris_budget(df_emissions)
 
 
+header = dbc.NavbarSimple(brand="CO2-Monitor Heidelberg", fluid=True)
+
+
+from cards import card_main_compare, card_paris, card_audit_year, card_audit_cumulated
+
+app, main_compare = card_main_compare(
+    app, df_emissions, df_t30, df_t50, df_t30_new, df_t50_new
+)
+app, card_paris = card_paris(app, df_emissions)
+card_audit_year = card_audit_year(df_compare_with_target)
+card_audit_cumulated = card_audit_cumulated(df_compare_with_target)
+
+
 app.layout = dbc.Container(
     [
-        dbc.NavbarSimple(brand="CO2-Monitor Heidelberg", fluid=True),
+        header,
         html.Hr(),
         dbc.Row(
             [
+                dbc.Col(card_paris, md=4),
                 dbc.Col(
-                    dbc.Card(id="live-update-paris-budget"),
-                    md=4,
-                ),
-                dbc.Col(
-                    dbc.Card(
-                        dbc.CardBody(
-                            [
-                                html.H4("Klimaziele der Stadt Heidelberg"),
-                                g_emissions_vs_target,
-                                g_compare_abs,
-                            ]
-                        )
-                    ),
+                    [
+                        main_compare,
+                        html.P(),
+                        dbc.CardDeck([card_audit_year, card_audit_cumulated]),
+                    ],
                     md=8,
                 ),
             ]
         ),
         dcc.Interval(
-            id="interval-component", interval=1 * 1000, n_intervals=0  # in milliseconds
+            id="interval-component",
+            interval=1 * 1000,
+            n_intervals=0,  # in milliseconds
         ),
     ],
     fluid=True,

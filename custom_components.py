@@ -26,17 +26,10 @@ def collapse_button(app, button_text, cardbody_collapse):
             dbc.Button(
                 button_text,
                 id=button_id,
-                block=True,
-                color="info",
+                # block=True,  # span the whole line if true
+                color="Secondary",
             ),
-            # dbc.Collapse(
-            #     dbc.Card(dbc.CardBody("This content is hidden in the collapse")),
-            #     id=collapse_id,
-            # ),
-            dbc.Collapse(
-                dbc.Card(cardbody_collapse),
-                id=collapse_id,
-            ),
+            dbc.Collapse(dbc.Card(cardbody_collapse), id=collapse_id, is_open=True),
         ]
     )
     return app, div

@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 from data.read_data import read_budget
 
 
-def get_remaining_budget(df_emissions):
+def get_remaining_paris_budget(df_emissions):
 
     budget_start_year, budget_start_value_kt = read_budget()
 
@@ -49,7 +49,9 @@ if __name__ == "__main__":
     from read_data import read_emissions
 
     df_emissions = read_emissions()
-    remaining_budget_kt, when_budget_is_depleted = get_remaining_budget(df_emissions)
+    remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(
+        df_emissions
+    )
 
     print(total_emissions_kt)
     print(remaining_budget_kt)

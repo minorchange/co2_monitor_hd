@@ -10,7 +10,7 @@ def read_emissions():
     df_allbuttraffic = df_allbuttraffic[
         [
             "co2_kt_privatehh",
-            "co2_industrie",
+            "co2_kt_industrie",
             "co2_kt_staedtgeb",
             "co2_kt_gewerbe_u_oeffentlgeb",
             "co2_kt_sum",
@@ -20,7 +20,7 @@ def read_emissions():
     sum_sanity_check = df_allbuttraffic[
         [
             "co2_kt_privatehh",
-            "co2_industrie",
+            "co2_kt_industrie",
             "co2_kt_staedtgeb",
             "co2_kt_gewerbe_u_oeffentlgeb",
         ]
@@ -29,7 +29,7 @@ def read_emissions():
     df_allbuttraffic = df_allbuttraffic[
         [
             "co2_kt_privatehh",
-            "co2_industrie",
+            "co2_kt_industrie",
             "co2_kt_staedtgeb",
             "co2_kt_gewerbe_u_oeffentlgeb",
         ]

@@ -1,12 +1,14 @@
 import dash_html_components as html
 import dash_daq as daq
-from data.compute_budget import get_remaining_budget
+from data.compute_budget import get_remaining_paris_budget
 import dash_bootstrap_components as dbc
 
 
 def _update_paris_budget(df_emissions):
 
-    remaining_budget_kt, when_budget_is_depleted = get_remaining_budget(df_emissions)
+    remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(
+        df_emissions
+    )
     remaining_budget_t = remaining_budget_kt * 1000
     remaining_budget_t_str = "{:.2f}".format(remaining_budget_t)
     g_md = dbc.CardBody(
@@ -31,6 +33,16 @@ def _update_paris_budget(df_emissions):
             html.Hr(),
             html.P(
                 f"Erklaerung",
+            ),
+            dbc.Button(
+                "Open collapse",
+                id="collapse-button",
+                className="mb-3",
+                color="primary",
+            ),
+            dbc.Collapse(
+                dbc.Card(dbc.CardBody("This content is hidden in the collapse")),
+                id="collapse",
             ),
         ]
     )

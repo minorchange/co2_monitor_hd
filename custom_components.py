@@ -29,7 +29,7 @@ def collapse_button(app, button_text, cardbody_collapse):
                 # block=True,  # span the whole line if true
                 color="Secondary",
             ),
-            dbc.Collapse(dbc.Card(cardbody_collapse), id=collapse_id, is_open=True),
+            dbc.Collapse(dbc.Card(cardbody_collapse), id=collapse_id, is_open=False),
         ]
     )
     return app, div

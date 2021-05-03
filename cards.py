@@ -83,6 +83,7 @@ def card_main_compare(app, df_emissions, df_t30, df_t50, df_t30_new, df_t50_new)
             df_emissions, df_t30, df_t50, df_t30_new, df_t50_new
         ),
     )
+
     card_main_compare = dbc.Card(
         dbc.CardBody(
             [

@@ -21,9 +21,6 @@ def fig_emissions_measured_vs_target(
         for i, c in enumerate(df_emissions.columns)
     ]
 
-    # trace_t30 = go.Scatter(
-    #     x=df_t30.index, y=df_t30["target"], name="Ziel 2030", mode="lines"
-    # )
     trace_t30 = go.Scatter(
         x=df_t30.index,
         y=df_t30["target"],
@@ -31,10 +28,6 @@ def fig_emissions_measured_vs_target(
         mode="lines",
         line=dict(color="cadetblue"),
     )
-
-    # trace_t50 = go.Line(
-    #     x=df_t50.index, y=df_t50["target"], name="Ziel 2050", mode="lines"
-    # )
 
     trace_t50 = go.Scatter(
         x=df_t50.index,
@@ -50,6 +43,7 @@ def fig_emissions_measured_vs_target(
         name="Ziel 2030 - Update",
         mode="lines",
         line=dict(color="cadetblue", dash="dash"),
+        visible="legendonly",
     )
 
     trace_t50_new = go.Scatter(
@@ -58,10 +52,11 @@ def fig_emissions_measured_vs_target(
         name="Ziel 2050 - Update",
         mode="lines",
         line=dict(color="crimson", dash="dash"),
+        visible="legendonly",
     )
 
     f_emissions_m_v_t = go.Figure(
-        data=traces_bar + [trace_t30_new, trace_t50_new, trace_t30, trace_t50],
+        data=traces_bar + [trace_t30_new, trace_t30, trace_t50_new, trace_t50],
         layout=go.Layout(
             barmode="stack",
             title="Tatsaechliche CO2-Emissionen und Heidelbergs Klimaschutzziele ",

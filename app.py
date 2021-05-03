@@ -87,6 +87,7 @@ app.layout = dbc.Container(
         dbc.Row(
             [
                 dbc.Col(card_paris, md=4),
+                # , style={"min-width": "400px"}),
                 dbc.Col(
                     [
                         main_compare,

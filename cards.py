@@ -215,15 +215,60 @@ def card_audit_cumulated(df_compare_with_target):
     return detail_compare_cum
 
 
-# detail_compare2 = dbc.Card(
-#     dbc.CardBody(
-#         [
-#             g_compare_abs2,
-#         ],
-#     )
-# )
+def card_audit_year(df_compare_with_target):
+
+    g_compare_abs = dcc.Graph(
+        id="gcomp_abs_year", figure=fig_target_diff_year(df_compare_with_target)
+    )
+
+    detail_compare = dbc.Card(
+        dbc.CardBody(
+            [
+                g_compare_abs,
+            ]
+        )
+    )
+
+    return detail_compare
 
 
-# # g_compare_abs2 = dcc.Graph(
-#     id="gcomp_abs2", figure=fig_target_diff(df_compare_with_target)
-# )
+def card_imprint():
+
+    link_klimaentscheidhd = html.A(
+        "Klimaentscheid Heidelberg",
+        href="ttp://klimaentscheid-heidelberg.de",
+    )
+    link_github = html.A(
+        "github",
+        href="https://github.com/minorchange/co2_monitor_hd",
+    )
+    link_contactmail = html.A(
+        "info@klimaentscheid-heidleberg.de",
+        href="mailto: info@klimaentscheid-heidelberg.de",
+    )
+
+    card_imprint = dbc.Card(
+        dbc.CardBody(
+            [
+                html.H6(
+                    "Impressum",
+                ),
+                html.P(
+                    [
+                        "Dieses Dashboard wude vom ",
+                        link_klimaentscheidhd,
+                        " erstellt.",
+                        html.Br(),
+                        "Der Quellcode ist frei verfuegbar und kann  auf ",
+                        link_github,
+                        " eingesehen werden.",
+                        html.Br(),
+                        "Bei Fragen und Anregungen wenden Sie sich bitte an: ",
+                        link_contactmail,
+                    ]
+                ),
+            ]
+        )
+    )
+
+    return card_imprint

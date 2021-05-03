@@ -70,7 +70,13 @@ def update_paris_budget(n):
 header = dbc.NavbarSimple(brand="CO2-Monitor Heidelberg", fluid=True)
 
 
-from cards import card_main_compare, card_paris, card_audit_year, card_audit_cumulated
+from cards import (
+    card_main_compare,
+    card_paris,
+    card_audit_year,
+    card_audit_cumulated,
+    card_imprint,
+)
 
 app, main_compare = card_main_compare(
     app, df_emissions, df_t30, df_t50, df_t30_new, df_t50_new
@@ -78,6 +84,7 @@ app, main_compare = card_main_compare(
 app, card_paris = card_paris(app, df_emissions)
 card_audit_year = card_audit_year(df_compare_with_target)
 card_audit_cumulated = card_audit_cumulated(df_compare_with_target)
+card_imprint = card_imprint()
 
 
 app.layout = dbc.Container(
@@ -86,7 +93,7 @@ app.layout = dbc.Container(
         html.Hr(),
         dbc.Row(
             [
-                dbc.Col(card_paris, md=4),
+                dbc.Col([card_paris, html.P(), card_imprint], md=4),
                 # , style={"min-width": "400px"}),
                 dbc.Col(
                     [

@@ -19,7 +19,7 @@ link_ifeu18 = html.A(
 )
 
 
-def card_main_compare(app, df_emissions, df_t30, df_t50, df_t30_new, df_t50_new):
+def card_main_compare(app, df_emissions, df_t30, df_t50, df_t30_new, df_t50_new, trend):
 
     link_ifeu_homepage = html.A(
         "Institut für Energie und Umweltforschung Heidelberg (ifeu)",
@@ -80,7 +80,7 @@ def card_main_compare(app, df_emissions, df_t30, df_t50, df_t30_new, df_t50_new)
     g_emissions_vs_target = dcc.Graph(
         id="g_emissions_vs_target",
         figure=fig_emissions_measured_vs_target(
-            df_emissions, df_t30, df_t50, df_t30_new, df_t50_new
+            df_emissions, df_t30, df_t50, df_t30_new, df_t50_new, trend
         ),
     )
 
@@ -98,7 +98,7 @@ def card_main_compare(app, df_emissions, df_t30, df_t50, df_t30_new, df_t50_new)
     return app, card_main_compare
 
 
-def card_paris(app, df_emissions):
+def card_paris(app, df_emissions, df_trend):
 
     link_umweltrat_budget_de = html.A(
         "Deutsche Umweltrat",
@@ -125,7 +125,7 @@ def card_paris(app, df_emissions):
     )
     def led_budget(n):
         remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(
-            df_emissions
+            df_emissions, df_trend
         )
         return led(when_budget_is_depleted.year)
 

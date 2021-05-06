@@ -12,6 +12,7 @@ from data.target import (
     compare_emissions_with_target,
     compute_new_line_targets,
 )
+from trend import compute_trend
 from data.read_data import read_emissions
 from custom_components import collapse_button
 import plotly.express as px
@@ -45,8 +46,10 @@ df_emissions = read_emissions()
 ) = compute_new_line_targets(df_emissions)
 
 
+trend = compute_trend(df_emissions)
+
 total_emissions_kt, when_paris_budget_is_depleted = get_remaining_paris_budget(
-    df_emissions
+    df_emissions, trend
 )
 
 
@@ -79,9 +82,9 @@ from cards import (
 )
 
 app, main_compare = card_main_compare(
-    app, df_emissions, df_t30, df_t50, df_t30_new, df_t50_new
+    app, df_emissions, df_t30, df_t50, df_t30_new, df_t50_new, trend
 )
-app, card_paris = card_paris(app, df_emissions)
+app, card_paris = card_paris(app, df_emissions, trend)
 card_audit_year = card_audit_year(df_compare_with_target)
 card_audit_cumulated = card_audit_cumulated(df_compare_with_target)
 card_imprint = card_imprint()

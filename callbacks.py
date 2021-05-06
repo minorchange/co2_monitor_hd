@@ -4,11 +4,9 @@ from data.compute_budget import get_remaining_paris_budget
 import dash_bootstrap_components as dbc
 
 
-def _update_paris_budget(df_emissions):
+def _update_paris_budget(df):
 
-    remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(
-        df_emissions
-    )
+    remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(df)
     remaining_budget_t = remaining_budget_kt * 1000
     remaining_budget_t_str = "{:.2f}".format(remaining_budget_t)
     g_md = dbc.CardBody(

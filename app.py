@@ -10,9 +10,9 @@ from data.compute_budget import get_remaining_paris_budget
 from data.target import (
     create_target_line,
     compare_emissions_with_target,
-    compute_new_line_targets,
+    add_targets,
 )
-from trend import compute_trend
+from trend import add_trend, add_trend_continuation
 from data.read_data import read_emissions
 from custom_components import collapse_button
 import plotly.express as px
@@ -34,23 +34,27 @@ os.chdir(proj_dir)
 
 # data
 df_emissions = read_emissions()
+df = df_emissions
+df["co2_kt_total"] = df.sum(axis=1)
 
-(
-    df_compare_with_target,
-    df_t30,
-    df_t50,
-    new_lin_target_30,
-    new_lin_target_50,
-    df_t30_new,
-    df_t50_new,
-) = compute_new_line_targets(df_emissions)
+df = add_trend(df)
+df = add_trend_continuation(df)
+df = add_targets(df)
+
+# (
+#     df_compare_with_target,
+#     df_t30,
+#     df_t50,
+#     new_lin_target_30,
+#     new_lin_target_50,
+#     df_t30_new,
+#     df_t50_new,
+# ) = compute_new_line_targets(df_emissions)
 
 
-trend = compute_trend(df_emissions)
-
-total_emissions_kt, when_paris_budget_is_depleted = get_remaining_paris_budget(
-    df_emissions, trend
-)
+# total_emissions_kt, when_paris_budget_is_depleted = get_remaining_paris_budget(
+# df_emissions, trend
+# )
 
 
 # app
@@ -67,7 +71,7 @@ app = dash.Dash(
     Input("interval-component", "n_intervals"),
 )
 def update_paris_budget(n):
-    return _update_paris_budget(df_emissions)
+    return _update_paris_budget(df)
 
 
 header = dbc.NavbarSimple(brand="CO2-Monitor Heidelberg", fluid=True)
@@ -81,12 +85,10 @@ from cards import (
     card_imprint,
 )
 
-app, main_compare = card_main_compare(
-    app, df_emissions, df_t30, df_t50, df_t30_new, df_t50_new, trend
-)
-app, card_paris = card_paris(app, df_emissions, trend)
-card_audit_year = card_audit_year(df_compare_with_target)
-card_audit_cumulated = card_audit_cumulated(df_compare_with_target)
+app, main_compare = card_main_compare(app, df)
+app, card_paris = card_paris(app, df)
+card_audit_year = card_audit_year(df)
+card_audit_cumulated = card_audit_cumulated(df)
 card_imprint = card_imprint()
 
 

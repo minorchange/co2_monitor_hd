@@ -12,7 +12,14 @@ from data.target import (
     compare_emissions_with_target,
     add_targets,
 )
-from trend import add_trend, add_trend_continuation
+from trend import add_trend
+from scenarios import (
+    add_trend_continuation,
+    when_scenario_0,
+    cumulated_emissions,
+    cumulated_emissions_this_second,
+    when_budget_is_spend,
+)
 from data.read_data import read_emissions
 from custom_components import collapse_button
 import plotly.express as px
@@ -38,23 +45,14 @@ df = df_emissions
 df["co2_kt_total"] = df.sum(axis=1)
 
 df = add_trend(df)
-df = add_trend_continuation(df)
 df = add_targets(df)
 
-# (
-#     df_compare_with_target,
-#     df_t30,
-#     df_t50,
-#     new_lin_target_30,
-#     new_lin_target_50,
-#     df_t30_new,
-#     df_t50_new,
-# ) = compute_new_line_targets(df_emissions)
+df = add_trend_continuation(df)
 
-
-# total_emissions_kt, when_paris_budget_is_depleted = get_remaining_paris_budget(
-# df_emissions, trend
-# )
+when_scenario_0(df, "scenario_trendconst_kt")
+cumulated_emissions(df, "scenario_trendlin_kt", from_y=2014, to_y=2022)
+cumulated_emissions_this_second(df, "scenario_trendlin_kt", from_y=2017)
+when_budget_is_spend(df, "scenario_trendlin_kt", 6000, from_y=2017)
 
 
 # app
@@ -83,6 +81,7 @@ from cards import (
     card_audit_year,
     card_audit_cumulated,
     card_imprint,
+    card_table,
 )
 
 app, main_compare = card_main_compare(app, df)
@@ -90,6 +89,7 @@ app, card_paris = card_paris(app, df)
 card_audit_year = card_audit_year(df)
 card_audit_cumulated = card_audit_cumulated(df)
 card_imprint = card_imprint()
+card_table = card_table(app, df)
 
 
 app.layout = dbc.Container(
@@ -103,6 +103,8 @@ app.layout = dbc.Container(
                 dbc.Col(
                     [
                         main_compare,
+                        html.P(),
+                        card_table,
                         html.P(),
                         dbc.CardDeck([card_audit_year, card_audit_cumulated]),
                     ],

@@ -1,4 +1,6 @@
+import pandas as pd
 import dash_html_components as html
+import dash_table
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
@@ -11,6 +13,8 @@ from figures import (
 )
 from custom_components import collapse_button, led
 from data.compute_budget import get_remaining_paris_budget
+from data.read_data import read_budget
+from scenarios import cumulated_emissions, when_budget_is_spend, when_scenario_0
 
 
 link_ifeu18 = html.A(
@@ -96,8 +100,6 @@ def card_main_compare(app, df):
     return app, card_main_compare
 
 
-# def card_main_compare(app, df_emissions, df_t30, df_t50, df_t30_new, df_t50_new, trend):
-
 #     link_ifeu_homepage = html.A(
 #         "Institut für Energie und Umweltforschung Heidelberg (ifeu)",
 #         href="https://www.ifeu.de/",
@@ -181,8 +183,11 @@ def card_paris(app, df):
         "Deutsche Umweltrat",
         href="https://www.umweltrat.de/SharedDocs/Downloads/EN/01_Environmental_Reports/2020_08_environmental_report_chapter_02.pdf?__blob=publicationFile&v=5",
     )
+    link_newclimateorg_de = html.A(
+        "newclimate.org",
+        href="https://newclimate.org/wp-content/uploads/2020/05/Zwei_neue_Klimaschutzziele_f%C3%BCr_Deutschland_5_2020.pdf",
+    )
 
-    #     link_umweltrat_budget_de =
     # https://www.umweltrat.de/SharedDocs/Downloads/EN/01_Environmental_Reports/2020_08_environmental_report_chapter_02.pdf?__blob=publicationFile&v=5
     @app.callback(
         Output("led_budget", "children"),
@@ -206,9 +211,9 @@ def card_paris(app, df):
         html.H5("Heidelbergs CO2 Budget"),
         html.P(
             [
-                "Im Abkommen von Paris hat sich die Weltgemeinschaft darauf verständigt die Globale Erwärmung hoffentlich auf 1.5, auf jeden Fall aber auf 2 Grad Celsius zu limitieren. Jedes Land muss seinen Beitrag leisten, damit wir dieses Ziel erreiche können. Den genauen Beitrag eines Landes zu bestimmen ist allerdings nicht einfach. Inwieweit spielen e.g. historische Emissionen eine Rolle bei der verteilung der Lasten? Der ",
-                link_umweltrat_budget_de,
-                " hat sich dieser schwierigen Aufgabe angenommen und ist zu dem Ergebnis gekommen, dass Deutschland ab dem Jahr 2020 noch ein Budget von 6.7 Gigatonnen hat. Will man die Lasten innerhalb Deutschlands gleichmache auf die Bevoelkerung aufteilen dann kommt Heidelberg auf ein Budget von 13009 kt.",
+                "Im Abkommen von Paris hat sich die Weltgemeinschaft darauf verständigt Anstrengungen zu unternehmen um die Globale Erwärmung auf 1.5 Grad Celsius zu beschränken. Jedes Land muss seinen Beitrag leisten, damit wir dieses Ziel erreiche können. Den genauen Beitrag eines Landes zu bestimmen ist allerdings nicht einfach. Inwieweit spielen e.g. historische Emissionen eine Rolle bei der verteilung der Lasten? ",
+                link_newclimateorg_de,
+                " hat sich dieser schwierigen Aufgabe angenommen und ist zu dem Ergebnis gekommen, dass Deutschland ab dem Jahr 2018 noch ein Budget von 4,6 Gigatonnen hat um mit einer Wahrscheinlichkeit von 66% unter 1.5 Grad zu bleiben. Will man die Lasten innerhalb Deutschlands gleichmache auf die Bevoelkerung aufteilen dann kommt Heidelberg auf ein Budget von 8932 kt.",
             ]
         ),
         html.H5("Heidelbergs Emissionen in dieser Sekunde?"),
@@ -216,13 +221,13 @@ def card_paris(app, df):
             [
                 "Die Heidelberger Emissionen liegen leider nur pro Kalenderjahr und nur bis 2018 vor (",
                 link_ifeu18,
-                "). Das bedeutet dass wir die Emissionen pro Sekunde nur schätzen können. Dies geschieht einfach in dem wir den letzten uns bekannten Wert, also von 2018, nehmen und diesen auf die Sekunde runter rechnen. Das ist natürlich nicht exakt, gibt aber eine Idee von den Größenordnungen.",
+                "). Das bedeutet dass wir die Emissionen pro Sekunde nur schätzen können. Dies geschieht in dem wir einen linearen Trend aus den Jahren 2014 und den letzten uns bekannten Wert, also 2018, schätzen und diesen auf die Sekunde runter rechnen. Das ist natürlich nicht exakt, gibt aber eine Idee von den Größenordnungen.",
             ]
         ),
         html.H5("Bis wann ist unser Budget aufgebraucht"),
         html.P(
             [
-                "Kennt man das Budget und nimmt man die oben beschriebene Rate der CO2 Emissionen dann lässt sich das Jahr bestimmen in dem wir unser Budget aufgebraucht haben. Dies ist das Szenario wenn wir nichts an unseren Emissionen ändern und tritt so hoffentlich nicht ein.",
+                "Kennt man das Budget und nimmt man die oben beschriebene Rate der CO2 Emissionen dann lässt sich das Jahr bestimmen in dem wir unser Budget aufgebraucht haben. Dies ist das Szenario in dem wir unsere Bemühungen nicht erhöhen tritt so hoffentlich nicht ein.",
             ]
         ),
     ]
@@ -288,21 +293,6 @@ def card_audit_cumulated(df):
     return detail_compare_cum
 
 
-def card_audit_year(df):
-
-    g_compare_abs = dcc.Graph(id="gcomp_abs_year", figure=fig_target_diff_year(df))
-
-    detail_compare = dbc.Card(
-        dbc.CardBody(
-            [
-                g_compare_abs,
-            ]
-        )
-    )
-
-    return detail_compare
-
-
 def card_imprint():
 
     link_klimaentscheidhd = html.A(
@@ -343,3 +333,47 @@ def card_imprint():
     )
 
     return card_imprint
+
+
+def card_table(app, df):
+
+    budget_start_year, budget_start_value_kt = read_budget()
+
+    df_t = pd.DataFrame()
+
+    for scenario_name, nice_name in [
+        ["scenario_trendlin_kt", "Linear Trend"],
+        ["scenario_trendconst_kt", "Keine Veraenderung"],
+        ["scenario_target30_kt", "Ziel 2030"],
+        ["scenario_target50_kt", "Ziel 2050"],
+        ["scenario_target30_new_kt", "Ziel 2030 - Update"],
+        ["scenario_target50_new_kt", "Ziel 2050 - Update"],
+    ]:
+        pass
+
+        # projected_emissions_kt = cumulated_emissions(
+        #     df, scenario_name, from_y=budget_start_year
+        # )
+        # percentage_budget = 100 * (projected_emissions_kt / budget_start_value_kt)
+
+        # year0 = when_scenario_0(df, scenario_name)
+
+        # year_budget_depleted = when_budget_is_spend(
+        #     df, scenario_name, budget_start_value_kt, from_y=budget_start_year
+        # )
+
+        # c = [projected_emissions_kt, percentage_budget, year0, year_budget_depleted]
+
+        # df[nice_name] = c
+
+    table = dash_table.DataTable(
+        id="table",
+        columns=[{"name": i, "id": i} for i in df.columns],
+        data=df.to_dict("records"),
+    )
+
+    card_table = dbc.Card(dbc.CardBody(table))
+
+    card_table = dbc.Card(dbc.CardBody(table))
+
+    return card_table

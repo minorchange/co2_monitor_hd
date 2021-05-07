@@ -111,20 +111,6 @@ def add_trend(df):
     return df
 
 
-def add_trend_continuation(df):
-    assert "co2_kt_total" in df.columns
-    assert "trend_const_kt" in df.columns
-    assert "trend_lin_kt" in df.columns
-
-    df["measured_n_trendlin_kt"] = df["co2_kt_total"]
-    df["measured_n_trendconst_kt"] = df["co2_kt_total"]
-
-    df["measured_n_trendlin_kt"].fillna(df["trend_lin_kt"], inplace=True)
-    df["measured_n_trendconst_kt"].fillna(df["trend_const_kt"], inplace=True)
-
-    return df
-
-
 # def compute_trend(df_emissions):
 
 #     df_e = df_emissions.sum(axis=1)

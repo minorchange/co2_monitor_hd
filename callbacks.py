@@ -2,11 +2,25 @@ import dash_html_components as html
 import dash_daq as daq
 from data.compute_budget import get_remaining_paris_budget
 import dash_bootstrap_components as dbc
+from scenarios import when_budget_is_spend, cumulated_emissions_this_second
+from data.read_data import read_budget
 
 
 def _update_paris_budget(df):
 
-    remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(df)
+    # remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(df)
+    # remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(df)
+
+    budget_start_year, budget_start_value_kt = read_budget()
+    emissions_up_to_now_kt = cumulated_emissions_this_second(
+        df, "scenario_trendlin_kt", from_y=budget_start_year
+    )
+
+    remaining_budget_kt = budget_start_value_kt - emissions_up_to_now_kt
+    when_budget_is_depleted = when_budget_is_spend(
+        df, "scenario_trendlin_kt", budget_start_value_kt, from_y=budget_start_year
+    )
+
     remaining_budget_t = remaining_budget_kt * 1000
     remaining_budget_t_str = "{:.2f}".format(remaining_budget_t)
     g_md = dbc.CardBody(

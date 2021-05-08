@@ -60,7 +60,7 @@ title_for_tab = "hd co2 monitor"
 app = dash.Dash(
     title=title_for_tab,
     update_title=None,
-    external_stylesheets=[dbc.themes.FLATLY],
+    external_stylesheets=[dbc.themes.SIMPLEX],
 )
 
 
@@ -72,7 +72,25 @@ def update_paris_budget(n):
     return _update_paris_budget(df)
 
 
-header = dbc.NavbarSimple(brand="CO2-Monitor Heidelberg", fluid=True)
+#header = dbc.NavbarSimple(brand="CO2-Monitor Heidelberg", sticky="top", fluid=True)
+
+header = dbc.Navbar(
+
+            html.A(
+
+                dbc.Row(
+                    [
+                        dbc.Col(html.Img(src='/assets/klimaentscheid-logo.jpg', height="45px")),
+                        dbc.Col(dbc.NavbarBrand("CO2-Monitor Heidelberg", className="ml-2")),
+                    ],
+                    align="center",
+                    no_gutters=True,
+                ),
+                href="https://klimaentscheid-heidelberg.de",
+            ),
+    sticky="top"
+    #fluid=True
+)
 
 
 from cards import (
@@ -92,14 +110,13 @@ card_imprint = card_imprint()
 card_table = card_table(app, df)
 
 
-app.layout = dbc.Container(
-    [
-        header,
-        html.Hr(),
+app.layout = html.Div([
+    header,
+    dbc.Container(
+    [   html.P(),
         dbc.Row(
             [
-                dbc.Col([card_paris, html.P(), card_imprint], md=4),
-                # , style={"min-width": "400px"}),
+                dbc.Col([card_paris], sm=4, style={"min-width": "320px"}),
                 dbc.Col(
                     [
                         main_compare,
@@ -108,10 +125,12 @@ app.layout = dbc.Container(
                         html.P(),
                         dbc.CardDeck([card_audit_year, card_audit_cumulated]),
                     ],
-                    md=8,
+                    sm=8,
                 ),
             ]
         ),
+
+
         dcc.Interval(
             id="interval-component",
             interval=1 * 1000,
@@ -119,7 +138,9 @@ app.layout = dbc.Container(
         ),
     ],
     fluid=True,
-)
+    ),
+    html.Footer(card_imprint)
+])
 
 
 if __name__ == "__main__":

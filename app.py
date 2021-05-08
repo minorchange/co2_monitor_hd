@@ -123,7 +123,7 @@ app.layout = html.Div(
                 html.P(),
                 dbc.Row(
                     [
-                        dbc.Col([card_paris], lg=4),
+                        dbc.Col([card_paris, html.P(), card_diff_year], lg=4),
                         # , style={"min-width": "400px"}),
                         dbc.Col(
                             [
@@ -131,7 +131,7 @@ app.layout = html.Div(
                                 html.P(),
                                 card_table,
                                 html.P(),
-                                dbc.CardDeck([card_diff_year, card_audit_cumulated]),
+                                # dbc.CardDeck([card_diff_year, card_audit_cumulated]),
                             ],
                             # md=12,
                             lg=8,

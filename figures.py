@@ -119,8 +119,9 @@ def fig_target_diff_year(df):
     f_compare_abs = go.Figure(
         data=traces_compare_abs,
         layout=go.Layout(
-            title="Differenz der Tatsaechlichen Emissionen zu den Zielen",
+            title="Differenz der Tatsächlichen Emissionen zu den Zielen",
             xaxis=dict(range=[2013.5, 2018.5]),
+            legend=dict(yanchor="top", y=0.97, xanchor="left", x=0.03),
         ),
     )
 

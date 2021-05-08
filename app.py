@@ -72,24 +72,22 @@ def update_paris_budget(n):
     return _update_paris_budget(df)
 
 
-#header = dbc.NavbarSimple(brand="CO2-Monitor Heidelberg", sticky="top", fluid=True)
+# header = dbc.NavbarSimple(brand="CO2-Monitor Heidelberg", sticky="top", fluid=True)
 
 header = dbc.Navbar(
-
-            html.A(
-
-                dbc.Row(
-                    [
-                        dbc.Col(html.Img(src='/assets/klimaentscheid-logo.jpg', height="45px")),
-                        dbc.Col(dbc.NavbarBrand("CO2-Monitor Heidelberg", className="ml-2")),
-                    ],
-                    align="center",
-                    no_gutters=True,
-                ),
-                href="https://klimaentscheid-heidelberg.de",
-            ),
+    html.A(
+        dbc.Row(
+            [
+                dbc.Col(html.Img(src="/assets/klimaentscheid-logo.jpg", height="45px")),
+                dbc.Col(dbc.NavbarBrand("CO2-Monitor Heidelberg", className="ml-2")),
+            ],
+            align="center",
+            no_gutters=True,
+        ),
+        href="https://klimaentscheid-heidelberg.de",
+    ),
     sticky="top"
-    #fluid=True
+    # fluid=True
 )
 
 
@@ -110,47 +108,48 @@ card_imprint = card_imprint()
 card_table = card_table(app, df)
 
 
-app.layout = html.Div([
-    header,
-    dbc.Container(
-    [   html.P(),
-        dbc.Row(
+# app.layout = html.Div(
+#     dbc.Container(
+#         dbc.Col([card_paris, main_compare]),
+#     )
+# )
+
+
+app.layout = html.Div(
+    [
+        header,
+        dbc.Container(
             [
-<<<<<<< HEAD
-                dbc.Col([card_paris], sm=4, style={"min-width": "320px"}),
-=======
-                dbc.Col([card_paris, html.P(), card_imprint], lg=4),
-                # , style={"min-width": "400px"}),
->>>>>>> dev
-                dbc.Col(
+                html.P(),
+                dbc.Row(
                     [
-                        main_compare,
-                        html.P(),
-                        card_table,
-                        html.P(),
-                        dbc.CardDeck([card_diff_year, card_audit_cumulated]),
-                    ],
-<<<<<<< HEAD
-                    sm=8,
-=======
-                    # md=12,
-                    lg=8,
->>>>>>> dev
+                        dbc.Col([card_paris], lg=4),
+                        # , style={"min-width": "400px"}),
+                        dbc.Col(
+                            [
+                                main_compare,
+                                html.P(),
+                                card_table,
+                                html.P(),
+                                dbc.CardDeck([card_diff_year, card_audit_cumulated]),
+                            ],
+                            # md=12,
+                            lg=8,
+                        ),
+                    ]
                 ),
-            ]
+                dcc.Interval(
+                    id="interval-component",
+                    interval=1 * 1000,
+                    n_intervals=0,  # in milliseconds
+                ),
+            ],
+            fluid=True,
         ),
-
-
-        dcc.Interval(
-            id="interval-component",
-            interval=1 * 1000,
-            n_intervals=0,  # in milliseconds
-        ),
-    ],
-    fluid=True,
-    ),
-    html.Footer(card_imprint)
-])
+        html.P(),
+        html.Footer(card_imprint),
+    ]
+)
 
 
 if __name__ == "__main__":

@@ -72,8 +72,7 @@ def card_main_compare(app, df):
         html.P(
             [
                 "Die Stadt Heidelberg hat seit dem Beschluss des Gemeinderates zum Masterplan 100% Klimaschutz jedes Jahr die durch einen linearen Pfad gegebenen Zwischenziele verfehlt. Selbst wenn ab 2019 die Emissionen jedes Jahr exakt den Zwischenzielen der linearen Pfade entsprächen, wären die Gesamtemissionen im Jahr 2030 bzw. 2050 zu hoch."
-
-# Um ein Gefühl bereits angehäufte Emissionsschulden zu visualisieren, sind zwei geupdatete Ziele in der Grafik dargestellt. Diese weisen einen linearen Pfad von 2018 an, der in Summe über die komplette Laufzeit des Plans genau so viele CO2-Emissionen verursacht, wie die ursprünglichen Pläne. Man beachte dass man in solch einem Szenario die Zielzeitpunkte von 2030 auf 2025 und von 2050 auf 2044 verschieben müsste. Wir haben also grob gesprochen in den 5 Jahren von 2014 bis 2018 soweit über das Ziel hinausgeschossen dass wir das Zieljahr um  mindestens 5 Jahre nach vorne verschieben müssen damit unsere gesamten Emissionen im Reduktionszeitraum denen entsprechen, die von den ursprünglichen Zielen Vorgegeben sind.",
+                # Um ein Gefühl bereits angehäufte Emissionsschulden zu visualisieren, sind zwei geupdatete Ziele in der Grafik dargestellt. Diese weisen einen linearen Pfad von 2018 an, der in Summe über die komplette Laufzeit des Plans genau so viele CO2-Emissionen verursacht, wie die ursprünglichen Pläne. Man beachte dass man in solch einem Szenario die Zielzeitpunkte von 2030 auf 2025 und von 2050 auf 2044 verschieben müsste. Wir haben also grob gesprochen in den 5 Jahren von 2014 bis 2018 soweit über das Ziel hinausgeschossen dass wir das Zieljahr um  mindestens 5 Jahre nach vorne verschieben müssen damit unsere gesamten Emissionen im Reduktionszeitraum denen entsprechen, die von den ursprünglichen Zielen Vorgegeben sind.",
             ]
         ),
     ]
@@ -95,8 +94,7 @@ def card_main_compare(app, df):
                 g_emissions_vs_target,
                 html.P(
                     "In diesem Diagram werden die tatsächlich gemessenen CO2-Emissionen der Stadt Heidelberg dargestellt, sowie mögliche Pfade zur Klimaneutralität  im Jahr 2030 bzw. 2050.  "
-
-                #Zusätzlich werden zwei Zielpfade visualisiert, die den bisherigen Emissionen Rechnung tragen. Sie skizzieren Szenarien, in denen im Zeitraum von 2014 bis zum jeweiligen Zieljahr für Klimaneutralität genau so viel CO2 emittiert wird wie in einer Welt, in der der entsprechenden Zielpfad realisiert wäre."
+                    # Zusätzlich werden zwei Zielpfade visualisiert, die den bisherigen Emissionen Rechnung tragen. Sie skizzieren Szenarien, in denen im Zeitraum von 2014 bis zum jeweiligen Zieljahr für Klimaneutralität genau so viel CO2 emittiert wird wie in einer Welt, in der der entsprechenden Zielpfad realisiert wäre."
                 ),
                 cbutton_maincompare,
             ]
@@ -168,13 +166,13 @@ def card_paris(app, df):
                     f"Verbleibendes CO2-Budget für Heidelberg in Tonnen:",
                 ),
                 html.Div(id="led_budget"),
-                html.Hr(),
+                html.P(),
                 html.H5(
                     f"CO2-Budget aufgebraucht bis:",
                     className="card-text",
                 ),
                 html.Div(id="led_endyear"),
-                html.Hr(),
+                html.P(),
                 html.P(
                     "Näherungsweise Angaben des CO2-Budgets für die Stadt Heidelberg basierend auf dem Pariser Klimaabkommen",
                     className="card-title",

@@ -54,25 +54,6 @@ def fig_emissions_measured_vs_target(df):
         line=dict(color="crimson"),
     )
 
-<<<<<<< HEAD
-#    trace_target30_new = go.Scatter(
-#        x=df.index,
-#        y=df["target30_new_kt"],
-#        name="Ziel 2030 - Update",
-#        mode="lines",
-#        line=dict(color="cadetblue", dash="dash"),
-#        visible="legendonly",
-#    )
-
-#    trace_target50_new = go.Scatter(
-#        x=df.index,
-#        y=df["target30_new_kt"],
-#        name="Ziel 2050 - Update",
-#        mode="lines",
-#        line=dict(color="crimson", dash="dash"),
-#        visible="legendonly",
-#    )
-=======
     trace_target30_new = go.Scatter(
         x=df.index,
         y=df["target30_new_kt"],
@@ -90,7 +71,6 @@ def fig_emissions_measured_vs_target(df):
         line=dict(color="crimson", dash="dash"),
         visible="legendonly",
     )
->>>>>>> dev
 
     trace_trend = go.Scatter(
         x=df.index,
@@ -105,15 +85,17 @@ def fig_emissions_measured_vs_target(df):
         data=[trace_e_sum]
         + traces_bar
         + [
-        #    trace_target30_new,
+            trace_target30_new,
             trace_target30,
-        #    trace_target50_new,
+            trace_target50_new,
             trace_target50,
             trace_trend,
         ],
         layout=go.Layout(
             barmode="stack",
             title="Tatsächliche CO2-Emissionen und die gesteckten Ziele der Stadt Heidelberg zur Klimaneutralität.  ",
+            title_font_family="Open Sans",
+            title_font_color="#212529",
             xaxis=dict(range=[2009.5, 2030.5]),
         ),
     )

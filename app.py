@@ -14,7 +14,7 @@ from data.target import (
 )
 from trend import add_trend
 from scenarios import (
-    add_trend_continuation,
+    add_scenarios,
     when_scenario_0,
     cumulated_emissions,
     cumulated_emissions_this_second,
@@ -47,7 +47,7 @@ df["co2_kt_total"] = df.sum(axis=1)
 df = add_trend(df)
 df = add_targets(df)
 
-df = add_trend_continuation(df)
+df = add_scenarios(df)
 
 when_scenario_0(df, "scenario_trendconst_kt")
 cumulated_emissions(df, "scenario_trendlin_kt", from_y=2014, to_y=2022)
@@ -96,7 +96,7 @@ header = dbc.Navbar(
 from cards import (
     card_main_compare,
     card_paris,
-    card_audit_year,
+    card_diff_year,
     card_audit_cumulated,
     card_imprint,
     card_table,
@@ -104,7 +104,7 @@ from cards import (
 
 app, main_compare = card_main_compare(app, df)
 app, card_paris = card_paris(app, df)
-card_audit_year = card_audit_year(df)
+card_diff_year = card_diff_year(df)
 card_audit_cumulated = card_audit_cumulated(df)
 card_imprint = card_imprint()
 card_table = card_table(app, df)
@@ -116,16 +116,26 @@ app.layout = html.Div([
     [   html.P(),
         dbc.Row(
             [
+<<<<<<< HEAD
                 dbc.Col([card_paris], sm=4, style={"min-width": "320px"}),
+=======
+                dbc.Col([card_paris, html.P(), card_imprint], lg=4),
+                # , style={"min-width": "400px"}),
+>>>>>>> dev
                 dbc.Col(
                     [
                         main_compare,
                         html.P(),
                         card_table,
                         html.P(),
-                        dbc.CardDeck([card_audit_year, card_audit_cumulated]),
+                        dbc.CardDeck([card_diff_year, card_audit_cumulated]),
                     ],
+<<<<<<< HEAD
                     sm=8,
+=======
+                    # md=12,
+                    lg=8,
+>>>>>>> dev
                 ),
             ]
         ),

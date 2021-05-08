@@ -72,13 +72,23 @@ def add_targets(df):
     remaining_emissions30 = planned_lin30_emissions - emissions_so_far
     remaining_emissions50 = planned_lin50_emissions - emissions_so_far
 
-    new_lin_target_30_years = remaining_emissions30 / (last_emissions / 2)
-    new_lin_target_50_years = remaining_emissions50 / (last_emissions / 2)
-    new_lin_target_30 = int(last_year_with_data + new_lin_target_30_years)
-    new_lin_target_50 = int(last_year_with_data + new_lin_target_50_years)
+    new_equiemission_lin_target_30_years = remaining_emissions30 / (last_emissions / 2)
+    new_equiemission_lin_target_50_years = remaining_emissions50 / (last_emissions / 2)
+    new_equiemission_lin_target_30 = int(
+        last_year_with_data + new_equiemission_lin_target_30_years
+    )
+    new_equiemission_lin_target_50 = int(
+        last_year_with_data + new_equiemission_lin_target_50_years
+    )
+    s_t30_new_equiemission = create_target_line(
+        last_year_with_data, new_equiemission_lin_target_30, s_t
+    )
+    s_t50_new_equiemission = create_target_line(
+        last_year_with_data, new_equiemission_lin_target_50, s_t
+    )
 
-    s_t30_new = create_target_line(last_year_with_data, new_lin_target_30, s_t)
-    s_t50_new = create_target_line(last_year_with_data, new_lin_target_50, s_t)
+    s_t30_new = create_target_line(last_year_with_data, 2030, s_t)
+    s_t50_new = create_target_line(last_year_with_data, 2050, s_t)
 
     df["target30_new_kt"] = s_t30_new
     df["target50_new_kt"] = s_t50_new

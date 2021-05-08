@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import dash_html_components as html
 import dash_table
@@ -100,83 +101,6 @@ def card_main_compare(app, df):
     return app, card_main_compare
 
 
-#     link_ifeu_homepage = html.A(
-#         "Institut für Energie und Umweltforschung Heidelberg (ifeu)",
-#         href="https://www.ifeu.de/",
-#     )
-
-#     link_statistisches_jb19 = html.A(
-#         "Statistischen Jahrbuch 2019",
-#         href="https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents_E-216793268/heidelberg/Objektdatenbank/12/PDF/Statistik/12_pdf_7.Umwelt.pdf",
-#     )
-
-#     details_data = [
-#         html.H5("Zu den Daten"),
-#         html.P(
-#             [
-#                 "Die Rohdaten, die im Balkendiagramm verwendet werden stammen aus der ",
-#                 link_ifeu18,
-#                 ", die vom ",
-#                 link_ifeu_homepage,
-#                 " erstellt wurde. Man beachte dass man für eine vollständige Bilanzierung des heidelberger CO2 Ausstoßes nicht auf die Daten im Heidelberger ",
-#                 link_statistisches_jb19,
-#                 " zurückgreifen kann. Diese decken nur Emissionen aus energetischer Nutzung fossiler Energieträger, also insgesamt weniger als die Hälfte der Gesamtemmisionen, ab. Die vorhandenen Daten liegen bisher nur bis zum Jahr 2018 vor. Bis auf den Verkehr liegen sie für volle Kalenderjahre vor. Für den Verkehr gab es in jüngerer Vergangenheit nur in den beiden Jahren 2010 und 2017 Daten. Die oben dargestellten Daten für den Verkehr sind also teilweise Schätzwerte. Diese sind durch lineare Interpretation zwischen den vorhandenen Werten und konstantem fortscheiben der Werte für das Jahr 2018 entstanden.",
-#             ]
-#         ),
-#     ]
-
-#     details_targets = [
-#         html.H5("Zu den Zielen"),
-#         html.H6("Warum Linear?"),
-#         html.P(
-#             [
-#                 "Die Zielszenarien sind allesamt (mindestens) lineare Pfade. Das ist aus 2 Gründen wichtig: Erstens macht ein Pfad im Vergleich zu einem reinen Zieldatum ein Monitoring möglich. Zweitens unterscheiden sich die Maßnahmen, die man zur Zielerreichung umsetzen muss, in ihren Kosten. Es gibt leicht umsetzbare Maßnahmen und welche, mit denen größere Kosten einher gehen. Diese leicht umsetzbaren sollten natürlich zu Beginn umgesetzt werden. Wenn es uns in einer frühen Phase, in der noch günstige Maßnahemen umsetzbar sind, nicht gelingt eine entsprechend große Reduzierung der Emissionen zu erreichen dann wird eine Umsetzung der ohnehin teuren Maßnahmen gegen Ende des Reduktionszeitraums noch schwieriger.",
-#             ]
-#         ),
-#         html.H6("Warum gibt es 2 Ziele und warum gerade 2030 und 2050?"),
-#         html.P(
-#             [
-#                 'Der Heidelberger Gemeinderat hat 2014 den "Masterplan 100% Klimaschutz" verabschiedet [Quelle?]. Darin wurde eine Reduktion der CO2 Emissionen um 95% bis zum Jahr 2050 beschlossen. Später hat der Oberbürgermeister das politische Ziel geäußert bis 2030 klimaneutral sein zu wollen [Quellen?]. Es ist an dieser Stelle aber wichtig festzuhalten dass das verbindliche Ziel der Stadt Heidelberg immer noch 2050 ist und bisher nicht auf 2030 geändert wurde.',
-#             ]
-#         ),
-#     ]
-
-#     details_targetsupdate = [
-#         html.H5("Zu den Updates der Ziele"),
-#         html.P(
-#             [
-#                 "Heidelberg hat seit dem Beschluss des Gemeinderates zum Masterplan 100% Klimaschutz jedes Jahr die durch einen linearen Pfad gegebenen Zwischenziele verfehlt. Selbst wenn wir ab 2019 jedes Jahr exakt den Zwischenzielen der linearen Pfade entsprächen haben wir im Jahr 2030 bzw. 2050 insgesamt mehr emittiert als der Lineare Pfad vorgesehen hätte. Um ein Gefühl dafür zu bekommen wie viel Emissionsschulden wir mittlerweile angehäuft haben sind 2 geupdatete Ziele in der Grafik mit dargestellt. Diese Weisen eine Linearen Pfad von 2018 an, der in Summe über die Komplette Laufzeit des Plans genau so viel CO2 Emissionen verursacht, wie die ursprünglichen Pläne. Man beachte dass man in solch einem Szenario die Zielzeitpunkte von 2030 auf 2025 und von 2050 auf 2044 verschieben müsste. Wir haben also grob gesprochen in den 5 Jahren von 2014 bis 2018 soweit über das Ziel hinausgeschossen dass wir das Zieljahr um  mindestens 5 Jahre nach vorne verschieben müssen damit unsere gesamten Emissionen im Reduktionszeitraum denen entsprechen, die von den ursprünglichen Zielen Vorgegeben sind.",
-#             ]
-#         ),
-#     ]
-
-#     app, cbutton_maincompare = collapse_button(
-#         app,
-#         "Mehr Infos",
-#         dbc.CardBody(details_data + details_targets + details_targetsupdate),
-#     )
-
-#     g_emissions_vs_target = dcc.Graph(
-#         id="g_emissions_vs_target",
-#         figure=fig_emissions_measured_vs_target(
-#             df_emissions, df_t30, df_t50, df_t30_new, df_t50_new, trend
-#         ),
-#     )
-
-#     card_main_compare = dbc.Card(
-#         dbc.CardBody(
-#             [
-#                 g_emissions_vs_target,
-#                 html.P(
-#                     "Hier werden die tatsächlich gemessenen CO2 Emissionen den gesteckten Zielen gegenübergestellt. Zusätzlich werden neue 2 neue Zielpfade eingeführt die den bisherigen Emissionen Rechnung tragen. Sie skizzieren Szenarien, in denen im Zeitraum von 2014 bis zum jeweiligen Zieljahr für Klimaneutralität genau so viel CO2 emittiert wird wie in einer Welt, in der der entsprechenden Zielpfad realisiert wäre."
-#                 ),
-#                 cbutton_maincompare,
-#             ]
-#         )
-#     )
-#     return app, card_main_compare
-
-
 def card_paris(app, df):
 
     link_umweltrat_budget_de = html.A(
@@ -259,21 +183,24 @@ def card_paris(app, df):
     return app, card_paris
 
 
-def card_audit_year(df_compare_with_target):
+def card_diff_year(df_compare_with_target):
 
     g_compare_abs = dcc.Graph(
         id="gcomp_abs_year", figure=fig_target_diff_year(df_compare_with_target)
     )
 
-    detail_compare = dbc.Card(
+    card_diff_year = dbc.Card(
         dbc.CardBody(
             [
                 g_compare_abs,
+                html.P(
+                    "Die beiden Graphen zeigen die entwicklung der jährlichen Differenz in kt zwischen den gemessenen Emissionen und den Zielwerten fuer die linearen Zielpfade zu 2030 und zu 2050. Man erkennt eine beschleunigung der Messwerte vom Ziel weg. Das fuehrt soweit dass sich der abnehmende Trend im Letzten Jahr umgekehrt hat. Die Emissionen im Jahr 2018 sind größer als die aus 2017."
+                ),
             ]
         )
     )
 
-    return detail_compare
+    return card_diff_year
 
 
 def card_audit_cumulated(df):
@@ -341,39 +268,75 @@ def card_table(app, df):
 
     df_t = pd.DataFrame()
 
+    df_t[" "] = [
+        "Gesammte Emissionen [kt]",
+        "Prozent des Pariser Budgets",
+        "Paris Budget aufgebraucht",
+        "Erstes Jahr 0 Emissionen",
+    ]
+
     for scenario_name, nice_name in [
-        ["scenario_trendlin_kt", "Linear Trend"],
-        ["scenario_trendconst_kt", "Keine Veraenderung"],
-        ["scenario_target30_kt", "Ziel 2030"],
-        ["scenario_target50_kt", "Ziel 2050"],
-        ["scenario_target30_new_kt", "Ziel 2030 - Update"],
-        ["scenario_target50_new_kt", "Ziel 2050 - Update"],
+        ["scenario_target30_kt", "Ziel 14-30"],
+        ["scenario_target50_kt", "Ziel 14-50"],
+        ["scenario_target30_new_kt", f"Ziel {budget_start_year-2000}-30"],
+        ["scenario_target50_new_kt", f"Ziel {budget_start_year-2000}-50"],
+        ["scenario_trendlin_kt", "Trend"],
     ]:
-        pass
 
-        # projected_emissions_kt = cumulated_emissions(
-        #     df, scenario_name, from_y=budget_start_year
-        # )
-        # percentage_budget = 100 * (projected_emissions_kt / budget_start_value_kt)
+        projected_emissions_kt = cumulated_emissions(
+            df, scenario_name, from_y=budget_start_year
+        )
+        percentage_budget = 100 * (projected_emissions_kt / budget_start_value_kt)
 
-        # year0 = when_scenario_0(df, scenario_name)
+        year0 = when_scenario_0(df, scenario_name)
 
-        # year_budget_depleted = when_budget_is_spend(
-        #     df, scenario_name, budget_start_value_kt, from_y=budget_start_year
-        # )
+        year_budget_depleted = when_budget_is_spend(
+            df, scenario_name, budget_start_value_kt, from_y=budget_start_year
+        )
 
-        # c = [projected_emissions_kt, percentage_budget, year0, year_budget_depleted]
+        c = [
+            projected_emissions_kt,
+            percentage_budget,
+            year_budget_depleted,
+            year0,
+        ]
+        units = [" kt", " %", "", ""]
+        c = [f"{x:.0f}{units[i]}" for i, x in enumerate(c)]
 
-        # df[nice_name] = c
+        c = [" " if x == "nan" else x for x in c]
+
+        df_t[nice_name] = c
 
     table = dash_table.DataTable(
         id="table",
-        columns=[{"name": i, "id": i} for i in df.columns],
-        data=df.to_dict("records"),
+        columns=[{"name": i, "id": i} for i in df_t.columns],
+        data=df_t.to_dict("records"),
     )
 
-    card_table = dbc.Card(dbc.CardBody(table))
+    details_table = [
+        html.P(
+            f'Da das Pariser Budget ab Beginn des Jahres {budget_start_year} gerechnet wird werden die entspredhenden Szenarien auch ab diesem Jahr berücksichtigt. Die "Gesammten Emissionen [kt]" etwa beziehen sich auf den Zeitraum von Anfang {budget_start_year} bis Zum Zeitpunkt, an dem die Klimaneutralität ereicht ist. Zusaetzlich wird dargestellt wieviel Prozent des urspruenglich angesetzten Pariser Budgets letztlich aufgebraucht wird und wann das Budget (also wann 100%) überschritten ist. Die letzte Zeile zeigt das Jahr an, in dem Klimaneutralität erreicht wird.'
+        ),
+        html.P(
+            'Ein "Ziel aa-bb" ist so deffiniert, dass es vom Jahr aa an von den tatsaechlichen Emissionen linear zu 0 Emissionen im Jahr bb abfaellt. Es ist zu beachten dass die 14-bb Ziele mittlerweile so nicht mehr realisierbar sind. Sie geben also an wie die Entwicklung haette sein koennen, wenn Heidelberg die Ziele jedes Jahr erreicht hätte.'
+        ),
+    ]
 
-    card_table = dbc.Card(dbc.CardBody(table))
+    app, cbutton_table = collapse_button(
+        app,
+        "Mehr Infos",
+        dbc.CardBody(details_table),
+    )
+
+    card_table = dbc.Card(
+        dbc.CardBody(
+            [
+                table,
+                html.P(),
+                html.P("Hier werden die verschienenen Szenarien verglichen."),
+                cbutton_table,
+            ]
+        )
+    )
 
     return card_table

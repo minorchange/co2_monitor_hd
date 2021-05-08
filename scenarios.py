@@ -3,7 +3,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 
 
-def add_trend_continuation(df):
+def add_scenarios(df):
 
     assert "co2_kt_total" in df.columns
     assert "trend_const_kt" in df.columns
@@ -12,10 +12,14 @@ def add_trend_continuation(df):
     df["scenario_trendlin_kt"] = df["co2_kt_total"].fillna(df["trend_lin_kt"])
     df["scenario_trendconst_kt"] = df["co2_kt_total"].fillna(df["trend_const_kt"])
 
-    df["scenario_target30_kt"] = df["co2_kt_total"].fillna(df["target30_kt"])
-    df["scenario_target50_kt"] = df["co2_kt_total"].fillna(df["target50_kt"])
-    df["scenario_target30_new_kt"] = df["co2_kt_total"].fillna(df["target30_new_kt"])
-    df["scenario_target50_new_kt"] = df["co2_kt_total"].fillna(df["target50_new_kt"])
+    df["scenario_target30_kt"] = df["co2_kt_total"].fillna(df["target30_kt"]).fillna(0)
+    df["scenario_target50_kt"] = df["co2_kt_total"].fillna(df["target50_kt"]).fillna(0)
+    df["scenario_target30_new_kt"] = (
+        df["co2_kt_total"].fillna(df["target30_new_kt"]).fillna(0)
+    )
+    df["scenario_target50_new_kt"] = (
+        df["co2_kt_total"].fillna(df["target50_new_kt"]).fillna(0)
+    )
 
     return df
 

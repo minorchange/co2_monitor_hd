@@ -195,7 +195,7 @@ def card_diff_year(df_compare_with_target):
             [
                 g_compare_abs,
                 html.P(
-                    "Die beiden Graphen zeigen die entwicklung der jährlichen Differenz in kt zwischen den gemessenen Emissionen und den Zielwerten fuer die linearen Zielpfade zu 2030 und zu 2050. Man erkennt eine beschleunigung der Messwerte vom Ziel weg. Das fuehrt soweit dass sich der abnehmende Trend im Letzten Jahr umgekehrt hat. Die Emissionen im Jahr 2018 sind größer als die aus 2017."
+                    "Die beiden Graphen zeigen die Entwicklung der jährlichen Differenz (in kt) zwischen den gemessenen Emissionen und den linearen Zielpfade zur Klimaneutralität im Jahr 2030 bzw. 2050. Die CO2-Emissionen der Stadt Heidelberg weichen Jahr für Jahr immer stärker von den Zielpfaden ab."
                 ),
             ]
         )

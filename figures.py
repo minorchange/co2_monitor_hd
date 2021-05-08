@@ -119,8 +119,10 @@ def fig_target_diff_year(df):
     f_compare_abs = go.Figure(
         data=traces_compare_abs,
         layout=go.Layout(
-            title="Differenz der Tatsaechlichen Emissionen zu den Zielen",
+            title="Differenz der CO2-Emissionen zu den Zielenpfaden Klimaneutralität 2030 bzw. 2050",
             xaxis=dict(range=[2013.5, 2018.5]),
+            title_font_family="Open Sans",
+            title_font_color="#212529"
         ),
     )
 

@@ -3,6 +3,7 @@ import dash_daq as daq
 from dash.dependencies import Input, Output, State
 import dash_html_components as html
 import dash_bootstrap_components as dbc
+from colors import *
 
 
 def collapse_button(app, button_text, cardbody_collapse):
@@ -27,7 +28,7 @@ def collapse_button(app, button_text, cardbody_collapse):
                 button_text,
                 id=button_id,
                 # block=True,  # span the whole line if true
-               # color="Secondary",
+                # color="Secondary",
             ),
             dbc.Collapse(dbc.Card(cardbody_collapse), id=collapse_id, is_open=False),
         ]
@@ -36,5 +37,6 @@ def collapse_button(app, button_text, cardbody_collapse):
 
 
 def led(nstr):
-    led = daq.LEDDisplay(value=nstr, color="#FF5E5E", size=30)
+    # '#FF5E5E' - nice red color
+    led = daq.LEDDisplay(value=nstr, color=trend_color, size=30)
     return led

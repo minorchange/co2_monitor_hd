@@ -8,9 +8,9 @@ import dash_bootstrap_components as dbc
 from dash_html_components import H4
 from figures import (
     fig_emissions_measured_vs_target,
-    fig_target_diff_cumulated,
+    # fig_target_diff_cumulated,
     fig_target_diff_year,
-    fig_target_diff_cumulated,
+    # fig_target_diff_cumulated,
 )
 from custom_components import collapse_button, led
 from data.compute_budget import get_remaining_paris_budget
@@ -184,44 +184,42 @@ def card_paris(app, df):
     return app, card_paris
 
 
-def card_diff_year(df_compare_with_target):
+def card_diff_year(app, df_compare_with_target):
 
     g_compare_abs = dcc.Graph(
         id="gcomp_abs_year", figure=fig_target_diff_year(df_compare_with_target)
     )
 
-    card_diff_year = dbc.Card(
-        dbc.CardBody(
-            [
-                g_compare_abs,
-                html.P(
-                    "Die beiden Graphen zeigen die entwicklung der jährlichen Differenz in kt zwischen den gemessenen Emissionen und den Zielwerten fuer die linearen Zielpfade zu 2030 und zu 2050. Man erkennt eine beschleunigung der Messwerte vom Ziel weg. Das fuehrt soweit dass sich der abnehmende Trend im Letzten Jahr umgekehrt hat. Die Emissionen im Jahr 2018 sind größer als die aus 2017."
-                ),
-            ]
-        )
+    details = (
+        html.P(
+            "Die beiden Graphen zeigen die Entwicklung der jährlichen Differenz (in kt) zwischen den gemessenen Emissionen und den linearen Zielpfade zur Klimaneutralität im Jahr 2030 bzw. 2050. Die CO2-Emissionen der Stadt Heidelberg weichen Jahr für Jahr immer stärker von den Zielpfaden ab."
+        ),
     )
+    app, cbutton_diff = collapse_button(app, "Weitere Infos", dbc.CardBody(details))
+
+    card_diff_year = dbc.Card(dbc.CardBody([g_compare_abs, cbutton_diff]))
 
     return card_diff_year
 
 
-def card_audit_cumulated(df):
+# def card_audit_cumulated(df):
 
-    g_compare_abs_cum = dcc.Graph(
-        id="gcomp_abs_cum", figure=fig_target_diff_cumulated(df)
-    )
+#     g_compare_abs_cum = dcc.Graph(
+#         id="gcomp_abs_cum", figure=fig_target_diff_cumulated(df)
+#     )
 
-    detail_compare_cum = dbc.Card(
-        dbc.CardBody(
-            [
-                g_compare_abs_cum,
-            ]
-        )
-    )
+#     detail_compare_cum = dbc.Card(
+#         dbc.CardBody(
+#             [
+#                 g_compare_abs_cum,
+#             ]
+#         )
+#     )
 
-    return detail_compare_cum
+#     return detail_compare_cum
 
 
-def card_imprint():
+def card_about():
 
     link_klimaentscheidhd = html.A(
         "Klimaentscheid Heidelberg",
@@ -239,22 +237,17 @@ def card_imprint():
     card_imprint = dbc.Card(
         dbc.CardBody(
             [
-                html.H6(
-                    "Impressum",
-                ),
                 html.P(
                     [
-                        "Dieses Dashboard wude vom ",
+                        "Dieses Dashboard wude vom",
                         link_klimaentscheidhd,
                         " erstellt.",
-                        html.Br(),
                         "Der Quellcode ist frei verfügbar und kann  auf ",
                         link_github,
                         " eingesehen werden.",
-                        html.Br(),
                         "Bei Fragen und Anregungen wenden Sie sich bitte an: ",
                         link_contactmail,
-                    ]
+                    ],
                 ),
             ]
         )
@@ -325,7 +318,7 @@ def card_table(app, df):
 
     app, cbutton_table = collapse_button(
         app,
-        "Mehr Infos",
+        "Weitere Infos",
         dbc.CardBody(details_table),
     )
 
@@ -334,7 +327,9 @@ def card_table(app, df):
             [
                 table,
                 html.P(),
-                html.P("Hier werden die verschienenen Szenarien verglichen."),
+                html.P(
+                    "Hier werden die verschienenen Szenarien zur Klimaneutralität in Heidelberg verglichen."
+                ),
                 cbutton_table,
             ]
         )

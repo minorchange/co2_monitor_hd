@@ -95,16 +95,16 @@ from cards import (
     card_main_compare,
     card_paris,
     card_diff_year,
-    card_audit_cumulated,
-    card_imprint,
+    # card_audit_cumulated,
+    card_about,
     card_table,
 )
 
 app, main_compare = card_main_compare(app, df)
 app, card_paris = card_paris(app, df)
-card_diff_year = card_diff_year(df)
-card_audit_cumulated = card_audit_cumulated(df)
-card_imprint = card_imprint()
+card_diff_year = card_diff_year(app, df)
+# card_audit_cumulated = card_audit_cumulated(df)
+card_about = card_about()
 card_table = card_table(app, df)
 
 
@@ -147,7 +147,7 @@ app.layout = html.Div(
             fluid=True,
         ),
         html.P(),
-        html.Footer(card_imprint),
+        html.Footer(card_about),
     ]
 )
 

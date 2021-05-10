@@ -1,4 +1,5 @@
 import plotly.graph_objs as go
+from colors import *
 
 
 def fig_emissions_measured_vs_target(df):
@@ -34,7 +35,7 @@ def fig_emissions_measured_vs_target(df):
         y=s_e.values,
         name="Gesammtemissionen",
         mode="lines+markers",
-        line=dict(color="grey"),
+        line=dict(color="grey", width=3),
         visible="legendonly",
     )
 
@@ -43,7 +44,7 @@ def fig_emissions_measured_vs_target(df):
         y=df["target30_kt"],
         name="Ziel 2030",
         mode="lines",
-        line=dict(color="cadetblue"),
+        line=dict(color=target_30_color, width=3),
     )
 
     trace_target50 = go.Scatter(
@@ -51,7 +52,7 @@ def fig_emissions_measured_vs_target(df):
         y=df["target50_kt"],
         name="Ziel 2050",
         mode="lines",
-        line=dict(color="crimson"),
+        line=dict(color=target_50_color, width=3),
     )
 
     trace_target30_new = go.Scatter(
@@ -59,7 +60,7 @@ def fig_emissions_measured_vs_target(df):
         y=df["target30_new_kt"],
         name="Ziel 2030 - Update",
         mode="lines",
-        line=dict(color="cadetblue", dash="dash"),
+        line=dict(color=target_30_color, dash="dash", width=3),
         visible="legendonly",
     )
 
@@ -68,7 +69,7 @@ def fig_emissions_measured_vs_target(df):
         y=df["target50_new_kt"],
         name="Ziel 2050 - Update",
         mode="lines",
-        line=dict(color="crimson", dash="dash"),
+        line=dict(color=target_50_color, dash="dash", width=3),
         visible="legendonly",
     )
 
@@ -77,7 +78,7 @@ def fig_emissions_measured_vs_target(df):
         y=df["trend_lin_kt"],
         name="Trend",
         mode="lines",
-        line=dict(color="red", dash="dot"),
+        line=dict(color=trend_color, width=3),  # dash="dot",
         # visible="legendonly",
     )
 
@@ -97,6 +98,7 @@ def fig_emissions_measured_vs_target(df):
             title_font_family="Open Sans",
             title_font_color="#212529",
             xaxis=dict(range=[2009.5, 2030.5]),
+            template=template,
         ),
     )
 
@@ -106,12 +108,15 @@ def fig_emissions_measured_vs_target(df):
 def fig_target_diff_year(df):
 
     nicenames = ["Diff. zum Ziel 2030", "Diff. zum Ziel 2050"]
+    colors = [target_30_color, target_50_color]
     traces_compare_abs = [
         go.Scatter(
             x=df[df[c].isna() == False].index,
             y=df[c][df[c].isna() == False],
             mode="lines+markers",
             name=nicenames[i],
+            line=dict(color=colors[i], width=3),
+            # color=[target_30_color, target_50_color],
         )
         for i, c in enumerate(["diff_target30_kt", "diff_target50_kt"])
     ]
@@ -119,28 +124,31 @@ def fig_target_diff_year(df):
     f_compare_abs = go.Figure(
         data=traces_compare_abs,
         layout=go.Layout(
-            title="Differenz der Tatsächlichen Emissionen zu den Zielen",
+            title="Differenz der CO2-Emissionen zu den Zielenpfaden<br>Klimaneutralität 2030 bzw. 2050",
             xaxis=dict(range=[2013.5, 2018.5]),
+            title_font_family="Open Sans",
+            title_font_color="#212529",
             legend=dict(yanchor="top", y=0.97, xanchor="left", x=0.03),
+            template=template,
         ),
     )
 
     return f_compare_abs
 
 
-def fig_target_diff_cumulated(df):
+# def fig_target_diff_cumulated(df):
 
-    traces_compare_abs = [
-        go.Scatter(
-            x=df.index,
-            y=df[c].cumsum(),
-            mode="lines+markers",
-        )
-        for c in ["diff_target30_kt", "diff_target50_kt"]
-    ]
+#     traces_compare_abs = [
+#         go.Scatter(
+#             x=df.index,
+#             y=df[c].cumsum(),
+#             mode="lines+markers",
+#         )
+#         for c in ["diff_target30_kt", "diff_target50_kt"]
+#     ]
 
-    f_compare_abs = go.Figure(
-        data=traces_compare_abs,
-    )
+#     f_compare_abs = go.Figure(
+#         data=traces_compare_abs,
+#     )
 
-    return f_compare_abs
+#     return f_compare_abs

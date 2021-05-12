@@ -20,11 +20,15 @@ def fig_emissions_measured_vs_target(df):
         "co2_kt_traffic",
     ]
 
+    # colors = ["#cad2c5", "#84a98c", "#52796f", "#354f52", "#2f3e46"]
+    # colors = ["#285d70", "#00b9a0", "#00f4d7", "#b4aa99", "#4e4637"]
+    colors = ["#cb997e", "#ddbea9", "#b7b7a4", "#a5a58d", "#6b705c"]
     traces_bar = [
         go.Bar(
             x=df.index,
             y=df[c],
             name=df_e_nicenames[i],
+            marker_color=colors[i],
         )
         for i, c in enumerate(individual_measurements_colnames)
     ]
@@ -35,7 +39,7 @@ def fig_emissions_measured_vs_target(df):
         y=s_e.values,
         name="Gesammtemissionen",
         mode="lines+markers",
-        line=dict(color="grey", width=3),
+        line=dict(color="grey", width=2),
         visible="legendonly",
     )
 
@@ -44,7 +48,7 @@ def fig_emissions_measured_vs_target(df):
         y=df["target30_kt"],
         name="Ziel 2030",
         mode="lines",
-        line=dict(color=target_30_color, width=3),
+        line=dict(color=target_30_color, width=2),
     )
 
     trace_target50 = go.Scatter(
@@ -52,7 +56,7 @@ def fig_emissions_measured_vs_target(df):
         y=df["target50_kt"],
         name="Ziel 2050",
         mode="lines",
-        line=dict(color=target_50_color, width=3),
+        line=dict(color=target_50_color, width=2),
     )
 
     trace_target30_new = go.Scatter(
@@ -60,7 +64,7 @@ def fig_emissions_measured_vs_target(df):
         y=df["target30_new_kt"],
         name="Ziel 2030 - Update",
         mode="lines",
-        line=dict(color=target_30_color, dash="dash", width=3),
+        line=dict(color=target_30_color, dash="dash", width=2),
         visible="legendonly",
     )
 
@@ -69,7 +73,7 @@ def fig_emissions_measured_vs_target(df):
         y=df["target50_new_kt"],
         name="Ziel 2050 - Update",
         mode="lines",
-        line=dict(color=target_50_color, dash="dash", width=3),
+        line=dict(color=target_50_color, dash="dash", width=2),
         visible="legendonly",
     )
 
@@ -78,7 +82,7 @@ def fig_emissions_measured_vs_target(df):
         y=df["trend_lin_kt"],
         name="Trend",
         mode="lines",
-        line=dict(color=trend_color, width=3),  # dash="dot",
+        line=dict(color=trend_color, width=2),  # dash="dot",
         # visible="legendonly",
     )
 
@@ -99,6 +103,8 @@ def fig_emissions_measured_vs_target(df):
             title_font_color="#212529",
             xaxis=dict(range=[2009.5, 2030.5]),
             template=template,
+            xaxis_title="Jahr",
+            yaxis_title="CO2 Emissionen [kt]",
         ),
     )
 
@@ -124,12 +130,15 @@ def fig_target_diff_year(df):
     f_compare_abs = go.Figure(
         data=traces_compare_abs,
         layout=go.Layout(
-            title="Differenz der CO2-Emissionen zu den Zielenpfaden<br>Klimaneutralität 2030 bzw. 2050",
+            # title="Differenz der CO2-Emissionen zu den Zielenpfaden<br>Klimaneutralität 2030 bzw. 2050",
+            title="Mehremmisionen",
             xaxis=dict(range=[2013.5, 2018.5]),
             title_font_family="Open Sans",
             title_font_color="#212529",
             legend=dict(yanchor="top", y=0.97, xanchor="left", x=0.03),
             template=template,
+            xaxis_title="Jahr",
+            yaxis_title="CO2 Mehremissionen [kt]",
         ),
     )
 

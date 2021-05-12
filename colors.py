@@ -1,4 +1,3 @@
-# template = "ggplot2"
 template = "ggplot2"
 assert template in [
     "plotly",

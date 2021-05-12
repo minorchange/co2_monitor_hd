@@ -1,17 +1,5 @@
-import uuid
-from dash_bootstrap_components._components import CardColumns
-from dash_bootstrap_components._components.Card import Card
-from dash_bootstrap_components._components.Col import Col
-import dash_daq as daq
-from datetime import datetime
 from callbacks import _update_paris_budget
-from figures import fig_emissions_measured_vs_target, fig_target_diff_year
-from data.compute_budget import get_remaining_paris_budget
-from data.target import (
-    create_target_line,
-    compare_emissions_with_target,
-    add_targets,
-)
+from data.target import add_targets
 from trend import add_trend
 from scenarios import (
     add_scenarios,
@@ -21,19 +9,13 @@ from scenarios import (
     when_budget_is_spend,
 )
 from data.read_data import read_emissions
-from custom_components import collapse_button
-import plotly.express as px
-import numpy as np
-
-
-import plotly.graph_objs as go
-import pandas as pd
 from dash.dependencies import Input, Output, State
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash
 import os
+from colors import *
 
 proj_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(proj_dir)
@@ -72,22 +54,21 @@ def update_paris_budget(n):
     return _update_paris_budget(df)
 
 
-# header = dbc.NavbarSimple(brand="CO2-Monitor Heidelberg", sticky="top", fluid=True)
-
 header = dbc.Navbar(
     html.A(
         dbc.Row(
             [
                 dbc.Col(html.Img(src="/assets/klimaentscheid-logo.jpg", height="45px")),
-                dbc.Col(dbc.NavbarBrand("CO2-Monitor Heidelberg", className="ml-2")),
+                dbc.Col(dbc.NavbarBrand("CO2-Monitor Heidelberg", className="ml-2", style = {'color':'white', 'font-weight': 'bold'})),
             ],
             align="center",
             no_gutters=True,
         ),
         href="https://klimaentscheid-heidelberg.de",
     ),
-    sticky="top"
-    # fluid=True
+    sticky="top",
+    color=primary_color,
+    style = {'border-width':'0px', 'box-shadow' : '0 6px 6px -6px #999'}
 )
 
 

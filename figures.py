@@ -95,8 +95,10 @@ def fig_emissions_measured_vs_target(df):
         layout=go.Layout(
             barmode="stack",
             title="Tatsächliche CO2-Emissionen und die gesteckten Ziele der Stadt Heidelberg zur Klimaneutralität.  ",
+
             title_font_family="Open Sans",
             title_font_color="#212529",
+            title_font_size =16,
             xaxis=dict(range=[2009.5, 2030.5]),
             template=template,
         ),
@@ -128,6 +130,7 @@ def fig_target_diff_year(df):
             xaxis=dict(range=[2013.5, 2018.5]),
             title_font_family="Open Sans",
             title_font_color="#212529",
+            title_font_size=16,
             legend=dict(yanchor="top", y=0.97, xanchor="left", x=0.03),
             template=template,
         ),

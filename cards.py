@@ -230,7 +230,7 @@ def card_about():
         href="https://github.com/minorchange/co2_monitor_hd",
     )
     link_contactmail = html.A(
-        "info@klimaentscheid-heidleberg.de",
+        "info@klimaentscheid-heidelberg.de",
         href="mailto: info@klimaentscheid-heidelberg.de",
     )
 
@@ -239,7 +239,7 @@ def card_about():
             [
                 html.P(
                     [
-                        "Dieses Dashboard wude vom",
+                        "Dieses Dashboard wude vom ",
                         link_klimaentscheidhd,
                         " erstellt.",
                         "Der Quellcode ist frei verfügbar und kann  auf ",

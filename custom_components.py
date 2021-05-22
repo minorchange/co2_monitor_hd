@@ -27,6 +27,7 @@ def collapse_button(app, button_text, cardbody_collapse):
             dbc.Button(
                 button_text,
                 id=button_id,
+                color="secondary",
             ),
             dbc.Collapse(dbc.Card(cardbody_collapse), id=collapse_id, is_open=False),
         ]
@@ -35,6 +36,6 @@ def collapse_button(app, button_text, cardbody_collapse):
 
 
 def led(nstr):
-    # '#FF5E5E' - nice red color
-    led = daq.LEDDisplay(value=nstr, color=dark_accent, size=30)
+
+    led = daq.LEDDisplay(value=nstr, color=trend_color, size=30)
     return led

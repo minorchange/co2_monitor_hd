@@ -20,15 +20,12 @@ def fig_emissions_measured_vs_target(df):
         "co2_kt_traffic",
     ]
 
-    # colors = ["#cad2c5", "#84a98c", "#52796f", "#354f52", "#2f3e46"]
-    # colors = ["#285d70", "#00b9a0", "#00f4d7", "#b4aa99", "#4e4637"]
-    colors = ["#cb997e", "#ddbea9", "#b7b7a4", "#a5a58d", "#6b705c"]
     traces_bar = [
         go.Bar(
             x=df.index,
             y=df[c],
             name=df_e_nicenames[i],
-            marker_color=colors[i],
+            marker_color=barcolors[i],
         )
         for i, c in enumerate(individual_measurements_colnames)
     ]
@@ -98,11 +95,10 @@ def fig_emissions_measured_vs_target(df):
         ],
         layout=go.Layout(
             barmode="stack",
-            title="Tatsächliche CO2-Emissionen und die gesteckten Ziele der Stadt Heidelberg zur Klimaneutralität.  ",
-
+            title="CO2-Emissionen der Stadt Heidelberg und gesteckte Ziele zur Klimaneutralität.",
             title_font_family="Open Sans",
             title_font_color="#212529",
-            title_font_size =16,
+            title_font_size=16,
             xaxis=dict(range=[2009.5, 2030.5]),
             template=template,
             xaxis_title="Jahr",
@@ -146,21 +142,3 @@ def fig_target_diff_year(df):
     )
 
     return f_compare_abs
-
-
-# def fig_target_diff_cumulated(df):
-
-#     traces_compare_abs = [
-#         go.Scatter(
-#             x=df.index,
-#             y=df[c].cumsum(),
-#             mode="lines+markers",
-#         )
-#         for c in ["diff_target30_kt", "diff_target50_kt"]
-#     ]
-
-#     f_compare_abs = go.Figure(
-#         data=traces_compare_abs,
-#     )
-
-#     return f_compare_abs

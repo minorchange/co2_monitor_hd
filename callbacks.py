@@ -8,9 +8,6 @@ from data.read_data import read_budget
 
 def _update_paris_budget(df):
 
-    # remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(df)
-    # remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(df)
-
     budget_start_year, budget_start_value_kt = read_budget()
     emissions_up_to_now_kt = cumulated_emissions_this_second(
         df, "scenario_trendlin_kt", from_y=budget_start_year

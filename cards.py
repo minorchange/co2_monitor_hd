@@ -6,12 +6,7 @@ from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash_html_components import H4
-from figures import (
-    fig_emissions_measured_vs_target,
-    # fig_target_diff_cumulated,
-    fig_target_diff_year,
-    # fig_target_diff_cumulated,
-)
+from figures import fig_emissions_measured_vs_target, fig_target_diff_year
 from custom_components import collapse_button, led
 from data.compute_budget import get_remaining_paris_budget
 from data.read_data import read_budget
@@ -34,6 +29,31 @@ def card_main_compare(app, df):
     link_statistisches_jb19 = html.A(
         "Statistischen Jahrbuch 2019",
         href="https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents_E-216793268/heidelberg/Objektdatenbank/12/PDF/Statistik/12_pdf_7.Umwelt.pdf",
+    )
+
+    link_masterplan = html.A(
+        "Masterplan 100% Klimaschutz",
+        href="https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents/heidelberg/Objektdatenbank/31/PDF/Energie%20und%20Klimaschutz/31_pdf_Masterplan%20Bericht%20und%20Ma%C3%9Fnahmen.pdf",
+    )
+
+    link_ob_suedd_19 = html.A(
+        "sueddeutsche.de",
+        href="https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents/heidelberg/Objektdatenbank/31/PDF/Energie%20und%20Klimaschutz/31_pdf_Masterplan%20Bericht%20und%20Ma%C3%9Fnahmen.pdf",
+    )
+
+    link_ob_hd_19 = html.A(
+        "heidelberg.de",
+        href="https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents/heidelberg/Objektdatenbank/31/PDF/Energie%20und%20Klimaschutz/31_pdf_Masterplan%20Bericht%20und%20Ma%C3%9Fnahmen.pdf",
+    )
+
+    link_ob_hd24_19 = html.A(
+        "heidelberg24.de",
+        href="https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents/heidelberg/Objektdatenbank/31/PDF/Energie%20und%20Klimaschutz/31_pdf_Masterplan%20Bericht%20und%20Ma%C3%9Fnahmen.pdf",
+    )
+
+    link_ob_rnz_19 = html.A(
+        "rnz.de",
+        href="https://www.rnz.de/nachrichten/heidelberg_artikel,-heidelberg-wuerzner-will-bis-2030-die-klimaneutrale-stadt-_arid,474402.html",
     )
 
     details_data = [
@@ -62,7 +82,17 @@ def card_main_compare(app, df):
         html.H6("Warum gibt es zwei Ziele und warum ausgerechnet 2030 und 2050?"),
         html.P(
             [
-                'Der Heidelberger Gemeinderat hat 2014 den "Masterplan 100% Klimaschutz" verabschiedet [Quelle?]. Darin wurde eine Reduktion der CO2-Emissionen um 95% bis zum Jahr 2050 beschlossen. Später hat der Oberbürgermeister das politische Ziel geäußert bis 2030 klimaneutral sein zu wollen [Quellen?]. Es ist an dieser Stelle aber wichtig festzuhalten, dass das verbindliche Ziel der Stadt Heidelberg immer noch 2050 ist und bisher nicht auf 2030 geändert wurde.',
+                "Der Heidelberger Gemeinderat hat 2014 den ",
+                link_masterplan,
+                " verabschiedet. Darin wurde eine Reduktion der CO2-Emissionen um 95% bis zum Jahr 2050 beschlossen. Später hat der Oberbürgermeister das politische Ziel geäußert bis 2030 klimaneutral sein zu wollen (e.g. auf ",
+                link_ob_suedd_19,
+                ", ",
+                link_ob_hd_19,
+                ", ",
+                link_ob_hd24_19,
+                " und ",
+                link_ob_rnz_19,
+                "). Es kann bei diesen Äusserungen leicht der Endruck entstehen dass sich das Heidleberger Klimaziel von 2050 auf 2030 verschoben hat. Das ist aber nicht der Fall. Bei allen bisherigen Meldungen um das neue Datum 2030 handelt es sich um Denkanstöße und Wünsche. Es ist wichtig Visionen zu haben doch es ist auch wichtig die Fakten zu kennen: Heidelberg hält bisher an 2050 als verbindliches Ziel für Klimaneutralität fest.",
             ]
         ),
         html.H6("Was hat es mit den Updates der Zielpfade auf sich?"),
@@ -223,7 +253,7 @@ def card_about():
                         "Der Quellcode ist frei verfügbar und kann  auf ",
                         link_github,
                         " eingesehen werden.",
-                        "Bei Fragen und Anregungen wenden Sie sich bitte an: ",
+                        " Bei Fragen und Anregungen wenden Sie sich bitte an: ",
                         link_contactmail,
                     ],
                 ),
@@ -287,7 +317,7 @@ def card_table(app, df):
 
     details_table = [
         html.P(
-            f'Da das Pariser Budget ab Beginn des Jahres {budget_start_year} gerechnet wird werden die entspredhenden Szenarien auch ab diesem Jahr berücksichtigt. Die "Gesammten Emissionen [kt]" etwa beziehen sich auf den Zeitraum von Anfang {budget_start_year} bis Zum Zeitpunkt, an dem die Klimaneutralität ereicht ist. Zusaetzlich wird dargestellt wieviel Prozent des urspruenglich angesetzten Pariser Budgets letztlich aufgebraucht wird und wann das Budget (also wann 100%) überschritten ist. Die letzte Zeile zeigt das Jahr an, in dem Klimaneutralität erreicht wird.'
+            f'Hier werden die verschienenen Szenarien zur Klimaneutralität in Heidelberg verglichen. Da das Pariser Budget ab Beginn des Jahres {budget_start_year} gerechnet wird werden die entsprechenden Szenarien auch ab diesem Jahr berücksichtigt. Die "Gesammten Emissionen [kt]" etwa beziehen sich auf den Zeitraum von Anfang {budget_start_year} bis Zum Zeitpunkt, an dem die Klimaneutralität ereicht ist. Zusaetzlich wird dargestellt wieviel Prozent des ursprünglich angesetzten Pariser Budgets letztlich aufgebraucht wird und wann das Budget (also wann 100%) überschritten ist. Die letzte Zeile zeigt das Jahr an, in dem Klimaneutralität erreicht wird.'
         ),
         html.P(
             "Die Ziele 2030 und 2050 sind mittlerweile so nicht mehr realisierbar. Sie geben also an wie die Entwicklung hätte sein können, wenn Heidelberg die Ziele jedes Jahr erreicht hätte. Um sich ein Bild von den noch zu erreichenden Zielen zu machen muss man sich die beiden Updates der Zielpfade anschauen: Ziel 2030 U. und Ziel 2050 U."
@@ -307,9 +337,6 @@ def card_table(app, df):
                 html.P(),
                 table,
                 html.P(),
-                html.P(
-                    "Hier werden die verschienenen Szenarien zur Klimaneutralität in Heidelberg verglichen."
-                ),
                 cbutton_table,
             ]
         )

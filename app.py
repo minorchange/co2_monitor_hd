@@ -17,6 +17,7 @@ import dash
 import os
 from colors import *
 
+
 proj_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(proj_dir)
 
@@ -59,7 +60,13 @@ header = dbc.Navbar(
         dbc.Row(
             [
                 dbc.Col(html.Img(src="/assets/klimaentscheid-logo.jpg", height="45px")),
-                dbc.Col(dbc.NavbarBrand("CO2-Monitor Heidelberg", className="ml-2", style = {'color':'white', 'font-weight': 'bold'})),
+                dbc.Col(
+                    dbc.NavbarBrand(
+                        "CO2-Monitor Heidelberg",
+                        className="ml-2",
+                        # style={"color": "red", "font-weight": "bold"},
+                    )
+                ),
             ],
             align="center",
             no_gutters=True,
@@ -67,8 +74,8 @@ header = dbc.Navbar(
         href="https://klimaentscheid-heidelberg.de",
     ),
     sticky="top",
-    color=primary_color,
-    style = {'border-width':'0px', 'box-shadow' : '0 6px 6px -6px #999'}
+    color="white",
+    style={"border-width": "0px", "box-shadow": "0 6px 6px -6px #999"},
 )
 
 
@@ -76,7 +83,6 @@ from cards import (
     card_main_compare,
     card_paris,
     card_diff_year,
-    # card_audit_cumulated,
     card_about,
     card_table,
 )
@@ -84,16 +90,8 @@ from cards import (
 app, main_compare = card_main_compare(app, df)
 app, card_paris = card_paris(app, df)
 card_diff_year = card_diff_year(app, df)
-# card_audit_cumulated = card_audit_cumulated(df)
 card_about = card_about()
 card_table = card_table(app, df)
-
-
-# app.layout = html.Div(
-#     dbc.Container(
-#         dbc.Col([card_paris, main_compare]),
-#     )
-# )
 
 
 app.layout = html.Div(
@@ -105,24 +103,21 @@ app.layout = html.Div(
                 dbc.Row(
                     [
                         dbc.Col([card_paris, html.P(), card_diff_year], lg=4),
-                        # , style={"min-width": "400px"}),
                         dbc.Col(
                             [
                                 main_compare,
                                 html.P(),
                                 card_table,
                                 html.P(),
-                                # dbc.CardDeck([card_diff_year, card_audit_cumulated]),
                             ],
-                            # md=12,
                             lg=8,
                         ),
                     ]
                 ),
                 dcc.Interval(
                     id="interval-component",
-                    interval=1 * 1000,
-                    n_intervals=0,  # in milliseconds
+                    interval=1 * 1000,  # in milliseconds
+                    n_intervals=0,
                 ),
             ],
             fluid=True,

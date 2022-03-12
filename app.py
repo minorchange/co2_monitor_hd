@@ -69,9 +69,9 @@ header = dbc.Navbar(
                 ),
             ],
             align="center",
-            no_gutters=True,
         ),
         href="https://klimaentscheid-heidelberg.de",
+        className="g-0",  # no gutters
     ),
     sticky="top",
     color="white",

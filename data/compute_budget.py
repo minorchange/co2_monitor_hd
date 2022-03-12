@@ -1,14 +1,14 @@
 import os, sys
 import datetime
 from dateutil.relativedelta import relativedelta
-from data.read_data import read_budget
+from data.read_data import read_bisko_budget
 
 
 def get_remaining_paris_budget(df):
 
     assert "co2_kt_total" in df.columns
 
-    budget_start_year, budget_start_value_kt = read_budget()
+    budget_start_year, bisko_budget_start_value_kt = read_bisko_budget()
 
     s_total = df["co2_kt_total"].dropna()
 
@@ -39,7 +39,7 @@ def get_remaining_paris_budget(df):
     )
     total_emissions_kt = measured_co2kt_since_budgetstart + estimated_emissions_kt
 
-    remaining_budget_kt = budget_start_value_kt - total_emissions_kt
+    remaining_budget_kt = bisko_budget_start_value_kt - total_emissions_kt
     remaining_seconds = remaining_budget_kt / latest_emissions_ktpersecond
 
     when_budget_is_depleted = now + relativedelta(seconds=+remaining_seconds)

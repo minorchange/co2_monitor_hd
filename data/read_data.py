@@ -42,6 +42,33 @@ def read_emissions():
     return df_all
 
 
+def total_budget_to_bisko_budget(b):
+    # https://de.statista.com/statistik/daten/studie/375849/umfrage/entwicklung-der-gesamtbevoelkerung-in-heidelberg/
+    persons_living_in_hd_2015 = 156267
+    # https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents_E2103137505/heidelberg/Objektdatenbank/31/PDF/01_Ifeu_Studie_CO2_Bilanzierung_bis_2018_fuer_die_Stadt_Heidelberg.pdf
+    total_average_emissions_one_person_2015_tons = 11.2
+    bisko_emissions_hd_2015_tons = 1117433
+
+    bisko_average_emissions_one_person_2015_tons = float(
+        bisko_emissions_hd_2015_tons
+    ) / float(persons_living_in_hd_2015)
+    biso_underestimate_factor = (
+        bisko_average_emissions_one_person_2015_tons
+        / total_average_emissions_one_person_2015_tons
+    )
+    buf = biso_underestimate_factor
+    assert buf > 0
+    assert buf < 1
+    # in 2015 the emissions covered by the bisko standard were buf * total emissions
+    # buf is around 0.64
+    # Since no up to date values could be found we assume that the ratio between emissions
+    # measured by bisko and total emissions are constant over time.
+    # Therefore the total bugdet must be devided in a bisko budget and a non bisko budget.
+
+    bisko_budget = b * buf
+    return bisko_budget
+
+
 def read_budget():
     df_budget = pd.read_csv("data/raw/co2_budget_hd.csv", index_col=False)
     budget_start_year = df_budget.first_year_the_budget_is_spend.values[0]
@@ -49,6 +76,12 @@ def read_budget():
     return budget_start_year, budget_start_value_kt
 
 
-if __name__ == "__main__":
+def read_bisko_budget():
     budget_start_year, budget_start_value_kt = read_budget()
+    bisko_budget_start_value_kt = total_budget_to_bisko_budget(budget_start_value_kt)
+    return budget_start_year, bisko_budget_start_value_kt
+
+
+if __name__ == "__main__":
+    budget_start_year, budget_start_value_kt = read_bisko_budget()
     print(budget_start_year, budget_start_value_kt)

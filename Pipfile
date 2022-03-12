@@ -1,5 +1,5 @@
 [[source]]
-url = "https://pypi.python.org/simple"
+url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
@@ -8,10 +8,14 @@ dash = "*"
 plotly = "*"
 pandas = "*"
 cd = "*"
-dash-bootstrap-components = "*"
 dash-daq = "*"
+dash-bootstrap-components = "~=0.13"
 
 [dev-packages]
+black = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"
+
+[pipenv]
+allow_prereleases = true

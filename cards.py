@@ -9,7 +9,7 @@ from dash_html_components import H4
 from figures import fig_emissions_measured_vs_target, fig_target_diff_year
 from custom_components import collapse_button, led
 from data.compute_budget import get_remaining_paris_budget
-from data.read_data import read_budget
+from data.read_data import read_bisko_budget
 from scenarios import cumulated_emissions, when_budget_is_spend, when_scenario_0
 
 
@@ -266,7 +266,7 @@ def card_about():
 
 def card_table(app, df):
 
-    budget_start_year, budget_start_value_kt = read_budget()
+    budget_start_year, bisko_budget_start_value_kt = read_bisko_budget()
 
     df_t = pd.DataFrame()
 
@@ -288,12 +288,12 @@ def card_table(app, df):
         projected_emissions_kt = cumulated_emissions(
             df, scenario_name, from_y=budget_start_year
         )
-        percentage_budget = 100 * (projected_emissions_kt / budget_start_value_kt)
+        percentage_budget = 100 * (projected_emissions_kt / bisko_budget_start_value_kt)
 
         year0 = when_scenario_0(df, scenario_name)
 
         year_budget_depleted = when_budget_is_spend(
-            df, scenario_name, budget_start_value_kt, from_y=budget_start_year
+            df, scenario_name, bisko_budget_start_value_kt, from_y=budget_start_year
         )
 
         c = [

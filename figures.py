@@ -43,15 +43,15 @@ def fig_emissions_measured_vs_target(df):
     trace_target30 = go.Scatter(
         x=df.index,
         y=df["target30_kt"],
-        name="Ziel 2030",
+        name="EU Mission 2030",
         mode="lines",
         line=dict(color=target_30_color, width=2),
     )
 
-    trace_target50 = go.Scatter(
+    trace_target40 = go.Scatter(
         x=df.index,
-        y=df["target50_kt"],
-        name="Ziel 2050",
+        y=df["target40_kt"],
+        name="Szenario 2040",
         mode="lines",
         line=dict(color=target_50_color, width=2),
     )
@@ -59,16 +59,16 @@ def fig_emissions_measured_vs_target(df):
     trace_target30_new = go.Scatter(
         x=df.index,
         y=df["target30_new_kt"],
-        name="Ziel 2030 - Update",
+        name="EU Mission 2030 - Update",
         mode="lines",
         line=dict(color=target_30_color, dash="dash", width=2),
         visible="legendonly",
     )
 
-    trace_target50_new = go.Scatter(
+    trace_target40_new = go.Scatter(
         x=df.index,
-        y=df["target50_new_kt"],
-        name="Ziel 2050 - Update",
+        y=df["target40_new_kt"],
+        name="Szenario 2040 - Update",
         mode="lines",
         line=dict(color=target_50_color, dash="dash", width=2),
         visible="legendonly",
@@ -89,8 +89,8 @@ def fig_emissions_measured_vs_target(df):
         + [
             trace_target30_new,
             trace_target30,
-            trace_target50_new,
-            trace_target50,
+            trace_target40_new,
+            trace_target40,
             trace_trend,
         ],
         layout=go.Layout(
@@ -111,7 +111,7 @@ def fig_emissions_measured_vs_target(df):
 
 def fig_target_diff_year(df):
 
-    nicenames = ["Diff. zum Ziel 2030", "Diff. zum Ziel 2050"]
+    nicenames = ["Diff. zum Ziel 2030", "Diff. zum Ziel 2040"]
     colors = [target_30_color, target_50_color]
     traces_compare_abs = [
         go.Scatter(
@@ -122,15 +122,14 @@ def fig_target_diff_year(df):
             line=dict(color=colors[i], width=3),
             # color=[target_30_color, target_50_color],
         )
-        for i, c in enumerate(["diff_target30_kt", "diff_target50_kt"])
+        for i, c in enumerate(["diff_target30_kt", "diff_target40_kt"])
     ]
 
     f_compare_abs = go.Figure(
         data=traces_compare_abs,
         layout=go.Layout(
-            # title="Differenz der CO2-Emissionen zu den Zielenpfaden<br>Klimaneutralität 2030 bzw. 2050",
             title="Mehremmisionen",
-            xaxis=dict(range=[2013.5, 2018.5]),
+            xaxis=dict(range=[2013.5, 2020.5]),
             title_font_family="Open Sans",
             title_font_color="#212529",
             title_font_size=16,

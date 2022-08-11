@@ -18,6 +18,11 @@ link_ifeu18 = html.A(
     href="https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents_E2103137505/heidelberg/Objektdatenbank/31/PDF/01_Ifeu_Studie_CO2_Bilanzierung_bis_2018_fuer_die_Stadt_Heidelberg.pdf",
 )
 
+link_ifeu20 = html.A(
+    '"Klimaschutzziele und Maßnahmen - Controlling für die Stadt Heidelberg"',
+    href="http://gemeinderat.heidelberg.de/getfile.asp?id=338418&type=do",
+)
+
 link_bisko = html.A(
     "BISKO-Systematik",
     href="https://www.kea-bw.de/fileadmin/user_upload/Energiemanagement/Angebote/Beschreibung_der_BISKO-Methodik.pdf",
@@ -60,49 +65,75 @@ def card_main_compare(app, df):
         html.H5("Zu den Daten"),
         html.P(
             [
-                "Die Rohdaten, die im Balkendiagramm verwendet werden, stammen aus der ",
+                "Die Rohdaten, die im Balkendiagramm verwendet werden, stammen aus den Berichten ",
                 link_ifeu18,
+                " und ",
+                link_ifeu20,
                 ", die vom ",
                 link_ifeu_homepage,
-                "nach der ",
+                " nach der ",
                 link_bisko,
                 " erstellt wurden. Für eine vollständige Bilanzierung des CO2-Ausstoßes der Stadt Heidelberg kann nicht auf die Daten im Heidelberger ",
                 link_statistisches_jb19,
-                " zurückgegriffen werden. Diese decken nur Emissionen aus energetischer Nutzung fossiler Energieträger, also insgesamt weniger als die Hälfte der Gesamtemissionen, ab. Die vorhandenen Daten liegen bis zum Jahr 2018 für volle Kalenderjahre vor, mit Ausnahme der Kategorie Verkehr. Für diese Kategorie gibt es nur Daten für 2010 und 2017, für die übrigen Jahre sind Schätzwerte dargestellt. Diese sind durch lineare Interpolation zwischen den vorhandenen Datenpunkten und konstantem fortschreiben der Werte für das Jahr 2018 entstanden. Da die Daten nach der ",
+                " zurückgegriffen werden. Diese decken nur Emissionen aus energetischer Nutzung fossiler Energieträger, also insgesamt weniger als die Hälfte der Gesamtemissionen, ab. Die vorhandenen Daten liegen bis zum Jahr 2020 für volle Kalenderjahre vor, mit Ausnahme der Kategorie Verkehr. Für diese Kategorie wurden in den Jahren 2011 bis 2014 keine Daten erhoben. Hier bedienen wir uns Schätzwerten. Diese sind durch lineare Interpolation zwischen den vorhandenen Datenpunkten entstanden. Da die Daten nach der ",
                 link_bisko,
                 " erstellt wurden umfassen sie nur Emissionen, die innerhalb der Grenzen der Kommune emittiert werden. Laut Kapitel 2.3 in ",
                 link_ifeu18,
                 " umfassen sie Damit explizit nicht alle, von Heidelberger Bürgern verursachten Emissionen.",
             ]
         ),
+        html.H5("Die Jahre 2019 und 2020"),
+        html.P(
+            [
+                "Bei der Veröffentlichung der Emissionen in den Jahren nach 2018 in ",
+                link_ifeu20,
+                " ist es den Autor*innen wichtig die aktuellen Zahlen wie folgt einzuordnen: ",
+            ],
+        ),
+        html.P(
+            [
+                '"Die Jahre 2019 und 2020 zeigen eine stark fallende Tendenz der CO 2 - Emissionen. Tatsächlich werden im Bereich der Gebäudewärme seit vielen Jahren deutliche Einsparungen erzielt. Vor allem liegen die hohen Einsparungen an einem starken Ausbau der Erneuerbaren Energien in Deutschland, was die spezifischen Emissionen des bundesdeutschen Strommixes deutlich sinken ließ. Im Jahr 2020 kommen noch „Corona-Effekte“ vor allem im Verkehrsbereich hinzu, insgesamt lagen die Fahrleistungen deutlich geringer als in den Vorjahren, was sich auch in der Heidelberger CO 2 -Bilanz niederschlägt. Es wird ausdrücklich davor gewarnt, eine lineare Fortsetzung dieser Entwicklung zu erwarten. Genaues Zahlenmaterial für die CO 2 -Bilanz 2021 liegt zwar noch nicht vor, Tendenzen der Bundesentwicklung deuten aber darauf hin, dass sowohl der CO 2 -Emissionsfaktor für den Strom wieder ansteigt („Windschwaches Jahr 2021“ 10), als auch der Verkehrsbereich wieder an das Niveau von 2019 anschließt."',
+            ],
+        ),
+        html.P(
+            [
+                "Dieser Einordnung schlißen wir uns an. Es ist vor diesem Hintergrund wichtig den dargestellten Trend nicht als Prognose zu verstehen. Vielmehr soll er, ähnlich der Zielpfade ein mögliches Szenario durchspielen."
+            ],
+        ),
+        html.P(
+            [
+                "Zudem Weisen die Autor*innen darauf hin, dass die Emissionswerte für das Jahr 2020 noch vorläufig sind."
+            ],
+        ),
     ]
 
     details_targets = [
         html.H5("Zu den Zielen"),
-        html.H6("Warum Linear?"),
         html.P(
             [
-                "Die Zielszenarien sind als (mindestens) lineare Pfade abgebildet. Das ist aus zwei Gründen wichtig: Erstens macht erst die Definition eines Zielpfades ein Monitoring möglich. Zweitens unterscheiden sich die Maßnahmen, die man zur Zielerreichung umsetzen muss, in ihren Kosten. Es gibt leicht umsetzbare Maßnahmen und welche, die mit denen größere Kosten einher gehen. Diese leicht umsetzbaren Maßnahmen werden vorrausichtlich zu Beginn umgesetzt. Wenn es in einer frühen Phase, in der noch kostengünstige Maßnahmen umsetzbar sind, nicht gelingt eine entsprechend große Reduzierung der Emissionen zu erreichen, dann wird eine Umsetzung der ohnehin teuren Maßnahmen gegen Ende des Reduktionszeitraums noch schwieriger.",
+                "Die Zielpfade sind, wie auch die Emissionswerte dem Bericht ",
+                link_ifeu20,
+                " entnommen.",
             ]
         ),
-        html.H6("Warum gibt es zwei Ziele und warum ausgerechnet 2030 und 2050?"),
-        html.P(
-            [
-                "Der Heidelberger Gemeinderat hat 2014 den ",
-                link_masterplan,
-                ' verabschiedet. Darin wurde eine Reduktion der CO2-Emissionen um 95% bis zum Jahr 2050 beschlossen. Später hat der Oberbürgermeister das politische Ziel geäußert bis 2030 klimaneutral sein zu wollen. Z.B.: "Der Gemeinderat hat nun beschlossen, bis 2030 klimaneutral zu sein." [',
-                link_ob_suedd_19,
-                '], "Wir sollten uns das Ziel setzen, dass Heidelberg bis zum Jahr 2030 eine klimaneutrale Stadt wird. ..." [',
-                link_ob_hd24_19,
-                '] und "Wir müssen alles dafür tun, dass Heidelberg bis 2030 klimaneutral ist" [',
-                link_ob_rnz_19,
-                "]. Es kann bei diesen Äußerungen leicht der Endruck entstehen dass sich das Heidelberger Klimaziel von 2050 auf 2030 verschoben hat. Das ist aber nicht der Fall. Bei allen bisherigen Meldungen um das neue Datum 2030 handelt es sich um Denkanstöße und Wünsche. Es ist wichtig Visionen zu haben doch es ist auch wichtig die Fakten zu kennen: Heidelberg hält bisher an 2050 als verbindliches Ziel für Klimaneutralität fest.",
-            ]
-        ),
+        # html.H6("Warum gibt es zwei Ziele und warum ausgerechnet 2030 und 2050?"),
+        # html.P(
+        #     [
+        #         "Der Heidelberger Gemeinderat hat 2014 den ",
+        #         link_masterplan,
+        #         ' verabschiedet. Darin wurde eine Reduktion der CO2-Emissionen um 95% bis zum Jahr 2050 beschlossen. Später hat der Oberbürgermeister das politische Ziel geäußert bis 2030 klimaneutral sein zu wollen. Z.B.: "Der Gemeinderat hat nun beschlossen, bis 2030 klimaneutral zu sein." [',
+        #         link_ob_suedd_19,
+        #         '], "Wir sollten uns das Ziel setzen, dass Heidelberg bis zum Jahr 2030 eine klimaneutrale Stadt wird. ..." [',
+        #         link_ob_hd24_19,
+        #         '] und "Wir müssen alles dafür tun, dass Heidelberg bis 2030 klimaneutral ist" [',
+        #         link_ob_rnz_19,
+        #         "]. Es kann bei diesen Äußerungen leicht der Endruck entstehen dass sich das Heidelberger Klimaziel von 2050 auf 2030 verschoben hat. Das ist aber nicht der Fall. Bei allen bisherigen Meldungen um das neue Datum 2030 handelt es sich um Denkanstöße und Wünsche. Es ist wichtig Visionen zu haben doch es ist auch wichtig die Fakten zu kennen: Heidelberg hält bisher an 2050 als verbindliches Ziel für Klimaneutralität fest.",
+        #     ]
+        # ),
         html.H6("Was hat es mit den Updates der Zielpfade auf sich?"),
         html.P(
             [
-                'Die Stadt Heidelberg hat seit dem Beschluss des Gemeinderates zum Masterplan 100% Klimaschutz jedes Jahr die durch einen linearen Pfad gegebenen Zwischenziele verfehlt. Wenn wir die Zieldaten weiterhin auf einem linearen Pfad erreichen wollen müssen wir ab 2018 den Updates der Zielpfade, also "Ziel 2030 Update" beziehungsweise "Ziel 2050 Update" folgen.'
+                'Die Stadt Heidelberg hat seit dem Beschluss des Gemeinderates zum Masterplan 100% Klimaschutz jedes Jahr die durch einen linearen Pfad gegebenen Zwischenziele verfehlt. Wenn wir die Zieldaten weiterhin auf einem linearen Pfad erreichen wollen müssen wir ab 2018 den Updates der Zielpfade, also "EU Mission 2030 Update" beziehungsweise "Szenario 2040 Update" folgen.'
             ]
         ),
     ]
@@ -126,8 +157,8 @@ def card_main_compare(app, df):
                     [
                         "In diesem Diagram werden die tatsächlich gemessenen CO2-Emissionen der Stadt Heidelberg nach der ",
                         link_bisko,
-                        " dargestellt. Zudem sind mögliche Pfade zur Klimaneutralität im Jahr 2030 und 2050, sowie der aktuelle Trend abgebildet.",
-                    ]
+                        " dargestellt. Zudem sind mögliche Pfade zur Klimaneutralität im Jahr 2030 und 2040, sowie der aktuelle Trend abgebildet.",
+                    ],
                 ),
                 cbutton_maincompare,
             ]
@@ -173,6 +204,10 @@ def card_paris(app, df):
     def led_budget(n):
         remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(df)
         return led(when_budget_is_depleted.year)
+        # wbid = when_budget_is_depleted
+        led_content = f"{wbid.day} . {wbid.month} . {wbid.year}"
+
+        return led(led_content)
 
     details = [
         html.H5("Das CO2-Budget der Stadt Heidelberg"),
@@ -211,9 +246,11 @@ def card_paris(app, df):
         html.H5("Heidelbergs Emissionen in dieser Sekunde?"),
         html.P(
             [
-                "Die Emissionen der Stadt Heidelberg liegen öffentlich nur für jedes Kalenderjahr bis 2018 vor (",
+                "Die Emissionen der Stadt Heidelberg liegen öffentlich nur für die Kalenderjahre bis einschließlich 2020 vor (",
                 link_ifeu18,
-                "). Das bedeutet, dass die Emissionen pro Sekunde nur schätzen können. Dies geschieht in ein linearen Trend aus den Jahren 2014 und den letzten bekannten Wert, also 2018, geschätzten und  auf die Sekunde runter gerechnet wird. Diese Angabe ist natürlich nicht exakt, gibt aber eine Idee zu den Größenordnungen.",
+                " und ",
+                link_ifeu20,
+                "). Das bedeutet, dass die Emissionen pro Sekunde nur schätzen können. Dies geschieht in ein linearen Trend aus den Jahren 2014 und den letzten bekannten Wert, also 2020, geschätzten und  auf die Sekunde runter gerechnet wird. Diese Angabe ist natürlich nicht exakt, gibt aber eine Idee zu den Größenordnungen.",
             ]
         ),
         html.H5("Bis wann ist unser Budget aufgebraucht"),
@@ -240,7 +277,7 @@ def card_paris(app, df):
                 html.Div(id="led_endyear"),
                 html.P(),
                 html.P(
-                    "Näherungsweise Angaben des CO2-Budgets für die Stadt Heidelberg basierend auf dem Pariser Klimaabkommen",
+                    "Näherungsweise Angaben des CO2-Budgets für die Stadt Heidelberg basierend auf dem Pariser Klimaabkommen und der Annahme, dass sich der Trend der Emissionen in Heidelberg unverändert fortsetzt.",
                     className="card-title",
                 ),
                 cbutton_paris,
@@ -258,7 +295,7 @@ def card_diff_year(app, df_compare_with_target):
 
     details = (
         html.P(
-            "Die beiden Graphen zeigen die Entwicklung der jährlichen Differenz (in Kilotonnen) zwischen den gemessenen Emissionen und den linearen Zielpfade zur Klimaneutralität im Jahr 2030 bzw. 2050. Die CO2-Emissionen der Stadt Heidelberg weichen Jahr für Jahr immer stärker von den Zielpfaden ab. Würden die tatsächlichen Emissionen die Zielvorgaben erreichen wäre der entsprechende Graph hier immer auf Null. Würde ein Ziel übererfüllt dann wäre der entsprechende Graph negativ."
+            "Die beiden Graphen zeigen die Entwicklung der jährlichen Differenz (in Kilotonnen) zwischen den gemessenen Emissionen und den linearen Zielpfade zur Klimaneutralität im Jahr 2030 bzw. 2040. Die CO2-Emissionen der Stadt Heidelberg weichen, bis zum Jahr 2018 immer stärker von den Zielpfaden ab. Danach sehen wir eine Annäherung an beide Zielpfade. Wir notieren allerdings weiterhin eine Untererfüllung der Ziele. Würden die tatsächlichen Emissionen die Zielvorgaben immer erreichen wäre der entsprechende Graph hier immer auf Null. Da es sich mit der Klimaerwärmung um ein kumulatives Problem handelt ist ein Erreichen der Nullline nicht mehr genug. Um vergangene Versäumnisse zu kompensieren müssen wir unsere Ziele in Zukunft übererfüllen. Im Falle einer Übererfüllung sähen wir negative Werte."
         ),
     )
     app, cbutton_diff = collapse_button(app, "Weitere Infos", dbc.CardBody(details))
@@ -319,10 +356,10 @@ def card_table(app, df):
     ]
 
     for scenario_name, nice_name in [
-        ["scenario_target30_kt", "Ziel 2030"],
-        ["scenario_target50_kt", "Ziel 2050"],
-        ["scenario_target30_new_kt", f"Ziel 2030 U."],
-        ["scenario_target50_new_kt", f"Ziel 2050 U."],
+        ["scenario_target30_kt", "EU Mission 2030"],
+        ["scenario_target40_kt", "Szenario 2040"],
+        ["scenario_target30_new_kt", f"EU Mission 2030 U."],
+        ["scenario_target40_new_kt", f"Szenario 2040 U."],
         ["scenario_trendlin_kt", "Trend"],
     ]:
 
@@ -361,7 +398,7 @@ def card_table(app, df):
             f'Hier werden die verschiedenen Szenarien zur Klimaneutralität in Heidelberg verglichen. Da das Pariser Budget ab Beginn des Jahres {budget_start_year} gerechnet wird werden die entsprechenden Szenarien auch ab diesem Jahr berücksichtigt. Die "Gesamten Emissionen [kt]" etwa beziehen sich auf den Zeitraum von Anfang {budget_start_year} bis Zum Zeitpunkt, an dem die Klimaneutralität erreicht ist. Zusätzlich wird dargestellt wieviel Prozent des ursprünglich angesetzten Pariser Budgets letztlich aufgebraucht wird und wann das Budget (also wann 100%) überschritten ist. Die letzte Zeile zeigt das Jahr an, in dem Klimaneutralität erreicht wird.'
         ),
         html.P(
-            "Die Ziele 2030 und 2050 sind mittlerweile so nicht mehr realisierbar. Sie geben also an wie die Entwicklung hätte sein können, wenn Heidelberg die Ziele jedes Jahr erreicht hätte. Um sich ein Bild von den noch zu erreichenden Zielen zu machen muss man sich die beiden Updates der Zielpfade anschauen: Ziel 2030 U. und Ziel 2050 U."
+            "Die Ziele 2030 und 2040 sind mittlerweile so nicht mehr realisierbar. Sie geben also an wie die Entwicklung hätte sein können, wenn Heidelberg die Ziele jedes Jahr erreicht hätte. Um sich ein Bild von den noch zu erreichenden Zielen zu machen muss man sich die beiden Updates der Zielpfade anschauen: EU Mission 2030 U. und Szenario 2040 U."
         ),
     ]
 

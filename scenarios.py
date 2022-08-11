@@ -13,12 +13,12 @@ def add_scenarios(df):
     df["scenario_trendconst_kt"] = df["co2_kt_total"].fillna(df["trend_const_kt"])
 
     df["scenario_target30_kt"] = df["co2_kt_total"].fillna(df["target30_kt"]).fillna(0)
-    df["scenario_target50_kt"] = df["co2_kt_total"].fillna(df["target50_kt"]).fillna(0)
+    df["scenario_target40_kt"] = df["co2_kt_total"].fillna(df["target40_kt"]).fillna(0)
     df["scenario_target30_new_kt"] = (
         df["co2_kt_total"].fillna(df["target30_new_kt"]).fillna(0)
     )
-    df["scenario_target50_new_kt"] = (
-        df["co2_kt_total"].fillna(df["target50_new_kt"]).fillna(0)
+    df["scenario_target40_new_kt"] = (
+        df["co2_kt_total"].fillna(df["target40_new_kt"]).fillna(0)
     )
 
     return df

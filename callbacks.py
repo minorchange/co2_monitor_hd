@@ -20,7 +20,7 @@ def _update_paris_budget(df):
         bisko_budget_start_value_kt,
         from_y=budget_start_year,
     )
-
+    assert False
     remaining_budget_t = remaining_budget_kt * 1000
     remaining_budget_t_str = "{:.2f}".format(remaining_budget_t)
     g_md = dbc.CardBody(
@@ -42,7 +42,6 @@ def _update_paris_budget(df):
             daq.LEDDisplay(
                 value=when_budget_is_depleted.year, color="#FF5E5E", size=30
             ),
-            html.Hr(),
             html.P(
                 f"Erklaerung",
             ),

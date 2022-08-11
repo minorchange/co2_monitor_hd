@@ -47,7 +47,7 @@ def add_trend(df):
         x2=year_end,
         y2=emissions_end,
         xrange_start=year_start,
-        xrange_end=2250,
+        xrange_end=2060,
         xindexname="year",
     )
     l_lin.name = "trend_lin_kt"
@@ -59,7 +59,7 @@ def add_trend(df):
         x2=year_end,
         y2=emissions_end,
         xrange_start=year_start,
-        xrange_end=2250,
+        xrange_end=2060,
         xindexname="year",
     )
     l_const.name = "trend_const_kt"

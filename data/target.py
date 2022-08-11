@@ -28,7 +28,7 @@ def compare_emissions_with_target(df_emissions, df_t30, df_t50):
     df_compare_with_target = df_compare_with_target.join(df_t30, how="inner").join(
         df_t50, how="inner", rsuffix="_"
     )
-    df_compare_with_target.columns = ["actual_emissions", "target_2030", "target_2050"]
+    df_compare_with_target.columns = ["actual_emissions", "target_2030", "target_2040"]
 
     df_compare_with_target["diff30"] = (
         df_compare_with_target["actual_emissions"]
@@ -36,7 +36,7 @@ def compare_emissions_with_target(df_emissions, df_t30, df_t50):
     )
     df_compare_with_target["diff50"] = (
         df_compare_with_target["actual_emissions"]
-        - df_compare_with_target["target_2050"]
+        - df_compare_with_target["target_2040"]
     )
 
     df_compare_with_target["diff30cumsum"] = df_compare_with_target.diff30.cumsum()
@@ -53,13 +53,13 @@ def add_targets(df):
     s_t = s_t[s_t.index >= target_start_year]
 
     s_t30 = create_target_line(target_start_year, 2030, s_t)
-    s_t50 = create_target_line(target_start_year, 2050, s_t)
+    s_t40 = create_target_line(target_start_year, 2040, s_t)
 
     df["target30_kt"] = s_t30
-    df["target50_kt"] = s_t50
+    df["target40_kt"] = s_t40
 
     df["diff_target30_kt"] = df["co2_kt_total"] - df["target30_kt"]
-    df["diff_target50_kt"] = df["co2_kt_total"] - df["target50_kt"]
+    df["diff_target40_kt"] = df["co2_kt_total"] - df["target40_kt"]
 
     last_year_with_data = s_t.index.max()
     last_emissions = s_t[last_year_with_data]
@@ -68,30 +68,30 @@ def add_targets(df):
     # overshoot_emissions30 = df_compare_with_target["diff30"].sum()
     # overshoot_emissions50 = df_compare_with_target["diff50"].sum()
     planned_lin30_emissions = s_t30.sum()
-    planned_lin50_emissions = s_t50.sum()
+    planned_lin40_emissions = s_t40.sum()
     remaining_emissions30 = planned_lin30_emissions - emissions_so_far
-    remaining_emissions50 = planned_lin50_emissions - emissions_so_far
+    remaining_emissions40 = planned_lin40_emissions - emissions_so_far
 
     new_equiemission_lin_target_30_years = remaining_emissions30 / (last_emissions / 2)
-    new_equiemission_lin_target_50_years = remaining_emissions50 / (last_emissions / 2)
+    new_equiemission_lin_target_40_years = remaining_emissions40 / (last_emissions / 2)
     new_equiemission_lin_target_30 = int(
         last_year_with_data + new_equiemission_lin_target_30_years
     )
-    new_equiemission_lin_target_50 = int(
-        last_year_with_data + new_equiemission_lin_target_50_years
+    new_equiemission_lin_target_40 = int(
+        last_year_with_data + new_equiemission_lin_target_40_years
     )
     s_t30_new_equiemission = create_target_line(
         last_year_with_data, new_equiemission_lin_target_30, s_t
     )
-    s_t50_new_equiemission = create_target_line(
-        last_year_with_data, new_equiemission_lin_target_50, s_t
+    s_t40_new_equiemission = create_target_line(
+        last_year_with_data, new_equiemission_lin_target_40, s_t
     )
 
     s_t30_new = create_target_line(last_year_with_data, 2030, s_t)
-    s_t50_new = create_target_line(last_year_with_data, 2050, s_t)
+    s_t40_new = create_target_line(last_year_with_data, 2040, s_t)
 
     df["target30_new_kt"] = s_t30_new
-    df["target50_new_kt"] = s_t50_new
+    df["target40_new_kt"] = s_t40_new
 
     return df
 

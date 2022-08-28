@@ -1,14 +1,14 @@
-import dash_html_components as html
+from dash import html
 import dash_daq as daq
-from data.compute_budget import get_remaining_paris_budget
+from data.compute_remaining_budget import get_remaining_paris_budget
 import dash_bootstrap_components as dbc
 from scenarios import when_budget_is_spend, cumulated_emissions_this_second
-from data.read_data import read_bisko_budget
+from data.read_data import read_bisko_budget_hd
 
 
-def _update_paris_budget(df):
+def _update_paris_budget(df, prob, temp):
 
-    budget_start_year, bisko_budget_start_value_kt = read_bisko_budget()
+    budget_start_year, bisko_budget_start_value_kt = read_bisko_budget_hd(prob, temp)
     emissions_up_to_now_kt = cumulated_emissions_this_second(
         df, "scenario_trendlin_kt", from_y=budget_start_year
     )

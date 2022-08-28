@@ -527,7 +527,7 @@ def card_temp_target(app, df):
                                 choice_temp,
                                 html.P("erhitzt. "),
                                 html.P(
-                                    "(Heidelberg bestimmt natürlich nicht alleine das Ausmaß der Klimaerwährmung. Hier wird der Frage nachgegangen wie die Welt aussehen würde, wenn jede Emittent:in mit seinem Budget auf die gleiche Weise umgehen würde wie Heidelberg.)"
+                                    "(Heidelberg bestimmt natürlich nicht alleine das Ausmaß der Klimaerwärmung. Hier wird der Frage nachgegangen wie die Welt aussehen würde, wenn jede Emittent:in mit seinem Budget auf die gleiche Weise umgehen würde wie Heidelberg.)"
                                 )
                                 # html.Div(id="TestFest"),
                             ]

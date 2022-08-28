@@ -1,16 +1,16 @@
 import numpy as np
 import pandas as pd
-import dash_html_components as html
-import dash_table
+from dash import html
+from dash import dash_table
 from dash.dependencies import Input, Output, State
-import dash_core_components as dcc
+from dash import dcc
 import dash_bootstrap_components as dbc
-from dash_html_components import H4
 from figures import fig_emissions_measured_vs_target, fig_target_diff_year
-from custom_components import collapse_button, led
-from data.compute_budget import get_remaining_paris_budget
-from data.read_data import read_bisko_budget
+from custom_components import collapse_button, led, set_value_buttons
+from data.compute_remaining_budget import get_remaining_paris_budget
+from data.read_data import read_bisko_budget_hd
 from scenarios import cumulated_emissions, when_budget_is_spend, when_scenario_0
+from data.read_data import read_budget_de, read_budget_hd
 
 
 link_ifeu18 = html.A(
@@ -26,6 +26,12 @@ link_ifeu20 = html.A(
 link_bisko = html.A(
     "BISKO-Systematik",
     href="https://www.kea-bw.de/fileadmin/user_upload/Energiemanagement/Angebote/Beschreibung_der_BISKO-Methodik.pdf",
+)
+
+
+link_steffen2018 = html.A(
+    "einer annerkannten Studie",
+    href="https://www.pnas.org/doi/full/10.1073/pnas.1810141115",
 )
 
 
@@ -189,37 +195,83 @@ def card_paris(app, df):
     # https://www.umweltrat.de/SharedDocs/Downloads/EN/01_Environmental_Reports/2020_08_environmental_report_chapter_02.pdf?__blob=publicationFile&v=5
     @app.callback(
         Output("led_budget", "children"),
-        Input("interval-component", "n_intervals"),
+        [
+            Input("interval-component", "n_intervals"),
+            Input("choice_prob", "value"),
+            Input("choice_temp", "value"),
+        ],
     )
-    def led_budget(n):
-        remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(df)
+    def led_budget(n, prob, temp):
+        remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(
+            df, prob, temp
+        )
         remaining_budget_t = remaining_budget_kt * 1000
         remaining_budget_t_str = "{:.2f}".format(remaining_budget_t)
         return led(remaining_budget_t_str)
 
     @app.callback(
         Output("led_endyear", "children"),
-        Input("interval-component", "n_intervals"),
+        [
+            Input("interval-component", "n_intervals"),
+            Input("choice_prob", "value"),
+            Input("choice_temp", "value"),
+        ],
     )
-    def led_budget(n):
-        remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(df)
+    def led_endyear(n, prob, temp):
+        remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(
+            df, prob, temp
+        )
         return led(when_budget_is_depleted.year)
         # wbid = when_budget_is_depleted
         led_content = f"{wbid.day} . {wbid.month} . {wbid.year}"
 
         return led(led_content)
 
+    @app.callback(
+        Output("details_paris_text_01intro", "children"),
+        [
+            Input("choice_prob", "value"),
+            Input("choice_temp", "value"),
+        ],
+    )
+    def get_details_paris_text_01intro(prob, temp):
+        y, b_de = read_budget_de(prob, temp)
+        y, b_hd = read_budget_hd(prob, temp)
+        text = [
+            "Im völkerrechtlich bindenden ",
+            link_parisagreement,
+            " hat sich die Weltgemeinschaft darauf verständigt Anstrengungen zu unternehmen um die globale Klimaerwärmung auf 1,5 Grad Celsius zu beschränken. Eine Erhöhung um 2 Grad soll auf jeden Fall verhindert werden. Mit 2 Grad Erwärmung können laut ",
+            link_steffen2018,
+            " irreversible Rückkopplungen durch Kippelemente im Erdsystem nicht ausgeschlossen werden, die das Erdklima in eine Heißzeit überführen würden. Jedes Land muss seinen Beitrag leisten, damit wir dieses Szenario verhindern. Doch welchen Beitrag muss jedes Land konkret leisten? Diese Frage zu beantworten ist nicht einfach. Inwieweit spielen z.B. historische Emissionen eine Rolle bei der Verteilung der Lasten? ",
+            link_newclimateorg_de,
+            f" hat sich dieser schwierigen Aufgabe angenommen und ist zu dem Ergebnis gekommen, dass Deutschland ab dem Jahr {y} noch ein CO2 Budget von {b_de} Gigatonnen hat um mit einer Wahrscheinlichkeit von {prob}% eine Klimaerwärmung um mehr als {temp} Grad Celsius zu verhindern. Teilen wir das deutsche Budget gleichmäßig auf die Bevölkerung auf, dann hat die Stadt Heidelberg ab {y} ein CO2 Budget von {int(b_hd)} kt zur Verfügung.",
+        ]
+        return text
+
+    @app.callback(
+        Output("details_paris_text_03bisko_berechnung", "children"),
+        [
+            Input("choice_prob", "value"),
+            Input("choice_temp", "value"),
+        ],
+    )
+    def get_details_paris_text_03bisko_berechnung(prob, temp):
+        y, b_de = read_budget_de(prob, temp)
+        y, b_hd = read_budget_hd(prob, temp)
+        text = [
+            "Wie genau wollen wir aber nun diese Aufteilung des Gesamtbudgets vornehmen? In Kapitel 2.3 in ",
+            link_ifeu18,
+            " werden für das Jahr 2015 jeder Heidelberger Bürger:in durchschnittliche Emissionen von 11,2 Tonnen CO2 bescheinigt. Von ",
+            link_statista2015hdnrpersons,
+            f" lässt sich die Einwohnerzahl Heidelbergs in 2015 ermitteln: 156267. Somit lassen sich die gesamten Emissionen für 2015 berechnen: 1750.19 kt. Aus der Balkengrafik aus diesem Dashboard lesen wir einen Wert für die BISKO-Emissionen von 1117.43 kt ab. Das bedeutet dass wir nur rund 64% der Gesamtemissionen Heidelbergs durch die BISKO-Emissionen erfassen. Folgerichtig sollte unser BISKO-Budget auch nur rund 64% der Gesamtbudgets betragen. Wir gehen also von rund (1117.43 kt / 1750.19 kt) * {int(b_hd)} kt = {int(1117.43*int(b_hd)/1750.19)} kt als BISKO-Budget aus. Dies ist das Budget, dass wir für die in der ",
+            link_ifeu18,
+            " erfassten Emissionen haben. Auf dieser Basis berechnen wir das verbleibende Restbudget sowie das Jahr, bis zu dem wir, bei fortschreitendem Trend, das Budget aufgebraucht haben werden.",
+        ]
+        return text
+
     details = [
         html.H5("Das CO2-Budget der Stadt Heidelberg"),
-        html.P(
-            [
-                "Im völkerrechtlich bindenden ",
-                link_parisagreement,
-                " hat sich die Weltgemeinschaft darauf verständigt Anstrengungen zu unternehmen um die globale Klimaerwärmung auf 1,5 Grad Celsius zu beschränken. Jedes Land muss seinen Beitrag leisten, damit wir dieses Ziel erreiche können. Den genauen Beitrag eines Landes zu bestimmen ist allerdings nicht einfach. Inwieweit spielen z.B. historische Emissionen eine Rolle bei der Verteilung der Lasten? ",
-                link_newclimateorg_de,
-                " hat sich dieser schwierigen Aufgabe angenommen und ist zu dem Ergebnis gekommen, dass Deutschland ab dem Jahr 2018 noch ein CO2 Budget von 4,6 Gigatonnen hat um mit einer Wahrscheinlichkeit von 66% die Pariser Klimaziele zu erreichen. Teilen wir das deutsche Budget gleichmäßig auf die Bevölkerung auf dann hat die Stadt Heidelberg ab 2018 ein CO2 Budget von 8932 kt zur Verfügung.",
-            ]
-        ),
+        html.P(id="details_paris_text_01intro"),
         html.H5("Das BISKO Budget"),
         html.H5("Allgemein"),
         html.P(
@@ -232,17 +284,7 @@ def card_paris(app, df):
             ]
         ),
         html.H5("Berechnung"),
-        html.P(
-            [
-                "Wie genau wollen wir aber nun diese Aufteilung des Gesamtbudgets vornehmen? In Kapitel 2.3 in ",
-                link_ifeu18,
-                " werden für das Jahr 2015 jeder Heidelberger Bürger:in durchschnittliche Emissionen von 11,2 Tonnen CO2 bescheinigt. Da wir von ",
-                link_statista2015hdnrpersons,
-                " die Einwohnerzahl Heidelbergs in 2015 ermitteln können: 156267, Können wir leicht die Gesamten Emissionen für 2015 berechnen: 1750.19 kt. Aus der Balkengrafik aus diesem Dashboard lesen wir einen Wert für die BISKO-Emissionen von 1117.43 kt ab. Das bedeutet dass wir nur rund 64% der Gesamtemissionen Heidelbergs durch die BISKO-Emissionen erfassen. Folgerichtig sollte unser BISKO-Budget auch nur rund 64% der Gesamtbudgets betragen. Wir gehen also von rund (1117.43 kt / 1750.19 kt) * 8932 kt = 5703 kt als BISKO-Budget aus. Dies ist das Budget, dass wir für die in der ",
-                link_ifeu18,
-                " erfassten Emissionen haben. Auf dieser Basis wird das Verbleibende Restbudget und das Jahr, bis zu dem wir, bei fortschreitendem Trend, das Budget aufgebraucht haben werden.",
-            ]
-        ),
+        html.P(id="details_paris_text_03bisko_berechnung"),
         html.H5("Heidelbergs Emissionen in dieser Sekunde?"),
         html.P(
             [
@@ -250,7 +292,7 @@ def card_paris(app, df):
                 link_ifeu18,
                 " und ",
                 link_ifeu20,
-                "). Das bedeutet, dass die Emissionen pro Sekunde nur schätzen können. Dies geschieht in ein linearen Trend aus den Jahren 2014 und den letzten bekannten Wert, also 2020, geschätzten und  auf die Sekunde runter gerechnet wird. Diese Angabe ist natürlich nicht exakt, gibt aber eine Idee zu den Größenordnungen.",
+                "). Das bedeutet, dass die Emissionen pro Sekunde nur schätzen können. Wir schätzen den linearen Trend aus den Jahren 2014 und dem letzten Jahr, aus dem wir Daten zur Verfügung haben (2020). Dieser wird dann auf Sekunden runter gerechnet. Diese Angabe ist natürlich nicht exakt, gibt aber eine Idee zu den Größenordnungen.",
             ]
         ),
         html.H5("Bis wann ist unser Budget aufgebraucht"),
@@ -343,59 +385,73 @@ def card_about():
 
 
 def card_table(app, df):
-
-    budget_start_year, bisko_budget_start_value_kt = read_bisko_budget()
-
-    df_t = pd.DataFrame()
-
-    df_t[" "] = [
-        "Gesamte Emissionen [kt]",
-        "Prozent des Pariser Budgets",
-        "Paris Budget aufgebraucht",
-        "Erstes Jahr 0 Emissionen",
-    ]
-
-    for scenario_name, nice_name in [
-        ["scenario_target30_kt", "EU Mission 2030"],
-        ["scenario_target40_kt", "Szenario 2040"],
-        ["scenario_target30_new_kt", f"EU Mission 2030 U."],
-        ["scenario_target40_new_kt", f"Szenario 2040 U."],
-        ["scenario_trendlin_kt", "Trend"],
-    ]:
-
-        projected_emissions_kt = cumulated_emissions(
-            df, scenario_name, from_y=budget_start_year
-        )
-        percentage_budget = 100 * (projected_emissions_kt / bisko_budget_start_value_kt)
-
-        year0 = when_scenario_0(df, scenario_name)
-
-        year_budget_depleted = when_budget_is_spend(
-            df, scenario_name, bisko_budget_start_value_kt, from_y=budget_start_year
-        )
-
-        c = [
-            projected_emissions_kt,
-            percentage_budget,
-            year_budget_depleted,
-            year0,
-        ]
-        units = [" kt", " %", "", ""]
-        c = [f"{x:.0f}{units[i]}" for i, x in enumerate(c)]
-
-        c = [" " if x == "nan" else x for x in c]
-
-        df_t[nice_name] = c
-
-    table = dash_table.DataTable(
-        id="table",
-        columns=[{"name": i, "id": i} for i in df_t.columns],
-        data=df_t.to_dict("records"),
+    @app.callback(
+        Output("tableholder", "children"),
+        [
+            Input("interval-component", "n_intervals"),
+            Input("choice_prob", "value"),
+            Input("choice_temp", "value"),
+        ],
     )
+    def fill_table(n, prob, temp):
+
+        budget_start_year, bisko_budget_start_value_kt = read_bisko_budget_hd(
+            prob, temp
+        )
+
+        df_t = pd.DataFrame()
+
+        df_t[" "] = [
+            "Gesamte Emissionen [kt]",
+            "Prozent des Pariser Budgets",
+            "Paris Budget aufgebraucht",
+            "Erstes Jahr 0 Emissionen",
+        ]
+
+        for scenario_name, nice_name in [
+            ["scenario_target30_kt", "EU Mission 2030"],
+            ["scenario_target40_kt", "Szenario 2040"],
+            ["scenario_target30_new_kt", f"EU Mission 2030 U."],
+            ["scenario_target40_new_kt", f"Szenario 2040 U."],
+            ["scenario_trendlin_kt", "Trend"],
+        ]:
+
+            projected_emissions_kt = cumulated_emissions(
+                df, scenario_name, from_y=budget_start_year
+            )
+            percentage_budget = 100 * (
+                projected_emissions_kt / bisko_budget_start_value_kt
+            )
+
+            year0 = when_scenario_0(df, scenario_name)
+
+            year_budget_depleted = when_budget_is_spend(
+                df, scenario_name, bisko_budget_start_value_kt, from_y=budget_start_year
+            )
+
+            c = [
+                projected_emissions_kt,
+                percentage_budget,
+                year_budget_depleted,
+                year0,
+            ]
+            units = [" kt", " %", "", ""]
+            c = [f"{x:.0f}{units[i]}" for i, x in enumerate(c)]
+
+            c = [" " if x == "nan" else x for x in c]
+
+            df_t[nice_name] = c
+
+        table = dash_table.DataTable(
+            # id="table",
+            columns=[{"name": i, "id": i} for i in df_t.columns],
+            data=df_t.to_dict("records"),
+        )
+        return table
 
     details_table = [
         html.P(
-            f'Hier werden die verschiedenen Szenarien zur Klimaneutralität in Heidelberg verglichen. Da das Pariser Budget ab Beginn des Jahres {budget_start_year} gerechnet wird werden die entsprechenden Szenarien auch ab diesem Jahr berücksichtigt. Die "Gesamten Emissionen [kt]" etwa beziehen sich auf den Zeitraum von Anfang {budget_start_year} bis Zum Zeitpunkt, an dem die Klimaneutralität erreicht ist. Zusätzlich wird dargestellt wieviel Prozent des ursprünglich angesetzten Pariser Budgets letztlich aufgebraucht wird und wann das Budget (also wann 100%) überschritten ist. Die letzte Zeile zeigt das Jahr an, in dem Klimaneutralität erreicht wird.'
+            f'Hier werden die verschiedenen Szenarien zur Klimaneutralität in Heidelberg verglichen. Da das Pariser Budget ab Beginn des Jahres {2018} gerechnet wird werden die entsprechenden Szenarien auch ab diesem Jahr berücksichtigt. Die "Gesamten Emissionen [kt]" etwa beziehen sich auf den Zeitraum von Anfang {2018} bis Zum Zeitpunkt, an dem die Klimaneutralität erreicht ist. Zusätzlich wird dargestellt wieviel Prozent des ursprünglich angesetzten Pariser Budgets letztlich aufgebraucht wird und wann das Budget (also wann 100%) überschritten ist. Die letzte Zeile zeigt das Jahr an, in dem Klimaneutralität erreicht wird.'
         ),
         html.P(
             "Die Ziele 2030 und 2040 sind mittlerweile so nicht mehr realisierbar. Sie geben also an wie die Entwicklung hätte sein können, wenn Heidelberg die Ziele jedes Jahr erreicht hätte. Um sich ein Bild von den noch zu erreichenden Zielen zu machen muss man sich die beiden Updates der Zielpfade anschauen: EU Mission 2030 U. und Szenario 2040 U."
@@ -413,11 +469,77 @@ def card_table(app, df):
             [
                 html.H5("Szenarien im Hinblick auf das Heidelberger CO2 Budget"),
                 html.P(),
-                table,
+                # table,
+                html.Div(id="tableholder"),
                 html.P(),
                 cbutton_table,
             ]
         )
     )
 
-    return card_table
+    return app, card_table
+
+
+def card_temp_target(app, df):
+    # @app.callback(
+    #     Output("TestFest", "children"),
+    #     Input("choice_temp", "value"),
+    # )
+    # def show_temp(value):
+    #     return f"blUBBblUBB {value}"
+
+    choice_prob = dcc.RadioItems(
+        # ["66%", "50%"],
+        id="choice_prob",
+        options=[
+            {"label": "66%", "value": 66},
+            {"label": "50%", "value": 50},
+        ],
+        value=66,
+        inline=True,
+        style={"marginLeft": 5, "marginRight": 5},
+    )
+    choice_temp = dcc.RadioItems(
+        id="choice_temp",
+        options=[
+            {"label": "1,5°C", "value": 1.5},
+            {"label": "1,75°C", "value": 1.75},
+            {"label": "2.0°C", "value": 2},
+        ],
+        value=1.5,
+        inline=True,
+        style={"marginLeft": 5, "marginRight": 5},
+    )
+
+    card_temp_target = dbc.Card(
+        dbc.CardBody(
+            [
+                html.H6("Temperatur Ziel"),
+                html.Div(
+                    [
+                        dbc.Row(
+                            [
+                                html.P(
+                                    "Ich möchte, dass sich unsere Atmosphäre mit einer Wahrscheinlichkeit von"
+                                ),
+                                choice_prob,
+                                html.P("nicht mehr als"),
+                                choice_temp,
+                                html.P("erhitzt. "),
+                                html.P(
+                                    "(Heidelberg bestimmt natürlich nicht alleine das Ausmaß der Klimaerwährmung. Hier wird der Frage nachgegangen wie die Welt aussehen würde, wenn jede Emittent:in mit seinem Budget auf die gleiche Weise umgehen würde wie Heidelberg.)"
+                                )
+                                # html.Div(id="TestFest"),
+                            ]
+                        )
+                    ],
+                    style={"marginLeft": 16, "marginRight": 16},
+                ),
+            ]
+        )
+    )
+    print("gaga")
+    print("")
+    print("gaga")
+
+    return app, card_temp_target

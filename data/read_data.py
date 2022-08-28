@@ -69,19 +69,40 @@ def total_budget_to_bisko_budget(b):
     return bisko_budget
 
 
-def read_budget():
+def read_budget_old():
     df_budget = pd.read_csv("data/raw/co2_budget_hd.csv", index_col=False)
     budget_start_year = df_budget.first_year_the_budget_is_spend.values[0]
     budget_start_value_kt = df_budget.co2_budget_kt.values[0]
     return budget_start_year, budget_start_value_kt
 
 
-def read_bisko_budget():
-    budget_start_year, budget_start_value_kt = read_budget()
+def read_budget_de(prob, temp):
+    df_budgets = pd.read_csv("data/raw/co2_budgets_de.csv", index_col=False)
+    df_budgets.set_index("probability", drop=True, inplace=True)
+
+    budget_start_value_gt = df_budgets.loc[int(prob)][str(temp)]
+    budget_start_year = 2018
+
+    return budget_start_year, budget_start_value_gt
+
+
+def read_budget_hd(prob, temp):
+    budget_start_year, budget_start_value_gt_de = read_budget_de(prob, temp)
+    budget_start_value_kt_de = 1941.73913 * budget_start_value_gt_de
+    return budget_start_year, budget_start_value_kt_de
+
+
+def read_bisko_budget_hd(prob, temp):
+
+    assert prob in [50, 66], prob
+    assert temp in [1.5, 1.75, 2], temp
+
+    # budget_start_year, budget_start_value_kt = read_budget()
+    budget_start_year, budget_start_value_kt = read_budget_hd(prob, temp)
     bisko_budget_start_value_kt = total_budget_to_bisko_budget(budget_start_value_kt)
     return budget_start_year, bisko_budget_start_value_kt
 
 
 if __name__ == "__main__":
-    budget_start_year, budget_start_value_kt = read_bisko_budget()
+    budget_start_year, budget_start_value_kt = read_bisko_budget_hd()
     print(budget_start_year, budget_start_value_kt)

@@ -1,14 +1,15 @@
 import os, sys
 import datetime
 from dateutil.relativedelta import relativedelta
-from data.read_data import read_bisko_budget
+from data.read_data import read_bisko_budget_hd
 
 
-def get_remaining_paris_budget(df):
+# def get_remaining_paris_budget(df, prob, temp):
+def get_remaining_paris_budget(df, prob, temp):
 
     assert "co2_kt_total" in df.columns
 
-    budget_start_year, bisko_budget_start_value_kt = read_bisko_budget()
+    budget_start_year, bisko_budget_start_value_kt = read_bisko_budget_hd(prob, temp)
 
     s_total = df["co2_kt_total"].dropna()
 

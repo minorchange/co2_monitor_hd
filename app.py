@@ -102,7 +102,9 @@ app.layout = html.Div(
                 html.P(),
                 dbc.Row(
                     [
-                        dbc.Col([card_paris, html.P(), card_diff_year], lg=4),
+                        dbc.Col([card_paris, html.P(),
+                                  card_diff_year
+                                  ], lg=4),
                         dbc.Col(
                             [
                                 main_compare,

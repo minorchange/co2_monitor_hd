@@ -10,9 +10,9 @@ from scenarios import (
 )
 from data.read_data import read_emissions
 from dash.dependencies import Input, Output, State
-import dash_html_components as html
 import dash_bootstrap_components as dbc
-import dash_core_components as dcc
+from dash import html
+from dash import dcc
 import dash
 import os
 from colors import *
@@ -49,10 +49,14 @@ app = dash.Dash(
 
 @app.callback(
     Output("live-update-paris-budget", "children"),
-    Input("interval-component", "n_intervals"),
+    [
+        Input("interval-component", "n_intervals"),
+        Input("choice_prob", "value"),
+        Input("choice_temp", "value"),
+    ],
 )
-def update_paris_budget(n):
-    return _update_paris_budget(df)
+def update_paris_budget(n, prob, temp):
+    return _update_paris_budget(df, prob, temp)
 
 
 header = dbc.Navbar(
@@ -85,13 +89,15 @@ from cards import (
     card_diff_year,
     card_about,
     card_table,
+    card_temp_target,
 )
 
 app, main_compare = card_main_compare(app, df)
 app, card_paris = card_paris(app, df)
 card_diff_year = card_diff_year(app, df)
 card_about = card_about()
-card_table = card_table(app, df)
+app, card_table = card_table(app, df)
+app, card_temp_target = card_temp_target(app, df)
 
 
 app.layout = html.Div(
@@ -99,6 +105,8 @@ app.layout = html.Div(
         header,
         dbc.Container(
             [
+                html.P(),
+                card_temp_target,
                 html.P(),
                 dbc.Row(
                     [

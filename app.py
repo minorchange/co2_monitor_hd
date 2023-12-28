@@ -1,6 +1,6 @@
 from callbacks import _update_paris_budget
 from data.target import add_targets
-from trend import add_trend
+from data.trend import add_trend
 from scenarios import (
     add_scenarios,
     when_scenario_0,
@@ -16,26 +16,29 @@ import dash_core_components as dcc
 import dash
 import os
 from colors import *
+from data.data import d
 
 
 proj_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(proj_dir)
 
 
-# data
-df_emissions = read_emissions()
-df = df_emissions
-df["co2_kt_total"] = df.sum(axis=1)
+# # data
+# df_emissions = read_emissions()
+# df = df_emissions
+# df["co2_kt_total"] = df.sum(axis=1)
 
-df = add_trend(df)
-df = add_targets(df)
+# df = add_trend(df)
+# df = add_targets(df)
 
-df = add_scenarios(df)
+# df = add_scenarios(df)
+df = d.df_balance
 
-when_scenario_0(df, "scenario_trendconst_kt")
-cumulated_emissions(df, "scenario_trendlin_kt", from_y=2014, to_y=2022)
-cumulated_emissions_this_second(df, "scenario_trendlin_kt", from_y=2017)
-when_budget_is_spend(df, "scenario_trendlin_kt", 6000, from_y=2017)
+
+# when_scenario_0(df, "scenario_trendconst_kt")
+# cumulated_emissions(df, "scenario_trendlin_kt", from_y=2014, to_y=2022)
+# cumulated_emissions_this_second(df, "scenario_trendlin_kt", from_y=2017)
+# when_budget_is_spend(df, "scenario_trendlin_kt", 6000, from_y=2017)
 
 
 # app
@@ -47,12 +50,12 @@ app = dash.Dash(
 )
 
 
-@app.callback(
-    Output("live-update-paris-budget", "children"),
-    Input("interval-component", "n_intervals"),
-)
-def update_paris_budget(n):
-    return _update_paris_budget(df)
+# @app.callback(
+#     Output("live-update-paris-budget", "children"),
+#     Input("interval-component", "n_intervals"),
+# )
+# def update_paris_budget(n):
+#     return _update_paris_budget(df)
 
 
 header = dbc.Navbar(
@@ -84,14 +87,16 @@ from cards import (
     card_paris,
     card_diff_year,
     card_about,
-    card_table,
+    card_table_compare_plans,
+    card_table_budgets,
 )
 
 app, main_compare = card_main_compare(app, df)
 app, card_paris = card_paris(app, df)
 card_diff_year = card_diff_year(app, df)
 card_about = card_about()
-card_table = card_table(app, df)
+card_table_compare_plans = card_table_compare_plans(app, df)
+app, card_table_budgets = card_table_budgets(app, df)
 
 
 app.layout = html.Div(
@@ -107,7 +112,9 @@ app.layout = html.Div(
                             [
                                 main_compare,
                                 html.P(),
-                                card_table,
+                                card_table_compare_plans,
+                                html.P(),
+                                card_table_budgets,
                                 html.P(),
                             ],
                             lg=8,

@@ -1,4 +1,4 @@
-co2_budget_hd:
+co2_budget_hd_newclimate:
     offering 66% for 1.7 Deg:"
         https://www.umweltrat.de/SharedDocs/Downloads/EN/01_Environmental_Reports/2020_08_environmental_report_chapter_02.pdf?__blob=publicationFile&v=5
     offering 50% and 66% for 1.5, 1.75 and 2 Deg:

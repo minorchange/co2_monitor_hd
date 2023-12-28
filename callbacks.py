@@ -7,7 +7,6 @@ from data.read_data import read_bisko_budget
 
 
 def _update_paris_budget(df):
-
     budget_start_year, bisko_budget_start_value_kt = read_bisko_budget()
     emissions_up_to_now_kt = cumulated_emissions_this_second(
         df, "scenario_trendlin_kt", from_y=budget_start_year
@@ -43,7 +42,7 @@ def _update_paris_budget(df):
                 value=when_budget_is_depleted.year, color="#FF5E5E", size=30
             ),
             html.P(
-                f"Erklaerung",
+                f"Erklärung",
             ),
             dbc.Button(
                 "Open collapse",

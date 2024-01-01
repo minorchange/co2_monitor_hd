@@ -9,8 +9,14 @@ from dash_html_components import H4
 from figures import fig_emissions_measured_vs_target, fig_target_diff_year
 from custom_components import collapse_button, led
 from data.compute_budget import get_remaining_paris_budget
-from data.read_data import read_bisko_budget, read_bisko_budget_hd_df
-from scenarios import cumulated_emissions, when_budget_is_spend, when_scenario_0
+from data.read_data import read_bisko_budget
+from scenarios import (
+    cumulated_emissions,
+    when_budget_is_spend,
+    when_budget_is_spend_plan,
+    when_scenario_0,
+    cumulated_emissions_this_second_plan,
+)
 
 
 link_ifeu18 = html.A(
@@ -29,7 +35,7 @@ link_bisko = html.A(
 )
 
 
-def card_main_compare(app, df):
+def card_main_compare(app, co2d):
     link_ifeu_homepage = html.A(
         "Institut für Energie und Umweltforschung Heidelberg (ifeu)",
         href="https://www.ifeu.de/",
@@ -145,7 +151,7 @@ def card_main_compare(app, df):
 
     g_emissions_vs_target = dcc.Graph(
         id="g_emissions_vs_target",
-        figure=fig_emissions_measured_vs_target(df),
+        figure=fig_emissions_measured_vs_target(co2d.df_balance),
     )
 
     card_main_compare = dbc.Card(
@@ -166,7 +172,7 @@ def card_main_compare(app, df):
     return app, card_main_compare
 
 
-def card_paris(app, df):
+def card_paris(app, co2d):
     link_umweltrat_budget_de = html.A(
         "Deutsche Umweltrat",
         href="https://www.umweltrat.de/SharedDocs/Downloads/EN/01_Environmental_Reports/2020_08_environmental_report_chapter_02.pdf?__blob=publicationFile&v=5",
@@ -190,7 +196,9 @@ def card_paris(app, df):
         Input("interval-component", "n_intervals"),
     )
     def led_budget(n):
-        remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(df)
+        remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(
+            co2d.df_balance
+        )
         remaining_budget_t = remaining_budget_kt * 1000
         remaining_budget_t_str = "{:.2f}".format(remaining_budget_t)
         return led(remaining_budget_t_str)
@@ -200,7 +208,9 @@ def card_paris(app, df):
         Input("interval-component", "n_intervals"),
     )
     def led_year(n):
-        remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(df)
+        remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(
+            co2d.df_balance
+        )
         return led(when_budget_is_depleted.year)
         # wbid = when_budget_is_depleted
         led_content = f"{wbid.day} . {wbid.month} . {wbid.year}"
@@ -285,9 +295,9 @@ def card_paris(app, df):
     return app, card_paris
 
 
-def card_diff_year(app, df_compare_with_target):
+def card_diff_year(app, co2d):
     g_compare_abs = dcc.Graph(
-        id="gcomp_abs_year", figure=fig_target_diff_year(df_compare_with_target)
+        id="gcomp_abs_year", figure=fig_target_diff_year(co2d.df_balance)
     )
 
     details = (
@@ -338,7 +348,7 @@ def card_about():
     return card_imprint
 
 
-def card_table_compare_plans(app, df):
+def card_table_compare_plans(app, co2d):
     budget_start_year, bisko_budget_start_value_kt = read_bisko_budget()
 
     df_t = pd.DataFrame()
@@ -358,14 +368,17 @@ def card_table_compare_plans(app, df):
         ["scenario_trendlin_kt", "Trend"],
     ]:
         projected_emissions_kt = cumulated_emissions(
-            df, scenario_name, from_y=budget_start_year
+            co2d.df_balance, scenario_name, from_y=budget_start_year
         )
         percentage_budget = 100 * (projected_emissions_kt / bisko_budget_start_value_kt)
 
-        year0 = when_scenario_0(df, scenario_name)
+        year0 = when_scenario_0(co2d.df_balance, scenario_name)
 
         year_budget_depleted = when_budget_is_spend(
-            df, scenario_name, bisko_budget_start_value_kt, from_y=budget_start_year
+            co2d.df_balance,
+            scenario_name,
+            bisko_budget_start_value_kt,
+            from_y=budget_start_year,
         )
 
         c = [
@@ -417,52 +430,69 @@ def card_table_compare_plans(app, df):
     return card_table
 
 
-def pddf2dashtable(df, id):
+def pddf2dashtable(df, id, index_col_name):
+    df_dt = df.reset_index().rename(columns={"index": index_col_name})
     table = dash_table.DataTable(
         id=id,
-        columns=[{"name": i, "id": i} for i in df.columns],
-        data=df.to_dict("records"),
+        columns=[{"name": i, "id": i} for i in df_dt.columns],
+        data=df_dt.reset_index().to_dict("records"),
     )
     return table
 
 
-def card_table_budgets(app, df):
-    df_hd_bisko_kt, start_date = read_bisko_budget_hd_df()
+def nice_temp_precent_table(df, id):
+    df_nice = df.copy()
+    index_col_name = "Temperaturerhöhung [°C]"
+    df_nice.index = df_nice.index.astype(str) + "°C"
+    df_nice.columns = df_nice.columns.str.replace("[^0-9]", "", regex=True) + "%"
+    df_nice = df_nice.round(1)
+    table = pddf2dashtable(df_nice, id, index_col_name)
+    return table
 
-    table = pddf2dashtable(df_hd_bisko_kt, "table_budgets")
-    # table = dash_table.DataTable(
-    #     id="table_budgets",
-    #     columns=[{"name": i, "id": i} for i in df_hd_bisko_kt.columns],
-    #     data=df_hd_bisko_kt.to_dict("records"),
-    # )
 
-    details_table = [
-        html.P(
-            f'Hier werden die verschiedenen Szenarien zur Klimaneutralität in Heidelberg verglichen. Da das Pariser Budget ab Beginn des Jahres TODO gerechnet wird werden die entsprechenden Szenarien auch ab diesem Jahr berücksichtigt. Die "Gesamten Emissionen [kt]" etwa beziehen sich auf den Zeitraum von Anfang TODObis Zum Zeitpunkt, an dem die Klimaneutralität erreicht ist. Zusätzlich wird dargestellt wieviel Prozent des ursprünglich angesetzten Pariser Budgets letztlich aufgebraucht wird und wann das Budget (also wann 100%) überschritten ist. Die letzte Zeile zeigt das Jahr an, in dem Klimaneutralität erreicht wird.'
-        ),
-        html.P(
-            "Die Ziele 2030 und 2040 sind mittlerweile so nicht mehr realisierbar. Sie geben also an wie die Entwicklung hätte sein können, wenn Heidelberg die Ziele jedes Jahr erreicht hätte. Um sich ein Bild von den noch zu erreichenden Zielen zu machen muss man sich die beiden Updates der Zielpfade anschauen: EU Mission 2030 U. und Szenario 2040 U."
-        ),
-    ]
-
-    app, cbutton_table = collapse_button(
-        app,
-        "Weitere Infos",
-        dbc.CardBody(details_table),
+def card_table_budgets(app, co2d):
+    # Glob
+    table_glob = nice_temp_precent_table(
+        co2d.df_budget_global_kt.round(2).astype(str) + " kt", "table_budgets_global"
     )
+    text_glob = html.P("Blubb BLubb Glob")
 
-    @app.callback(Output("tabs-content", "children"), Input("tabs", "value"))
-    def render_content(tab):
-        if tab == "tab-1":
-            return html.Div(
-                [
-                    table,
-                    html.P(),
-                    html.P("Blubb Blubb Das ist ja interessant."),
-                ]
-            )
-        elif tab == "tab-2":
-            return html.Div([html.H3("Tab content 2")])
+    # HD
+    table_hd = nice_temp_precent_table(
+        co2d.df_budget_hd_kt.round(2).astype(str) + " kt", "table_budgets_hd"
+    )
+    text_hd = html.P("Blubb BLubb HD")
+
+    # HD Bisko
+    table_hd_bisko = nice_temp_precent_table(
+        co2d.df_budget_hd_bisko_kt.round(2).astype(str) + " kt",
+        "table_budgets_hd_bisko",
+    )
+    text_hd_bisko = html.P("Blubb BLubb HD Bisko")
+
+    # HD Remaining
+    table_hd_remaining_tonns = nice_temp_precent_table(
+        (
+            (co2d.df_budget_hd_bisko_kt - cumulated_emissions_this_second_plan(co2d))
+            * 1000
+        )
+        .round(0)
+        .astype(str)
+        + " kt",
+        "table_budgets_hd_bisko_remaining",
+    )
+    text_hd_remaining = html.P("Blubb BLubb HD Bisko Remaining")
+
+    # HD Deplation Date
+    df_date = co2d.df_budget_hd_bisko_kt.applymap(
+        lambda x: when_budget_is_spend_plan(co2d, x)
+    )
+    table_hd_deplation_date = nice_temp_precent_table(
+        df_date.astype(str), "table_budgets_hd_bisko_deplation_date"
+    )
+    text_hd_depletion_date = html.P("Blubb BLubb HD Bisko Date")
+
+    print()
 
     t = html.Div(
         [
@@ -470,25 +500,42 @@ def card_table_budgets(app, df):
                 id="tabs",
                 value="tab-1",
                 children=[
-                    dcc.Tab(label="Tab one", value="tab-1"),
-                    dcc.Tab(label="Tab two", value="tab-2"),
+                    dcc.Tab(label="Global Budget", value="tab-1"),
+                    dcc.Tab(label="Total Budget HD", value="tab-2"),
+                    dcc.Tab(label="Bisko Budget HD", value="tab-3"),
+                    dcc.Tab(label="Budget Ende", value="tab-4"),
+                    # dcc.Tab(label="Remaining Budget", value="tab-4"),
                 ],
             ),
             html.Div(id="tabs-content"),
         ]
     )
+
+    # TODO: Somehow it does not work with both inputs. only tabs is working
+    @app.callback(
+        Output("tabs-content", "children"),
+        [Input("interval-component", "n_intervals"), Input("tabs", "value")],
+    )
+    def render_content(n_intervals, tab):
+        if tab == "tab-1":
+            return html.Div([table_glob, html.P(), text_glob])
+        elif tab == "tab-2":
+            return html.Div([table_hd, html.P(), text_hd])
+        elif tab == "tab-3":
+            return html.Div([table_hd_bisko, html.P(), text_hd_bisko])
+        elif tab == "tab-4":
+            return html.Div([table_hd_deplation_date, html.P(), text_hd_depletion_date])
+        # elif tab == "tab-4":
+        #     return html.Div([table_hd_remaining_tonns, html.P(), text_hd_remaining])
+
     card_table = dbc.Card(
         dbc.CardBody(
             [
                 html.H5("Szenarien im Hinblick auf das Heidelberger CO2 Budget"),
                 html.P(),
                 t,
-                # table,
-                html.P(),
-                cbutton_table,
             ]
         )
     )
 
     return app, card_table
-    # return card_table

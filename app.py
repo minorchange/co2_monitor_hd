@@ -6,7 +6,10 @@ from scenarios import (
     when_scenario_0,
     cumulated_emissions,
     cumulated_emissions_this_second,
+    cumulated_emissions_this_second_plan,
+    emissions_measured_or_planned,
     when_budget_is_spend,
+    when_budget_is_spend_plan,
 )
 from data.read_data import read_emissions
 from dash.dependencies import Input, Output, State
@@ -16,12 +19,15 @@ import dash_core_components as dcc
 import dash
 import os
 from colors import *
-from data.data import d
+from data.data import co2d
 
 
 proj_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(proj_dir)
 
+
+# Todo remove
+# when_budget_is_spend_plan(co2d, 6000)
 
 # # data
 # df_emissions = read_emissions()
@@ -32,9 +38,9 @@ os.chdir(proj_dir)
 # df = add_targets(df)
 
 # df = add_scenarios(df)
-df = d.df_balance
+df = co2d.df_balance
 
-
+cumulated_emissions_this_second_plan(co2d)
 # when_scenario_0(df, "scenario_trendconst_kt")
 # cumulated_emissions(df, "scenario_trendlin_kt", from_y=2014, to_y=2022)
 # cumulated_emissions_this_second(df, "scenario_trendlin_kt", from_y=2017)
@@ -91,12 +97,12 @@ from cards import (
     card_table_budgets,
 )
 
-app, main_compare = card_main_compare(app, df)
-app, card_paris = card_paris(app, df)
-card_diff_year = card_diff_year(app, df)
+app, main_compare = card_main_compare(app, co2d)
+app, card_paris = card_paris(app, co2d)
+card_diff_year = card_diff_year(app, co2d)
 card_about = card_about()
-card_table_compare_plans = card_table_compare_plans(app, df)
-app, card_table_budgets = card_table_budgets(app, df)
+card_table_compare_plans = card_table_compare_plans(app, co2d)
+app, card_table_budgets = card_table_budgets(app, co2d)
 
 
 app.layout = html.Div(

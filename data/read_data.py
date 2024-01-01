@@ -4,7 +4,9 @@ from datetime import datetime
 
 
 def read_emissions():
-    df_allbuttraffic = pd.read_csv("data/raw/co2_hd.csv", index_col=0).fillna(0)
+    df_allbuttraffic = pd.read_csv("data/raw/co2_emissions_hd.csv", index_col=0).fillna(
+        0
+    )
     df_allbuttraffic["co2_kt_gewerbe_u_oeffentlgeb"] = (
         df_allbuttraffic.co2_kt_gewerbe + df_allbuttraffic.co2_kt_oeffentlgeb
     )
@@ -36,11 +38,16 @@ def read_emissions():
         ]
     ]
 
-    df_traffic = pd.read_csv("data/raw/co2_hd_traffic.csv", index_col=0)
+    df_traffic = pd.read_csv("data/raw/co2_emissions_hd_traffic.csv", index_col=0)
     df_all = df_allbuttraffic.join(df_traffic, how="outer").interpolate(
         limit_direction="both"
     )
     return df_all
+
+
+def read_plan_from_csv():
+    df_plan = pd.read_csv("data/raw/hd_emissions_plan_bisko.csv", index_col=0)
+    return df_plan
 
 
 def read_global_budget_Gt_df():
@@ -103,12 +110,16 @@ def portion_of_population_hd_2020():
     return ratio
 
 
-def read_bisko_budget_hd_df():
+def read_budget_hd_kt_df():
     df_glob, start_date = read_global_budget_Gt_df()
     Gt2kt = 1000000
-    df_hd_bisko_kt = (
-        df_glob * portion_of_population_hd_2020() * bisko_underestimate_factor() * Gt2kt
-    )
+    df_hd_kt = df_glob * portion_of_population_hd_2020() * Gt2kt
+    return df_hd_kt, start_date
+
+
+def read_bisko_budget_hd_kt_df():
+    df_hd, start_date = read_budget_hd_kt_df()
+    df_hd_bisko_kt = df_hd * bisko_underestimate_factor()
     return df_hd_bisko_kt, start_date
 
 
@@ -121,5 +132,6 @@ def read_bisko_budget():
 if __name__ == "__main__":
     budget_start_year, budget_start_value_kt = read_bisko_budget()
     print(budget_start_year, budget_start_value_kt)
-    df_hd_bisko_kt, start_date = read_bisko_budget_hd_df()
+    df_hd_bisko_kt, start_date = read_bisko_budget_hd_kt_df()
     print(df_hd_bisko_kt, start_date)
+    read_plan_from_csv()

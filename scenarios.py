@@ -177,7 +177,7 @@ def when_budget_is_spend_plan(co2d, budget_kt):
         return first_year_the_budget_is_depleted(budget_kt) - 1
 
     if math.isnan(first_year_the_budget_is_depleted(budget_kt)):
-        return "Nicht aufgebraucht"
+        return None
 
     s = emissions_measured_or_planned(co2d)
     assert not s.isnull().any()
@@ -216,4 +216,12 @@ def when_budget_is_spend_plan(co2d, budget_kt):
         fraction_of_depletion_year, first_year_the_budget_is_depleted(budget_kt)
     )
 
-    return date_budget_is_depleted.strftime("%d.%m.%Y")
+    return date_budget_is_depleted
+
+
+def when_budget_is_spend_plan_nicestr(co2d, budget_kt):
+    date_budget_is_depleted = when_budget_is_spend_plan(co2d, budget_kt)
+    if date_budget_is_depleted is None:
+        return "Nicht aufgebraucht"
+    else:
+        return date_budget_is_depleted.strftime("%d.%m.%Y")

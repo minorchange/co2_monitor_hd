@@ -6,14 +6,14 @@ from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash_html_components import H4
-from figures import fig_emissions_measured_vs_target, fig_target_diff_year
+from figures import fig_emissions_measured_vs_plan, fig_target_diff_year
 from custom_components import collapse_button, led
-from data.compute_budget import get_remaining_paris_budget
+from data.compute_budget import get_remaining_paris_budget_next_deadline
 from data.read_data import read_bisko_budget
 from scenarios import (
     cumulated_emissions,
     when_budget_is_spend,
-    when_budget_is_spend_plan,
+    when_budget_is_spend_plan_nicestr,
     when_scenario_0,
     cumulated_emissions_this_second_plan,
 )
@@ -151,7 +151,7 @@ def card_main_compare(app, co2d):
 
     g_emissions_vs_target = dcc.Graph(
         id="g_emissions_vs_target",
-        figure=fig_emissions_measured_vs_target(co2d.df_balance),
+        figure=fig_emissions_measured_vs_plan(co2d),
     )
 
     card_main_compare = dbc.Card(
@@ -196,9 +196,12 @@ def card_paris(app, co2d):
         Input("interval-component", "n_intervals"),
     )
     def led_budget(n):
-        remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(
-            co2d.df_balance
-        )
+        (
+            remaining_budget_kt,
+            when_budget_is_depleted,
+            row_index,
+            col_index,
+        ) = get_remaining_paris_budget_next_deadline(co2d)
         remaining_budget_t = remaining_budget_kt * 1000
         remaining_budget_t_str = "{:.2f}".format(remaining_budget_t)
         return led(remaining_budget_t_str)
@@ -208,14 +211,25 @@ def card_paris(app, co2d):
         Input("interval-component", "n_intervals"),
     )
     def led_year(n):
-        remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(
-            co2d.df_balance
-        )
-        return led(when_budget_is_depleted.year)
-        # wbid = when_budget_is_depleted
-        led_content = f"{wbid.day} . {wbid.month} . {wbid.year}"
+        (
+            remaining_budget_kt,
+            when_budget_is_depleted,
+            row_index,
+            col_index,
+        ) = get_remaining_paris_budget_next_deadline(co2d)
+        led_content = f"{str(when_budget_is_depleted.day).zfill(2)}.{str(when_budget_is_depleted.month).zfill(2)}.{when_budget_is_depleted.year}"
 
-        return led(led_content)
+        return (
+            dbc.Row(
+                [
+                    led(str(when_budget_is_depleted.day).zfill(2)),
+                    led(str(when_budget_is_depleted.month).zfill(2)),
+                    led(str(when_budget_is_depleted.year)),
+                ]
+            ),
+        )
+
+        # return led(led_content)
 
     details = [
         html.H5("Das CO2-Budget der Stadt Heidelberg"),
@@ -485,7 +499,7 @@ def card_table_budgets(app, co2d):
 
     # HD Deplation Date
     df_date = co2d.df_budget_hd_bisko_kt.applymap(
-        lambda x: when_budget_is_spend_plan(co2d, x)
+        lambda x: when_budget_is_spend_plan_nicestr(co2d, x)
     )
     table_hd_deplation_date = nice_temp_precent_table(
         df_date.astype(str), "table_budgets_hd_bisko_deplation_date"
@@ -498,7 +512,7 @@ def card_table_budgets(app, co2d):
         [
             dcc.Tabs(
                 id="tabs",
-                value="tab-1",
+                value="tab-4",
                 children=[
                     dcc.Tab(label="Global Budget", value="tab-1"),
                     dcc.Tab(label="Total Budget HD", value="tab-2"),

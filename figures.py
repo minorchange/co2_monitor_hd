@@ -2,8 +2,74 @@ import plotly.graph_objs as go
 from colors import *
 
 
-def fig_emissions_measured_vs_target(df):
+def fig_emissions_measured_vs_plan(co2d):
+    df_e_nicenames = [
+        "Private Haushalte",
+        "Industrie",
+        "Gebäude Stadt",
+        "Gewerbe u. Sonstige",
+        "Verkehr",
+    ]
 
+    individual_measurements_colnames = [
+        "co2_kt_privatehh",
+        "co2_kt_industrie",
+        "co2_kt_staedtgeb",
+        "co2_kt_gewerbe_u_oeffentlgeb",
+        "co2_kt_traffic",
+    ]
+
+    traces_bar = [
+        go.Bar(
+            x=co2d.df_balance.index,
+            y=co2d.df_balance[c],
+            name=df_e_nicenames[i],
+            marker_color=barcolors[i],
+        )
+        for i, c in enumerate(individual_measurements_colnames)
+    ]
+
+    s_e = co2d.df_balance["co2_kt_total"]
+    trace_e_sum = go.Scatter(
+        x=s_e.index,
+        y=s_e.values,
+        name="Gesammtemissionen",
+        mode="lines+markers",
+        line=dict(color="grey", width=2),
+        visible="legendonly",
+    )
+
+    trace_plan = go.Scatter(
+        x=co2d.df_plan.index,
+        y=co2d.df_plan["planned emissions"],
+        name="Geplante Emissionen",
+        mode="lines+markers",
+        line=dict(color=trend_color, width=2),
+        # visible="legendonly",
+    )
+    f_emissions_m_v_t = go.Figure(
+        data=[trace_e_sum]
+        + traces_bar
+        + [
+            trace_plan,
+        ],
+        layout=go.Layout(
+            barmode="stack",
+            title="CO2-Emissionen der Stadt Heidelberg und gesteckte Ziele zur Klimaneutralität.",
+            title_font_family="Open Sans",
+            title_font_color="#212529",
+            title_font_size=16,
+            xaxis=dict(range=[2009.5, 2030.5]),
+            template=template,
+            xaxis_title="Jahr",
+            yaxis_title="CO2 Emissionen [kt]",
+        ),
+    )
+
+    return f_emissions_m_v_t
+
+
+def fig_emissions_measured_vs_target(df):
     df_e_nicenames = [
         "Private Haushalte",
         "Industrie",
@@ -110,7 +176,6 @@ def fig_emissions_measured_vs_target(df):
 
 
 def fig_target_diff_year(df):
-
     nicenames = ["Diff. zum Ziel 2030", "Diff. zum Ziel 2040"]
     colors = [target_30_color, target_50_color]
     traces_compare_abs = [

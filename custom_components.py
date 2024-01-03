@@ -7,7 +7,6 @@ from colors import *
 
 
 def collapse_button(app, button_text, cardbody_collapse):
-
     myuuid = uuid.uuid4()
     button_id = f"button_{myuuid}"
     collapse_id = f"collapse_{myuuid}"
@@ -36,6 +35,5 @@ def collapse_button(app, button_text, cardbody_collapse):
 
 
 def led(nstr):
-
     led = daq.LEDDisplay(value=nstr, color=trend_color, size=30)
     return led

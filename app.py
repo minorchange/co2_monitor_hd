@@ -23,6 +23,7 @@ from cards import (
     card_main_compare,
     card_paris,
     card_diff_year,
+    card_faq,
     card_about,
     card_table_compare_plans,
     card_table_budgets,
@@ -31,6 +32,7 @@ from cards import (
 app, main_compare = card_main_compare(app, co2d)
 app, card_paris = card_paris(app, co2d)
 card_diff_year = card_diff_year(app, co2d)
+card_faq = card_faq(app, co2d)
 card_about = card_about()
 card_table_compare_plans = card_table_compare_plans(app, co2d)
 app, card_table_budgets = card_table_budgets(app, co2d)
@@ -44,12 +46,10 @@ app.layout = html.Div(
                 html.P(),
                 dbc.Row(
                     [
-                        dbc.Col([card_paris, html.P(), card_diff_year], lg=4),
+                        dbc.Col([card_paris, html.P(), card_faq], lg=4),
                         dbc.Col(
                             [
                                 main_compare,
-                                html.P(),
-                                card_table_compare_plans,
                                 html.P(),
                                 card_table_budgets,
                                 html.P(),

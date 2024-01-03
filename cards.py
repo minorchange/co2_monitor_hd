@@ -226,13 +226,34 @@ def card_paris(app, co2d):
         ) = get_remaining_paris_budget_next_deadline(co2d)
         remaining_budget_t = remaining_budget_kt * 1000
         remaining_budget_t_str = "{:.2f}".format(remaining_budget_t)
-        return led(remaining_budget_t_str)
+
+        return [led(remaining_budget_t_str)]
 
     @app.callback(
         Output("led_endyear", "children"),
         Input("interval-component", "n_intervals"),
     )
     def led_year(n):
+        def get_german_month_name(month_number):
+            assert month_number >= 1
+            assert month_number <= 12
+
+            german_months = [
+                "Januar",
+                "Februar",
+                "März",
+                "April",
+                "Mai",
+                "Juni",
+                "Juli",
+                "August",
+                "September",
+                "Oktober",
+                "November",
+                "Dezember",
+            ]
+            return german_months[month_number - 1]
+
         (
             remaining_budget_kt,
             when_budget_is_depleted,
@@ -241,14 +262,21 @@ def card_paris(app, co2d):
         ) = get_remaining_paris_budget_next_deadline(co2d)
         led_content = f"{str(when_budget_is_depleted.day).zfill(2)}.{str(when_budget_is_depleted.month).zfill(2)}.{when_budget_is_depleted.year}"
 
-        return (
-            dbc.Row(
-                [
-                    led(str(when_budget_is_depleted.day).zfill(2)),
-                    led(str(when_budget_is_depleted.month).zfill(2)),
-                    led(str(when_budget_is_depleted.year)),
-                ]
-            ),
+        return html.Div(
+            [
+                dbc.Row(
+                    [
+                        html.Div((led(str(when_budget_is_depleted.day).zfill(2)))),
+                        html.Div(led(str(when_budget_is_depleted.month).zfill(2))),
+                        html.Div(led(str(when_budget_is_depleted.year))),
+                    ],
+                    style={"marginLeft": "0px"},
+                ),
+                html.P(),
+                html.P(
+                    f"Im {get_german_month_name(when_budget_is_depleted.month)} {when_budget_is_depleted.year} wird die Stadt Heidelberg voraussichtlich das ihr CO2 Budget für die Erreichung des {row_index} Grad Zieles mit einer Wahrscheinlichkeit von {col_index.replace('p', '')}% aufgebraucht haben."
+                ),
+            ]
         )
 
         # return led(led_content)
@@ -311,28 +339,58 @@ def card_paris(app, co2d):
             [
                 html.Div(
                     [
-                        html.H5(
-                            f"Verbleibendes CO2-Budget für Heidelberg in Tonnen:",
+                        html.H5(f"Nächste Budgetüberschreitung:"),
+                        html.P(),
+                        html.Div(id="led_endyear"),
+                        html.P(),
+                        html.P(
+                            "Das entsprechende Restbudget in Tonnen ist hier wird hier dargestellt:"
                         ),
                         html.Div(id="led_budget"),
                     ]
                 ),
                 html.P(),
-                html.H5(
-                    f"CO2-Budget aufgebraucht bis:",
-                    className="card-text",
-                ),
-                html.Div(id="led_endyear"),
+                html.H5(f"CO2-Budget aufgebraucht bis:"),
                 html.P(),
                 html.P(
                     "Näherungsweise Angaben des CO2-Budgets für die Stadt Heidelberg basierend auf dem Pariser Klimaabkommen und der Annahme, dass sich der Trend der Emissionen in Heidelberg unverändert fortsetzt.",
-                    className="card-title",
                 ),
                 cbutton_paris,
             ]
         )
     )
     return app, card_paris
+
+
+def card_faq(app, co2d):
+    teaser_tex = html.H5("Gererelle Infos")
+    details = html.Div(
+        [
+            html.H6("Warum gibt es dieses Dashboard?"),
+            html.P(
+                "Die Stadt Heidelberg stellt derzeit nicht alle erforderlichen Informationen zur Verfügung, um die Klimapolitik in Heidelberg auf eine faktenbasierte Weise zu bewerten. Solange das nicht der Fall ist, stellt das Klimanetz HD diese Informationen zur Verfügung."
+            ),
+            html.H5("Was wird benötigt, um Klimapolitik bewerten zu können?"),
+            html.P(
+                "Zwei Aspekte sind hier relevant: Zum einen muss klar ersichtlich sein, zu welcher Temperaturerhöhung die Pläne der Stadt voraussichtlich beitragen (genauer gesagt, wenn weltweit jede Instanz auf ähnliche Weise ihre Budgetverantwortung wahrnimmt, mit welcher Temperaturerhöhung müssen wir dann rechnen). Zum anderen ist es wichtig, zeitnah zu überprüfen, ob die umgesetzten Maßnahmen zu einer planmäßigen Absenkung führen."
+            ),
+            html.H5(
+                "Woher können wir wissen, zu welcher Temperaturerhöhung Heidelberg beitragen wird?"
+            ),
+            html.P(
+                "Die genaue Berechnung ist im Abschnitt über das CO2-Budget Schritt für Schritt dargelegt. Kurz gesagt kennen wir aus dem IPCC das globale CO2-Budget. Wir können jeder Organisationseinheit, sei es nun Staatenbünde, Nationalstaaten, Bundesländer oder Gemeinden, anteilig an ihrer Bevölkerung ein Budget zuweisen."
+            ),
+            html.H5("Woher wissen wir, ob wir unsere Pläne realisieren können?"),
+            html.P(
+                "Hier ist ein engmaschiges Controlling wichtig. Dieser Aspekt wird momentan schon vorbildlich von Heidelberg mittels des TODO-Dashboards umgesetzt. Die Grundidee ist einfach: Nach jedem Jahr wird überprüft, ob so viel CO2 eingespart wurde, wie geplant."
+            ),
+        ]
+    )
+    app, cbutton = collapse_button(app, "Oft gestellte Fragen", dbc.CardBody(details))
+
+    card_faq = dbc.Card(dbc.CardBody([teaser_tex, cbutton]))
+
+    return card_faq
 
 
 def card_diff_year(app, co2d):

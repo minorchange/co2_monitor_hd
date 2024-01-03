@@ -19,6 +19,28 @@ from scenarios import (
 )
 
 
+header = dbc.Navbar(
+    html.A(
+        dbc.Row(
+            [
+                dbc.Col(html.Img(src="/assets/klimaentscheid-logo.jpg", height="45px")),
+                dbc.Col(
+                    dbc.NavbarBrand(
+                        "CO2-Monitor Heidelberg",
+                        className="ml-2",
+                        # style={"color": "red", "font-weight": "bold"},
+                    )
+                ),
+            ],
+            align="center",
+        ),
+        href="https://klimaentscheid-heidelberg.de",
+        className="g-0",  # no gutters
+    ),
+    sticky="top",
+    color="white",
+    style={"border-width": "0px", "box-shadow": "0 6px 6px -6px #999"},
+)
 link_ifeu18 = html.A(
     '"CO2-Bilanzierung bis 2018 für die Stadt Heidelberg"',
     href="https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents_E2103137505/heidelberg/Objektdatenbank/31/PDF/01_Ifeu_Studie_CO2_Bilanzierung_bis_2018_fuer_die_Stadt_Heidelberg.pdf",
@@ -287,10 +309,14 @@ def card_paris(app, co2d):
     card_paris = dbc.Card(
         dbc.CardBody(
             [
-                html.H5(
-                    f"Verbleibendes CO2-Budget für Heidelberg in Tonnen:",
+                html.Div(
+                    [
+                        html.H5(
+                            f"Verbleibendes CO2-Budget für Heidelberg in Tonnen:",
+                        ),
+                        html.Div(id="led_budget"),
+                    ]
                 ),
-                html.Div(id="led_budget"),
                 html.P(),
                 html.H5(
                     f"CO2-Budget aufgebraucht bis:",

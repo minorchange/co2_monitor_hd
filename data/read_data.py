@@ -1,11 +1,13 @@
 import pandas as pd
 import json
 from datetime import datetime
+import os
 
 
 def read_emissions():
-    print("BLUBB")
-    print()
+    print("---->BLUBB")
+    print(os.getcwd())
+    print(os.listdir(os.getcwd()))
     df_allbuttraffic = pd.read_csv("data/raw/co2_emissions_hd.csv", index_col=0).fillna(
         0
     )

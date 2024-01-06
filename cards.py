@@ -89,58 +89,62 @@ def card_main_compare(app, co2d):
     )
 
     details_data = [
-        html.H5("Zu den Daten"),
+        html.H5("Zu den Messdaten"),
         html.P(
             [
-                "Die Rohdaten, die im Balkendiagramm verwendet werden, stammen aus den Berichten ",
+                "Die Grundlage für das Balkendiagramm bilden Rohdaten aus den Berichten ",
                 link_ifeu18,
                 " und ",
                 link_ifeu20,
-                ", die vom ",
+                ", erstellt vom ",
                 link_ifeu_homepage,
                 " nach der ",
                 link_bisko,
-                " erstellt wurden. Für eine vollständige Bilanzierung des CO2-Ausstoßes der Stadt Heidelberg kann nicht auf die Daten im Heidelberger ",
+                ". Beachten Sie, dass die Daten im Heidelberger ",
                 link_statistisches_jb19,
-                " zurückgegriffen werden. Diese decken nur Emissionen aus energetischer Nutzung fossiler Energieträger, also insgesamt weniger als die Hälfte der Gesamtemissionen, ab. Die vorhandenen Daten liegen bis zum Jahr 2020 für volle Kalenderjahre vor, mit Ausnahme der Kategorie Verkehr. Für diese Kategorie wurden in den Jahren 2011 bis 2014 keine Daten erhoben. Hier bedienen wir uns Schätzwerten. Diese sind durch lineare Interpolation zwischen den vorhandenen Datenpunkten entstanden. Da die Daten nach der ",
-                link_bisko,
-                " erstellt wurden umfassen sie nur Emissionen, die innerhalb der Grenzen der Kommune emittiert werden. Laut Kapitel 2.3 in ",
-                link_ifeu18,
-                " umfassen sie Damit explizit nicht alle, von Heidelberger Bürgern verursachten Emissionen.",
+                " nicht für eine umfassende Bilanzierung des CO2-Ausstoßes der Stadt Heidelberg herangezogen werden konnten. Diese beschränken sich lediglich auf Emissionen aus der energetischen Nutzung fossiler Energieträger und decken somit weniger als die Hälfte der Gesamtemissionen ab. Die vorliegenden Daten reichen bis zum Jahr 2020 für volle Kalenderjahre, außer in der Kategorie Verkehr, für die in den Jahren 2011 bis 2014 keine Daten vorliegen. In diesem Fall wurden Schätzwerte durch lineare Interpolation zwischen den vorhandenen Datenpunkten erzeugt."
+                # " Generell wurden die Daten nach der ",
+                # link_bisko,
+                # " erstellt wurden. Sie umfassen also nur Emissionen, die innerhalb der Grenzen der Kommune emittiert werden. Laut Kapitel 2.3 in ",
+                # link_ifeu18,
+                # " umfassen sie Damit explizit nicht alle, von Heidelberger Bürgern verursachten Emissionen.",
             ]
         ),
-        html.H5("Die Jahre 2019 und 2020"),
-        html.P(
-            [
-                "Bei der Veröffentlichung der Emissionen in den Jahren nach 2018 in ",
-                link_ifeu20,
-                " ist es den Autor*innen wichtig die aktuellen Zahlen wie folgt einzuordnen: ",
-            ],
-        ),
-        html.P(
-            [
-                '"Die Jahre 2019 und 2020 zeigen eine stark fallende Tendenz der CO 2 - Emissionen. Tatsächlich werden im Bereich der Gebäudewärme seit vielen Jahren deutliche Einsparungen erzielt. Vor allem liegen die hohen Einsparungen an einem starken Ausbau der Erneuerbaren Energien in Deutschland, was die spezifischen Emissionen des bundesdeutschen Strommixes deutlich sinken ließ. Im Jahr 2020 kommen noch „Corona-Effekte“ vor allem im Verkehrsbereich hinzu, insgesamt lagen die Fahrleistungen deutlich geringer als in den Vorjahren, was sich auch in der Heidelberger CO 2 -Bilanz niederschlägt. Es wird ausdrücklich davor gewarnt, eine lineare Fortsetzung dieser Entwicklung zu erwarten. Genaues Zahlenmaterial für die CO 2 -Bilanz 2021 liegt zwar noch nicht vor, Tendenzen der Bundesentwicklung deuten aber darauf hin, dass sowohl der CO 2 -Emissionsfaktor für den Strom wieder ansteigt („Windschwaches Jahr 2021“ 10), als auch der Verkehrsbereich wieder an das Niveau von 2019 anschließt."',
-            ],
-        ),
-        html.P(
-            [
-                "Dieser Einordnung schlißen wir uns an. Es ist vor diesem Hintergrund wichtig den dargestellten Trend nicht als Prognose zu verstehen. Vielmehr soll er, ähnlich der Zielpfade ein mögliches Szenario durchspielen."
-            ],
-        ),
-        html.P(
-            [
-                "Zudem Weisen die Autor*innen darauf hin, dass die Emissionswerte für das Jahr 2020 noch vorläufig sind."
-            ],
-        ),
+        # html.H5("Die Jahre 2019 und 2020"),
+        # html.P(
+        #     [
+        #         "Bei der Veröffentlichung der Emissionen in den Jahren nach 2018 in ",
+        #         link_ifeu20,
+        #         " ist es den Autor*innen wichtig die aktuellen Zahlen wie folgt einzuordnen: ",
+        #     ],
+        # ),
+        # html.P(
+        #     [
+        #         '"Die Jahre 2019 und 2020 zeigen eine stark fallende Tendenz der CO 2 - Emissionen. Tatsächlich werden im Bereich der Gebäudewärme seit vielen Jahren deutliche Einsparungen erzielt. Vor allem liegen die hohen Einsparungen an einem starken Ausbau der Erneuerbaren Energien in Deutschland, was die spezifischen Emissionen des bundesdeutschen Strommixes deutlich sinken ließ. Im Jahr 2020 kommen noch „Corona-Effekte“ vor allem im Verkehrsbereich hinzu, insgesamt lagen die Fahrleistungen deutlich geringer als in den Vorjahren, was sich auch in der Heidelberger CO 2 -Bilanz niederschlägt. Es wird ausdrücklich davor gewarnt, eine lineare Fortsetzung dieser Entwicklung zu erwarten. Genaues Zahlenmaterial für die CO 2 -Bilanz 2021 liegt zwar noch nicht vor, Tendenzen der Bundesentwicklung deuten aber darauf hin, dass sowohl der CO 2 -Emissionsfaktor für den Strom wieder ansteigt („Windschwaches Jahr 2021“ 10), als auch der Verkehrsbereich wieder an das Niveau von 2019 anschließt."',
+        #     ],
+        # ),
+        # html.P(
+        #     [
+        #         "Dieser Einordnung schlißen wir uns an. Es ist vor diesem Hintergrund wichtig den dargestellten Trend nicht als Prognose zu verstehen. Vielmehr soll er, ähnlich der Zielpfade ein mögliches Szenario durchspielen."
+        #     ],
+        # ),
+        # html.P(
+        #     [
+        #         "Zudem Weisen die Autor*innen darauf hin, dass die Emissionswerte für das Jahr 2020 noch vorläufig sind."
+        #     ],
+        # ),
     ]
 
     details_targets = [
-        html.H5("Zu den Zielen"),
+        html.H5("Zum Plan"),
         html.P(
             [
-                "Die Zielpfade sind, wie auch die Emissionswerte dem Bericht ",
-                link_ifeu20,
-                " entnommen.",
+                "Die geplanten Emissionen sind dem ",
+                html.A(
+                    "Heidelberger Klimaschutsplan",
+                    href="https://app.climateview.global/v3/public/board/2ae7af89-40d4-4ff0-892c-febbfb36886f",
+                ),
+                " entnommen. Die veröffentlichten Pläne reichen nur bis zum Jahr 2040. Zu diesem Zeitpunkt wird die Menge der Emissionen nur auf rund 45% der Emissionsmenge im Jahr 2020 gesunken sein. Für die Betrachtung der Jahre nach 2040 haben wir den linearen trend weiter geschrieben. Das erste Jahr mit Nullemissionen ist danach 2068.",
             ]
         ),
         # html.H6("Warum gibt es zwei Ziele und warum ausgerechnet 2030 und 2050?"),
@@ -157,12 +161,12 @@ def card_main_compare(app, co2d):
         #         "]. Es kann bei diesen Äußerungen leicht der Endruck entstehen dass sich das Heidelberger Klimaziel von 2050 auf 2030 verschoben hat. Das ist aber nicht der Fall. Bei allen bisherigen Meldungen um das neue Datum 2030 handelt es sich um Denkanstöße und Wünsche. Es ist wichtig Visionen zu haben doch es ist auch wichtig die Fakten zu kennen: Heidelberg hält bisher an 2050 als verbindliches Ziel für Klimaneutralität fest.",
         #     ]
         # ),
-        html.H6("Was hat es mit den Updates der Zielpfade auf sich?"),
-        html.P(
-            [
-                'Die Stadt Heidelberg hat seit dem Beschluss des Gemeinderates zum Masterplan 100% Klimaschutz jedes Jahr die durch einen linearen Pfad gegebenen Zwischenziele verfehlt. Wenn wir die Zieldaten weiterhin auf einem linearen Pfad erreichen wollen müssen wir ab 2018 den Updates der Zielpfade, also "EU Mission 2030 Update" beziehungsweise "Szenario 2040 Update" folgen.'
-            ]
-        ),
+        # html.H6("Was hat es mit den Updates der Zielpfade auf sich?"),
+        # html.P(
+        #     [
+        #         'Die Stadt Heidelberg hat seit dem Beschluss des Gemeinderates zum Masterplan 100% Klimaschutz jedes Jahr die durch einen linearen Pfad gegebenen Zwischenziele verfehlt. Wenn wir die Zieldaten weiterhin auf einem linearen Pfad erreichen wollen müssen wir ab 2018 den Updates der Zielpfade, also "EU Mission 2030 Update" beziehungsweise "Szenario 2040 Update" folgen.'
+        #     ]
+        # ),
     ]
 
     app, cbutton_maincompare = collapse_button(
@@ -179,14 +183,11 @@ def card_main_compare(app, co2d):
     card_main_compare = dbc.Card(
         dbc.CardBody(
             [
+                html.H5("Bilanz und Plan"),
                 g_emissions_vs_target,
-                html.P(
-                    [
-                        "In diesem Diagram werden die tatsächlich gemessenen CO2-Emissionen der Stadt Heidelberg nach der ",
-                        link_bisko,
-                        " dargestellt. Zudem sind mögliche Pfade zur Klimaneutralität im Jahr 2030 und 2040, sowie der aktuelle Trend abgebildet.",
-                    ],
-                ),
+                # html.P(
+                #     "In diesem Diagram werden die tatsächlich gemessenen CO2-Emissionen der Stadt Heidelberg sowie deren geplante Emissionen dargestellt."
+                # ),
                 cbutton_maincompare,
             ]
         )
@@ -346,16 +347,15 @@ def card_paris(app, co2d):
                         html.P(
                             "Das entsprechende Restbudget in Tonnen ist hier wird hier dargestellt:"
                         ),
+                        html.H5("Restbudget"),
                         html.Div(id="led_budget"),
                     ]
                 ),
                 html.P(),
-                html.H5(f"CO2-Budget aufgebraucht bis:"),
-                html.P(),
                 html.P(
-                    "Näherungsweise Angaben des CO2-Budgets für die Stadt Heidelberg basierend auf dem Pariser Klimaabkommen und der Annahme, dass sich der Trend der Emissionen in Heidelberg unverändert fortsetzt.",
+                    "Die konkrete Berechnung sowie die Daten der Budgetüberschreitung für weitere Termeraturziele sind im Kästchen 'Budgets' undtergebracht.",
                 ),
-                cbutton_paris,
+                # cbutton_paris,
             ]
         )
     )
@@ -363,32 +363,102 @@ def card_paris(app, co2d):
 
 
 def card_faq(app, co2d):
-    teaser_tex = html.H5("Gererelle Infos")
-    details = html.Div(
+    teaser_tex = html.Div(
         [
-            html.H6("Warum gibt es dieses Dashboard?"),
-            html.P(
-                "Die Stadt Heidelberg stellt derzeit nicht alle erforderlichen Informationen zur Verfügung, um die Klimapolitik in Heidelberg auf eine faktenbasierte Weise zu bewerten. Solange das nicht der Fall ist, stellt das Klimanetz HD diese Informationen zur Verfügung."
-            ),
-            html.H5("Was wird benötigt, um Klimapolitik bewerten zu können?"),
-            html.P(
-                "Zwei Aspekte sind hier relevant: Zum einen muss klar ersichtlich sein, zu welcher Temperaturerhöhung die Pläne der Stadt voraussichtlich beitragen (genauer gesagt, wenn weltweit jede Instanz auf ähnliche Weise ihre Budgetverantwortung wahrnimmt, mit welcher Temperaturerhöhung müssen wir dann rechnen). Zum anderen ist es wichtig, zeitnah zu überprüfen, ob die umgesetzten Maßnahmen zu einer planmäßigen Absenkung führen."
-            ),
-            html.H5(
-                "Woher können wir wissen, zu welcher Temperaturerhöhung Heidelberg beitragen wird?"
-            ),
-            html.P(
-                "Die genaue Berechnung ist im Abschnitt über das CO2-Budget Schritt für Schritt dargelegt. Kurz gesagt kennen wir aus dem IPCC das globale CO2-Budget. Wir können jeder Organisationseinheit, sei es nun Staatenbünde, Nationalstaaten, Bundesländer oder Gemeinden, anteilig an ihrer Bevölkerung ein Budget zuweisen."
-            ),
-            html.H5("Woher wissen wir, ob wir unsere Pläne realisieren können?"),
-            html.P(
-                "Hier ist ein engmaschiges Controlling wichtig. Dieser Aspekt wird momentan schon vorbildlich von Heidelberg mittels des TODO-Dashboards umgesetzt. Die Grundidee ist einfach: Nach jedem Jahr wird überprüft, ob so viel CO2 eingespart wurde, wie geplant."
+            html.H5("Bewertbarkeit von Klimapolitik"),
+            html.Div(
+                [
+                    html.P(
+                        [
+                            "Der Sachverständigenrat  für Umweltfragen beschreibt in einer ",
+                            html.A(
+                                "Stellungnahme",
+                                href="https://www.umweltrat.de/SharedDocs/Downloads/DE/04_Stellungnahmen/2020_2024/2022_06_fragen_und_antworten_zum_co2_budget.pdf?__blob=publicationFile&v=33",
+                            ),
+                            " die 3 wichtigsten Kriterien, anhand derer sich nationale Klimapolitik bewerten lässt. Diese gelten natürlich auch für internationale oder kommunale Klimapolitik:",
+                        ]
+                    ),
+                    html.P(),
+                    html.H6("1. Umsetzungslücke"),
+                    html.P(
+                        [
+                            "Eine Umsetzungslücke liegt dann vor, wenn die tatsächlichen Emissionen nicht den politisch beschlossenen Reduktionszielen entsprechen. Um frühzeitig zu erkennen ob eine Umsetzungslücke besteht bietet sich ein direkter Vergleich der Messdaten mit den ursrünglich geplanten Emissionen an. Heidelberg selbst führt einen solchen Vergleich in ihrem ",
+                            html.A(
+                                "Klimaschutzplan",
+                                "https://app.climateview.global/v3/public/board/2ae7af89-40d4-4ff0-892c-febbfb36886f",
+                            ),
+                            ". Auch im Kästchen 'Bilanz und Plan' werden wir über die nächsten Jahre genau nachverfolgen ob es in Heidelberg eine Umsetzungslücke gibt.",
+                        ]
+                    ),
+                    html.H6("2. Ambitionslücke"),
+                    html.P(
+                        "Eine Ambitionslücke liegt dann vor, wenn die gesteckten Ziele der Emissionsreduktion nicht mit den völkerrechtlich verbindlichen Zielen von Paris kompatibel sind. Hier bietet sich eine Analyse an, ob und, wenn ja, wann die entsprechenden CO2-Budgets aufgebraucht sein werden. Wie eine solche Analyse ausschauen könnte finden Sie im Kästchen 'Budgets'."
+                    ),
+                    html.H6("3. Transparenzlücke"),
+                    html.P(
+                        "Eine Transparenzlücke liegt dann vor, wenn Umsetzungslücke und Ambitionslücke nicht quantitativ bestimmt und öffentlich kommuniziert werden. In Heidelberg wird derzeit die Umsetzungslücke, nicht aber die Ambitionslücke kommuniziert. Wir versuchen auf diesem Dashboard die fehlenden Informationen bereitzustellen und hoffen, dass die Stadt Heidelberg zeitnah selbst die Transparenzlücke schließt."
+                    ),
+                ]
             ),
         ]
     )
-    app, cbutton = collapse_button(app, "Oft gestellte Fragen", dbc.CardBody(details))
+    # details = html.Div(
+    #     [
+    #         html.P(
+    #             [
+    #                 "Der Sachverständigenrat  für Umweltfragen beschreibt in einer ",
+    #                 html.A(
+    #                     "Stellungnahme",
+    #                     href="https://www.umweltrat.de/SharedDocs/Downloads/DE/04_Stellungnahmen/2020_2024/2022_06_fragen_und_antworten_zum_co2_budget.pdf?__blob=publicationFile&v=33",
+    #                 ),
+    #                 " die 3 wichtigsten Kriterien, anhand derer sich nationale Klimapolitik bewerten lässt. Diese gelten natürlich ebenso für internationale oder kommunale Klimapolitik:",
+    #             ]
+    #         ),
+    #         html.P(),
+    #         html.H6("1. Umsetzungslücke"),
+    #         html.P(
+    #             [
+    #                 "Eine Umsetzungslücke ist dann gegeben wenn die tatsächlichen Emissionen den politisch beschlossenen Reduktionzielen nicht genügen. Um frühzeitig zu erkennen ob eine Umsetzungslücke besteht bietet sich ein direkter Vergleich der Messdaten mit den ehemals geplanten Emissionen an. Heidelberg selbt führt einen Solchen Vergleich auf in ihrem ",
+    #                 html.A(
+    #                     "Klimaschutzplan",
+    #                     "https://app.climateview.global/v3/public/board/2ae7af89-40d4-4ff0-892c-febbfb36886f",
+    #                 ),
+    #                 ". Auch im Kästchen 'Bilanz und Plan' werden wir über die nächsten Jahre genaun nachverfolgen ob es in Heidelberg eine Umsetzungslücke gibt.",
+    #             ]
+    #         ),
+    #         html.H6("2. Ambitionslücke"),
+    #         html.P(
+    #             "Eine Ambitionslücke ist dann vorhanden wenn die gesteckten Ziele der Emissionsreduktion nicht mit den völkerrechtlich verbindlichen Zielen von Paris kompatibel sind. Hier bietet sich eine Analyse an, ob und wenn ja, wann die entsprechenden CO2-Budgets aufgebraucht sein werden. Wie so eine Analyse ausschauen könnte finden Sie im Kästen 'Budgets'."
+    #         ),
+    #         html.H6("3. Transparenzlücke"),
+    #         html.P(
+    #             "Eine Transparenzlücke liegt dann vor, wenn Umsetzungslücke und Ambitionslücke nicht quantitativ bestimmt und öffentlich kommuniziert wird. In Heidelberg wird momentan die Umsetzungslücke, nicht aber die Ambitionslücke kommuniziert. Wir versuchen auf diesem Dashboard die fehelenden Infromationen bereit zu stellen und hoffen dass die Stadt Heidelberg zeitnah selbst die Transparenzlücke schließt."
+    #         ),
+    #         #     ]
+    #         # ),
+    #         # html.H6("Warum gibt es dieses Dashboard?"),
+    #         # html.P(
+    #         #     "Die Stadt Heidelberg stellt derzeit nicht alle erforderlichen Informationen zur Verfügung, um die Klimapolitik in Heidelberg auf eine faktenbasierte Weise zu bewerten. Solange das nicht der Fall ist, stellt das Klimanetz HD diese Informationen zur Verfügung."
+    #         # ),
+    #         # html.H5("Was wird benötigt, um Klimapolitik bewerten zu können?"),
+    #         # html.P(
+    #         #     "Zwei Aspekte sind hier relevant: Zum einen muss klar ersichtlich sein, zu welcher Temperaturerhöhung die Pläne der Stadt voraussichtlich beitragen (genauer gesagt, wenn weltweit jede Instanz auf ähnliche Weise ihre Budgetverantwortung wahrnimmt, mit welcher Temperaturerhöhung müssen wir dann rechnen). Zum anderen ist es wichtig, zeitnah zu überprüfen, ob die umgesetzten Maßnahmen zu einer planmäßigen Absenkung führen."
+    #         # ),
+    #         # html.H5(
+    #         #     "Woher können wir wissen, zu welcher Temperaturerhöhung Heidelberg beitragen wird?"
+    #         # ),
+    #         # html.P(
+    #         #     "Die genaue Berechnung ist im Abschnitt über das CO2-Budget Schritt für Schritt dargelegt. Kurz gesagt kennen wir aus dem IPCC das globale CO2-Budget. Wir können jeder Organisationseinheit, sei es nun Staatenbünde, Nationalstaaten, Bundesländer oder Gemeinden, anteilig an ihrer Bevölkerung ein Budget zuweisen."
+    #         # ),
+    #         # html.H5("Woher wissen wir, ob wir unsere Pläne realisieren können?"),
+    #         # html.P(
+    #         #     "Hier ist ein engmaschiges Controlling wichtig. Dieser Aspekt wird momentan schon vorbildlich von Heidelberg mittels des TODO-Dashboards umgesetzt. Die Grundidee ist einfach: Nach jedem Jahr wird überprüft, ob so viel CO2 eingespart wurde, wie geplant."
+    #         # ),
+    #     ]
+    # )
+    # app, cbutton = collapse_button(app, "Oft gestellte Fragen", dbc.CardBody(details))
 
-    card_faq = dbc.Card(dbc.CardBody([teaser_tex, cbutton]))
+    card_faq = dbc.Card(dbc.CardBody([teaser_tex]))  # , cbutton]))
 
     return card_faq
 
@@ -553,20 +623,69 @@ def card_table_budgets(app, co2d):
     table_glob = nice_temp_precent_table(
         co2d.df_budget_global_kt.round(2).astype(str) + " kt", "table_budgets_global"
     )
-    text_glob = html.P("Blubb BLubb Glob")
+    text_glob = html.P(
+        [
+            "Aus einem ",
+            html.A(
+                "Bericht des IPCCs",
+                href="https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_SPM.pdf",
+            ),
+            f" (S.29) geht hervor, welche Menenge CO2 die gesammte Menschheit ab dem Jahr {co2d.budget_start_date.year} noch emittieren darf um die entsprechenden Temperaturziele (+1.5°C, +1.7°C, +2.0°C) mit einer entsprechenden Wahrscheinlichkeit (17%-83%) zu erreichen.",
+        ]
+    )
 
     # HD
     table_hd = nice_temp_precent_table(
         co2d.df_budget_hd_kt.round(2).astype(str) + " kt", "table_budgets_hd"
     )
-    text_hd = html.P("Blubb BLubb HD")
+    text_hd = html.P(
+        [
+            "In einer ",
+            html.A(
+                "Stellungnahme",
+                href="https://www.umweltrat.de/SharedDocs/Downloads/DE/04_Stellungnahmen/2020_2024/2022_06_fragen_und_antworten_zum_co2_budget.pdf?__blob=publicationFile&v=33",
+            ),
+            " (Kapitel 9) geht der Sachverständigenrat für Umweltfragen im Detail darauf ein, warum eine Aufteilung des globalen Budgets auf e.g. Nationalstaaten nach deren Bevölkerungsanteil 'ethisch gut begründet', 'praktikabel', und 'sachgerecht' ist. Im Vergleich zum globalen Budget, dass auf haten Wissenschaftlichen Analysen basiert ist ein Budget für e.g. Nationalstaaten immer ein menschen gemachtes Konstrukt. Hier ist nicht mehr die Frage nach korrekt oder falsch relevant. Vielmehr ist hier die Frage nach der Nützlichkeit die prägende. In der oben schon genannten ",
+            html.A(
+                "Stellungnahme",
+                href="https://www.umweltrat.de/SharedDocs/Downloads/DE/04_Stellungnahmen/2020_2024/2022_06_fragen_und_antworten_zum_co2_budget.pdf?__blob=publicationFile&v=33",
+            ),
+            " (Kapitel 19) ghet der Sachverständigenrat für Umweltfragen auf die Bedenken ein, die mit einer Bevölkerungsanteiligen Aufteilung des Budgets auf e.g. Bundesländer oder Kommunen enhergehen. Er kommt aber letztlich auch zu dem Schluss dass durch die Einführung des Budget Ansatzes auch unterhalb der Ebene der Nationalstaaten: '...überall dort, wo klimarelevante Entscheidungen getroffen werden, ein Maßstab für einen ausreichenden, angemessenen und gerechten Beitrag geschaffen werden.'",
+            html.P(),
+            "Zur konkreten Berechnung können wir e.g. von ",
+            html.A(
+                "Statista",
+                href="https://de.statista.com/statistik/daten/studie/1694/umfrage/entwicklung-der-weltbevoelkerungszahl/",
+            ),
+            " die Bevölkerungszahl der gesammten Erde heranziehen (Im Jahr 2020: 7,84 Milliarden). Ebenfalls von ",
+            html.A(
+                "Statista",
+                href="https://de.statista.com/statistik/daten/studie/375849/umfrage/entwicklung-der-gesamtbevoelkerung-in-heidelberg/",
+            ),
+            " bekommen wir die Zahl der Heidelberger Bürger*innen (Im Jahr 2020: 158741). Daraus ergibt sich dass Heidelberg einen Anteil von c.a. 0,002% der Weltbevölkerung stellt. Das oben gezeigte Budget ist entsprechend anteilig vom globalen Budget aus 1) gerechnet.",
+        ]
+    )
 
     # HD Bisko
     table_hd_bisko = nice_temp_precent_table(
         co2d.df_budget_hd_bisko_kt.round(2).astype(str) + " kt",
         "table_budgets_hd_bisko",
     )
-    text_hd_bisko = html.P("Blubb BLubb HD Bisko")
+    text_hd_bisko = html.P(
+        [
+            "Das in 2) beschriebene Heidelberger Budget umfasst alle von Heidelberger Bürgern verursachten Emissionen. Die Stadt Heidelberg misst, wie viele andere Staedte auch, ihre Emissionen nach der ",
+            html.A(
+                "BISKO Systematik",
+                href="https://www.kea-bw.de/fileadmin/user_upload/Energiemanagement/Angebote/Beschreibung_der_BISKO-Methodik.pdf",
+            ),
+            ". Der ",
+            html.A(
+                "C02 Bilanzierung bis 2018 für die Stadt Heidelberg",
+                "https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents_E2103137505/heidelberg/Objektdatenbank/31/PDF/01_Ifeu_Studie_CO2_Bilanzierung_bis_2018_fuer_die_Stadt_Heidelberg.pdf",
+            ),
+            " ist zu entnehmen, dass die 'BISKO-Emissionen' rund 64% der von den Heidelbergern insgesammt verursachten Emissionen entsprechen. Um dem Rechnung zu tragen müssen wir auch das Heidelberger CO2 Budget differenziert betrachten. Ein Teil des Budgets, nämlich genau die 64% kann für BISKO-Emissionen aufgewendet werden. Der Rest ist den Nicht-BISKO Emissionen vorbehalten. Entsprechend dieser Überlegung sind in der Tabelle oben die Heidelberger BISKO-Budgets aufgelistet.",
+        ]
+    )
 
     # HD Remaining
     table_hd_remaining_tonns = nice_temp_precent_table(
@@ -588,7 +707,16 @@ def card_table_budgets(app, co2d):
     table_hd_deplation_date = nice_temp_precent_table(
         df_date.astype(str), "table_budgets_hd_bisko_deplation_date"
     )
-    text_hd_depletion_date = html.P("Blubb BLubb HD Bisko Date")
+    text_hd_depletion_date = html.P(
+        [
+            "Hier wird für jede Kombination aus gewünschter Temperaturerhöhung und der entsprechenden Wahrscheinlichkeit, diese auch tatsächlich zu erreichen, ein konkretes Datum genannt, an dem das entsprechende (BISKO-)Budget voraussichtlich aufgebraucht sein wird. Dieses Datum ergibt sich aus den in 3) berechneten BISKO-Budgets sowie den im ",
+            html.A(
+                "Heidelberger Klimaschutzplan",
+                href="https://app.climateview.global/v3/public/board/2ae7af89-40d4-4ff0-892c-febbfb36886f",
+            ),
+            " bisher gemessenen und zukünftig geplanten Emissionen. Nur die Kombinationen aus Temperatur und Wahrscheinlichkeit, die als 'nicht aufgebraucht' markiert sind, sind nach den aktuellen Klimaschutzplänen erreichbar.",
+        ]
+    )
 
     print()
 
@@ -598,10 +726,10 @@ def card_table_budgets(app, co2d):
                 id="tabs",
                 value="tab-4",
                 children=[
-                    dcc.Tab(label="Global Budget", value="tab-1"),
-                    dcc.Tab(label="Total Budget HD", value="tab-2"),
-                    dcc.Tab(label="Bisko Budget HD", value="tab-3"),
-                    dcc.Tab(label="Budget Ende", value="tab-4"),
+                    dcc.Tab(label="1) Globales Budget", value="tab-1"),
+                    dcc.Tab(label="2) Gesammt Budget HD", value="tab-2"),
+                    dcc.Tab(label="3) Bisko Budget HD", value="tab-3"),
+                    dcc.Tab(label="4) Budget Ende", value="tab-4"),
                     # dcc.Tab(label="Remaining Budget", value="tab-4"),
                 ],
             ),
@@ -616,20 +744,23 @@ def card_table_budgets(app, co2d):
     )
     def render_content(n_intervals, tab):
         if tab == "tab-1":
-            return html.Div([table_glob, html.P(), text_glob])
+            return html.Div([html.P(), table_glob, html.P(), text_glob])
         elif tab == "tab-2":
-            return html.Div([table_hd, html.P(), text_hd])
+            return html.Div([html.P(), table_hd, html.P(), text_hd])
         elif tab == "tab-3":
-            return html.Div([table_hd_bisko, html.P(), text_hd_bisko])
+            return html.Div([html.P(), table_hd_bisko, html.P(), text_hd_bisko])
         elif tab == "tab-4":
-            return html.Div([table_hd_deplation_date, html.P(), text_hd_depletion_date])
+            return html.Div(
+                [html.P(), table_hd_deplation_date, html.P(), text_hd_depletion_date]
+            )
         # elif tab == "tab-4":
         #     return html.Div([table_hd_remaining_tonns, html.P(), text_hd_remaining])
 
     card_table = dbc.Card(
         dbc.CardBody(
             [
-                html.H5("Szenarien im Hinblick auf das Heidelberger CO2 Budget"),
+                html.P(),
+                html.H5("Budgets"),
                 html.P(),
                 t,
             ]

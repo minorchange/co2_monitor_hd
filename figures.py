@@ -55,7 +55,7 @@ def fig_emissions_measured_vs_plan(co2d):
         ],
         layout=go.Layout(
             barmode="stack",
-            title="CO2-Emissionen der Stadt Heidelberg und gesteckte Ziele zur Klimaneutralität.",
+            title="Gemessene und geplante CO2-Emissionen der Stadt Heidelberg",
             title_font_family="Open Sans",
             title_font_color="#212529",
             title_font_size=16,

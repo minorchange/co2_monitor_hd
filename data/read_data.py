@@ -4,6 +4,8 @@ from datetime import datetime
 
 
 def read_emissions():
+    print("BLUBB")
+    print()
     df_allbuttraffic = pd.read_csv("data/raw/co2_emissions_hd.csv", index_col=0).fillna(
         0
     )

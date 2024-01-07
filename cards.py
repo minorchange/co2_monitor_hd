@@ -627,7 +627,7 @@ def card_table_budgets(app, co2d):
         [
             "Aus einem ",
             html.A(
-                "Bericht des IPCCs",
+                "Bericht des IPCCs von 2021",
                 href="https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_SPM.pdf",
             ),
             f" (S.29) geht hervor, welche Menenge CO2 die gesammte Menschheit ab dem Jahr {co2d.budget_start_date.year} noch emittieren darf um die entsprechenden Temperaturziele (+1.5°C, +1.7°C, +2.0°C) mit einer entsprechenden Wahrscheinlichkeit (17%-83%) zu erreichen.",

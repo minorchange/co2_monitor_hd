@@ -33,7 +33,7 @@ def fig_emissions_measured_vs_plan(co2d):
     trace_e_sum = go.Scatter(
         x=s_e.index,
         y=s_e.values,
-        name="Gesammtemissionen",
+        name="Gesamtemissionen",
         mode="lines+markers",
         line=dict(color="grey", width=2),
         visible="legendonly",
@@ -100,7 +100,7 @@ def fig_emissions_measured_vs_target(df):
     trace_e_sum = go.Scatter(
         x=s_e.index,
         y=s_e.values,
-        name="Gesammtemissionen",
+        name="Gesamtemissionen",
         mode="lines+markers",
         line=dict(color="grey", width=2),
         visible="legendonly",
@@ -161,7 +161,7 @@ def fig_emissions_measured_vs_target(df):
         ],
         layout=go.Layout(
             barmode="stack",
-            title="CO2-Emissionen der Stadt Heidelberg und gesteckte Ziele zur Klimaneutralität.",
+            title="CO₂-Emissionen der Stadt Heidelberg und gesteckte Ziele zur Klimaneutralität.",
             title_font_family="Open Sans",
             title_font_color="#212529",
             title_font_size=16,
@@ -201,7 +201,7 @@ def fig_target_diff_year(df):
             legend=dict(yanchor="top", y=0.97, xanchor="left", x=0.03),
             template=template,
             xaxis_title="Jahr",
-            yaxis_title="CO2 Mehremissionen [kt]",
+            yaxis_title="CO₂ Mehremissionen [kt]",
         ),
     )
 

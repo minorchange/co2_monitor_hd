@@ -8,38 +8,14 @@ from colors import *
 from datetime import datetime
 
 
-def write_directory_info_to_file(file_path):
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    current_directory = os.getcwd()
-    contents = os.listdir(current_directory)
-
-    # Create a string containing the directory information
-    directory_info = (
-        f"Timestamp: {timestamp}\nCurrent Directory: {current_directory}\n\nContents:\n"
-    )
-
-    for item in contents:
-        full_path = os.path.join(current_directory, item)
-        stat_info = os.stat(full_path)
-        directory_info += f"{item} - Size: {stat_info.st_size} bytes, Last Modified: {stat_info.st_mtime}\n"
-
-    # Write the directory information to the specified file
-    with open(file_path, "w") as file:
-        file.write(directory_info)
-
-
-write_directory_info_to_file("debug_directory_info_1.txt")
-
-
 proj_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(proj_dir)
 
-write_directory_info_to_file("debug_directory_info_2.txt")
 
 from data.data import co2d
 
 
-title_for_tab = "hd co2 monitor"
+title_for_tab = "CO₂ Monitor Heidelberg"
 app = dash.Dash(
     title=title_for_tab,
     update_title=None,

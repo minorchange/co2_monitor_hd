@@ -21,15 +21,15 @@ def fig_emissions_measured_vs_plan(co2d):
 
     traces_bar = [
         go.Bar(
-            x=co2d.df_balance.index,
-            y=co2d.df_balance[c],
+            x=co2d.df_emissions_hd.index,
+            y=co2d.df_emissions_hd[c],
             name=df_e_nicenames[i],
             marker_color=barcolors[i],
         )
         for i, c in enumerate(individual_measurements_colnames)
     ]
 
-    s_e = co2d.df_balance["co2_kt_total"]
+    s_e = co2d.df_emissions_hd["co2_kt_total"]
     trace_e_sum = go.Scatter(
         x=s_e.index,
         y=s_e.values,

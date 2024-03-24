@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 
-def read_emissions():
+def read_emissions_hd():
     print("---->BLUBB")
     print(os.getcwd())
     print(os.listdir(os.getcwd()))
@@ -49,23 +49,55 @@ def read_emissions():
     return df_all
 
 
+def read_emissions_global_t():
+    emissions_global = pd.read_csv(
+        "data/raw/co2_emissions_world_byyear_ourworldindata.csv", index_col=0
+    )
+    return emissions_global
+
+
+def emissions_global_between_20016_and_latest_kt():
+    df_emissions_glob = read_emissions_global_t()
+    _, start_date = read_global_budget_latest_kt_df()
+    sum_kt = (
+        df_emissions_glob.loc[2016 : start_date.year - 1, "emissions_t"].sum() / 1000
+    )
+    return sum_kt
+
+
+def emissions_global_between_20016_and_latest_table_kt():
+    df_glob, start_date = read_global_budget_latest_kt_df()
+
+    sum = emissions_global_between_20016_and_latest_kt()
+    df_sum = df_glob.replace(to_replace=df_glob.values, value=sum)
+    return df_sum
+
+
 def read_plan_from_csv():
     df_plan = pd.read_csv("data/raw/hd_emissions_plan_bisko.csv", index_col=0)
     return df_plan
 
 
-def read_global_budget_Gt_df():
+def read_global_budget_latest_kt_df():
     with open(
         "data/raw/co2_budget_ipcc_2021_physical_science_basis_summary_for_policymakers.json",
         "r",
     ) as json_file:
         data_json = json.load(json_file)
 
-    df_read = pd.DataFrame(data_json["dataframe"])
+    Gt2kt = 1000000
+    df_read = pd.DataFrame(data_json["dataframe"]) * Gt2kt
     df_read.set_index(pd.Index(data_json["index"]), inplace=True)
     # first_year_the_budget_is_spend = data_json["first_year_the_budget_is_spend"]
     start_date = datetime.strptime(data_json["start_date"], data_json["date_format"])
     return df_read, start_date
+
+
+def global_budget_2016_kt_df():
+    df_latest, _ = read_global_budget_latest_kt_df()
+    df_emissions = emissions_global_between_20016_and_latest_table_kt()
+    df_budget_2016 = df_latest + df_emissions
+    return df_budget_2016
 
 
 def bisko_underestimate_factor():
@@ -114,15 +146,15 @@ def portion_of_population_hd_2020():
     return ratio
 
 
-def read_budget_hd_kt_df():
-    df_glob, start_date = read_global_budget_Gt_df()
-    Gt2kt = 1000000
-    df_hd_kt = df_glob * portion_of_population_hd_2020() * Gt2kt
+def read_budget_2016_hd_kt_df():
+    start_date = 2016
+    df_glob = global_budget_2016_kt_df()
+    df_hd_kt = df_glob * portion_of_population_hd_2020()
     return df_hd_kt, start_date
 
 
-def read_bisko_budget_hd_kt_df():
-    df_hd, start_date = read_budget_hd_kt_df()
+def read_bisko_budget_2016_hd_kt_df():
+    df_hd, start_date = read_budget_2016_hd_kt_df()
     df_hd_bisko_kt = df_hd * bisko_underestimate_factor()
     return df_hd_bisko_kt, start_date
 
@@ -136,6 +168,6 @@ def read_bisko_budget():
 if __name__ == "__main__":
     budget_start_year, budget_start_value_kt = read_bisko_budget()
     print(budget_start_year, budget_start_value_kt)
-    df_hd_bisko_kt, start_date = read_bisko_budget_hd_kt_df()
+    df_hd_bisko_kt, start_date = read_bisko_budget_2016_hd_kt_df()
     print(df_hd_bisko_kt, start_date)
     read_plan_from_csv()

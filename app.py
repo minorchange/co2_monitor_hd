@@ -43,7 +43,12 @@ card_table_compare_plans = card_table_compare_plans(app, co2d)
 app, card_table_budgets = card_table_budgets(app, co2d)
 
 
-app.layout = html.Div(
+def square(x):
+    s = x * x
+    return
+
+
+a = html.Div(
     [
         header,
         dbc.Container(
@@ -75,6 +80,7 @@ app.layout = html.Div(
         html.Footer(card_about),
     ]
 )
+app.layout = a
 
 
 if __name__ == "__main__":

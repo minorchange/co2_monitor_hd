@@ -52,16 +52,18 @@ def cumulated_emissions(df, scenario_name, from_y=None, to_y=None):
 
 
 def all_relevant_measured_emissions(co2d):
-    last_year_with_measured_data = co2d.df_balance.co2_kt_total.dropna().index.max()
+    last_year_with_measured_data = (
+        co2d.df_emissions_hd.co2_kt_total.dropna().index.max()
+    )
 
     where_balance_after_budget_start = (
-        co2d.df_balance.co2_kt_total.index >= co2d.budget_start_date.year
+        co2d.df_emissions_hd.co2_kt_total.index >= co2d.budget_latest_start_date.year
     )
     where_balance_measured_data_available = (
-        co2d.df_balance.co2_kt_total.index <= last_year_with_measured_data
+        co2d.df_emissions_hd.co2_kt_total.index <= last_year_with_measured_data
     )
 
-    all_relevant_years_with_measured_data = co2d.df_balance.loc[
+    all_relevant_years_with_measured_data = co2d.df_emissions_hd.loc[
         where_balance_after_budget_start & where_balance_measured_data_available,
         "co2_kt_total",
     ]
@@ -71,12 +73,14 @@ def all_relevant_measured_emissions(co2d):
 
 
 def all_relevant_concluded_planned_years(co2d):
-    last_year_with_measured_data = co2d.df_balance.co2_kt_total.dropna().index.max()
+    last_year_with_measured_data = (
+        co2d.df_emissions_hd.co2_kt_total.dropna().index.max()
+    )
 
     df_plan = co2d.df_plan
 
     now = datetime.datetime.now()
-    assert co2d.budget_start_date < now
+    assert co2d.budget_latest_start_date < now
     current_year = now.year
 
     where_no_measured_data_exists = df_plan.index > last_year_with_measured_data
@@ -119,7 +123,7 @@ def cumulated_emissions_this_second_plan(co2d):
 
 
 def emissions_measured_or_planned(co2d):
-    df_prio = co2d.df_balance.co2_kt_total.dropna()
+    df_prio = co2d.df_emissions_hd.co2_kt_total.dropna()
     df_secondary = co2d.df_plan["planned emissions"]
     df = df_prio.combine_first(df_secondary)
     return df
@@ -164,12 +168,14 @@ def when_budget_is_spend(df, scenario_name, budget_kt, from_y):
 
 
 def when_budget_is_spend_plan(co2d, budget_kt):
-    df_plan = co2d.df_plan
-    df_plan = df_plan[df_plan.index >= co2d.budget_start_date.year]
+    # df_plan = co2d.df_plan
+    # df_plan = df_plan[df_plan.index >= 2016]
+    df_measure_or_plan = emissions_measured_or_planned(co2d)
+    df_measure_or_plan = df_measure_or_plan.loc[df_measure_or_plan.index >= 2016]
 
     def first_year_the_budget_is_depleted(budget_kt):
-        first_year_the_budget_is_depleted = df_plan.index[
-            df_plan["planned emissions"].cumsum() > budget_kt
+        first_year_the_budget_is_depleted = df_measure_or_plan.index[
+            df_measure_or_plan.cumsum() > budget_kt
         ].min()
         return first_year_the_budget_is_depleted
 
@@ -179,25 +185,27 @@ def when_budget_is_spend_plan(co2d, budget_kt):
     if math.isnan(first_year_the_budget_is_depleted(budget_kt)):
         return None
 
-    s = emissions_measured_or_planned(co2d)
+    s = df_measure_or_plan
     assert not s.isnull().any()
-    s = s[s.index >= co2d.budget_start_date.year]
+    s = s[s.index >= 2016]
     s = s[s.index <= year_before_budget_is_depleted(budget_kt)]
 
     sum_whole_years = s.sum()
     assert sum_whole_years > 0
-    assert sum_whole_years < budget_kt
+    # assert sum_whole_years < budget_kt
 
-    emissins_in_depletion_year = emissions_measured_or_planned(co2d)[
+    emissions_in_depletion_year = emissions_measured_or_planned(co2d)[
         first_year_the_budget_is_depleted(budget_kt)
     ]
 
-    assert budget_kt - sum_whole_years >= 0
-    assert budget_kt - sum_whole_years < emissins_in_depletion_year
+    # assert budget_kt - sum_whole_years >= 0
+    assert budget_kt - sum_whole_years < emissions_in_depletion_year
 
     fraction_of_depletion_year = (
         budget_kt - sum_whole_years
-    ) / emissins_in_depletion_year
+    ) / emissions_in_depletion_year
+    assert fraction_of_depletion_year >= 0
+    assert fraction_of_depletion_year < 1
 
     def date_from_year_fraction(fraction, year):
         if not (0 <= fraction < 1):

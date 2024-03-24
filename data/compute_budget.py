@@ -7,29 +7,49 @@ import numpy as np
 
 
 def get_remaining_paris_budget_next_deadline(co2d):
-    df_emissions = emissions_measured_or_planned(co2d)
 
     now = datetime.datetime.now()
 
-    last_year = now.year - 1
+    # df_date = co2d.df_budget_hd_bisko_kt.applymap(
+    #     lambda x: when_budget_is_spend_plan(co2d, x)
+    # )
+    # next_deadline = df_date[df_date > now].min().min()
 
-    df_fully = df_emissions[
-        (df_emissions.index <= last_year)
-        & (df_emissions.index >= co2d.budget_start_date.year)
-    ]
+    # row_index = df_date.index[df_date.isin([next_deadline]).any(axis=1)][0]
+    # col_index = df_date.columns[df_date.isin([next_deadline]).any()][0]
 
-    total_emissions_full_years_kt = df_fully.sum()
+    # return (
+    #     remaining_budget_kt,
+    #     when_budget_is_depleted,
+    #     row_index,
+    #     col_index,
+    # )
 
-    this_year_completion_factor = (
-        now - datetime.datetime(now.year, 1, 1)
-    ).total_seconds() / (60 * 60 * 24 * 365.25)
-    emissions_this_year_so_far_kt = (
-        df_emissions.loc[now.year] * this_year_completion_factor
-    )
+    df_emissions = emissions_measured_or_planned(co2d)
 
-    all_emiissions_up_to_now_kt = (
-        total_emissions_full_years_kt + emissions_this_year_so_far_kt
-    )
+    def _contribution_of_all_completed_years(df_emissions):
+
+        last_year = now.year - 1
+
+        df_fully = df_emissions[
+            (df_emissions.index <= last_year) & (df_emissions.index >= 2016)
+        ]
+
+        total_emissions_full_years_kt = df_fully.sum()
+        return total_emissions_full_years_kt
+
+    def _contribution_of_current_year(df_emissions):
+        this_year_completion_factor = (
+            now - datetime.datetime(now.year, 1, 1)
+        ).total_seconds() / (60 * 60 * 24 * 365.25)
+        emissions_this_year_so_far_kt = (
+            df_emissions.loc[now.year] * this_year_completion_factor
+        )
+        return emissions_this_year_so_far_kt
+
+    all_emissions_up_to_now_kt = _contribution_of_all_completed_years(
+        df_emissions
+    ) + _contribution_of_current_year(df_emissions)
 
     def find_smallest_non_zero_values(df):
         min_value = df[df >= 0].min().min()
@@ -41,7 +61,7 @@ def get_remaining_paris_budget_next_deadline(co2d):
         return min_value, df.index[row_index], df.columns[col_index]
 
     remaining_budget_kt, row_index, col_index = find_smallest_non_zero_values(
-        co2d.df_budget_hd_bisko_kt - all_emiissions_up_to_now_kt
+        co2d.df_budget_hd_bisko_kt - all_emissions_up_to_now_kt
     )
 
     original_budget_that_is_now_closest_to_beeing_depleted = (
@@ -101,9 +121,9 @@ def get_remaining_paris_budget(df):
 
 
 if __name__ == "__main__":
-    from read_data import read_emissions
+    from read_data import read_emissions_hd
 
-    df_emissions = read_emissions()
+    df_emissions = read_emissions_hd()
     remaining_budget_kt, when_budget_is_depleted = get_remaining_paris_budget(
         df_emissions, trend
     )

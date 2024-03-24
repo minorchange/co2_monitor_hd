@@ -362,7 +362,7 @@ def card_faq(app, co2d):
 
 def card_diff_year(app, co2d):
     g_compare_abs = dcc.Graph(
-        id="gcomp_abs_year", figure=fig_target_diff_year(co2d.df_balance)
+        id="gcomp_abs_year", figure=fig_target_diff_year(co2d.df_emissions_hd)
     )
 
     details = (
@@ -433,14 +433,14 @@ def card_table_compare_plans(app, co2d):
         ["scenario_trendlin_kt", "Trend"],
     ]:
         projected_emissions_kt = cumulated_emissions(
-            co2d.df_balance, scenario_name, from_y=budget_start_year
+            co2d.df_emissions_hd, scenario_name, from_y=budget_start_year
         )
         percentage_budget = 100 * (projected_emissions_kt / bisko_budget_start_value_kt)
 
-        year0 = when_scenario_0(co2d.df_balance, scenario_name)
+        year0 = when_scenario_0(co2d.df_emissions_hd, scenario_name)
 
         year_budget_depleted = when_budget_is_spend(
-            co2d.df_balance,
+            co2d.df_emissions_hd,
             scenario_name,
             bisko_budget_start_value_kt,
             from_y=budget_start_year,
@@ -516,20 +516,29 @@ def nice_temp_precent_table(df, id):
 
 
 def card_table_budgets(app, co2d):
-    # Glob
-    table_glob = nice_temp_precent_table(
-        co2d.df_budget_global_kt.round(2).astype(str) + " kt", "table_budgets_global"
+    # Global Budget (latest numbers from ipcc)
+    table_glob_latest = nice_temp_precent_table(
+        co2d.df_budget_latest_global_kt.round(2).astype(str) + " kt",
+        "table_budgets_global",
     )
-    text_glob = html.P(
+    text_glob_latest = html.P(
         [
             "Aus einem ",
             html.A(
                 "Bericht des IPCCs von 2021",
                 href="https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_SPM.pdf",
             ),
-            f" (S.29) geht hervor, welche Menenge CO₂ die gesamte Menschheit ab dem Jahr {co2d.budget_start_date.year} noch emittieren darf um die entsprechenden Temperaturziele (+1.5°C, +1.7°C, +2.0°C) mit einer entsprechenden Wahrscheinlichkeit (17%-83%) zu erreichen.",
+            f" (S.29) geht hervor, welche Menenge CO₂ die gesamte Menschheit ab dem Jahr {co2d.budget_latest_start_date.year} noch emittieren darf um die entsprechenden Temperaturziele (+1.5°C, +1.7°C, +2.0°C) mit einer entsprechenden Wahrscheinlichkeit (17%-83%) zu erreichen.",
         ]
     )
+
+    table_emissions_glob_2016_to_latest = nice_temp_precent_table(
+        co2d.df_emissions_glob_between_2016_and_latest.astype(str) + " kt",
+        "table_emissions_global_from_2016_to_latest",
+    )
+
+    # Most accurate estimation for the wworldwide Budget starting at the beginning of 2016, just after the End of the Paris Agreement
+    # table_glob_2016 = nice_temp_precent_table
 
     # HD
     table_hd = nice_temp_precent_table(
@@ -621,13 +630,21 @@ def card_table_budgets(app, co2d):
         [
             dcc.Tabs(
                 id="tabs",
-                value="tab-4",
+                value="tab-6",
                 children=[
-                    dcc.Tab(label="1) Globales Budget", value="tab-1"),
-                    dcc.Tab(label="2) Gesammt Budget HD", value="tab-2"),
-                    dcc.Tab(label="3) Bisko Budget HD", value="tab-3"),
-                    dcc.Tab(label="4) Budget Ende", value="tab-4"),
-                    # dcc.Tab(label="Remaining Budget", value="tab-4"),
+                    dcc.Tab(
+                        label=f"1) Globales Budget ab {co2d.budget_latest_start_date.year}",
+                        value="tab-1",
+                    ),
+                    dcc.Tab(
+                        label=f"2) Globale Emissionen 2016 - {co2d.budget_latest_start_date.year - 1}",
+                        value="tab-2",
+                    ),
+                    dcc.Tab(label="3) Globales Budget ab 2016", value="tab-3"),
+                    dcc.Tab(label="4) Gesammt Budget HD", value="tab-4"),
+                    dcc.Tab(label="5) Bisko Budget HD", value="tab-5"),
+                    dcc.Tab(label="6) Budget Ende", value="tab-6"),
+                    # dcc.Tab(label="Remaining Budget", value="tab-6"),
                 ],
             ),
             html.Div(id="tabs-content"),
@@ -641,16 +658,22 @@ def card_table_budgets(app, co2d):
     )
     def render_content(n_intervals, tab):
         if tab == "tab-1":
-            return html.Div([html.P(), table_glob, html.P(), text_glob])
+            return html.Div([html.P(), table_glob_latest, html.P(), text_glob_latest])
         elif tab == "tab-2":
-            return html.Div([html.P(), table_hd, html.P(), text_hd])
+            return html.Div(
+                [html.P(), table_emissions_glob_2016_to_latest, html.P(), text_hd]
+            )
         elif tab == "tab-3":
-            return html.Div([html.P(), table_hd_bisko, html.P(), text_hd_bisko])
+            return html.Div([html.P(), table_hd, html.P(), text_hd])
         elif tab == "tab-4":
+            return html.Div([html.P(), table_hd, html.P(), text_hd])
+        elif tab == "tab-5":
+            return html.Div([html.P(), table_hd_bisko, html.P(), text_hd_bisko])
+        elif tab == "tab-6":
             return html.Div(
                 [html.P(), table_hd_deplation_date, html.P(), text_hd_depletion_date]
             )
-        # elif tab == "tab-4":
+        # elif tab == "tab-6":
         #     return html.Div([table_hd_remaining_tonns, html.P(), text_hd_remaining])
 
     card_table = dbc.Card(

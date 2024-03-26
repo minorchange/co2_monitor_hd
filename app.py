@@ -1,9 +1,9 @@
-import dash_html_components as html
+from dash import html
 import dash_bootstrap_components as dbc
-import dash_core_components as dcc
+from dash import dcc
 import dash
 import os
-from colors import *
+from components.colors import *
 
 from datetime import datetime
 
@@ -23,64 +23,67 @@ app = dash.Dash(
 )
 
 
-from cards import (
+from components.cards import (
     header,
-    card_main_compare,
-    card_paris,
-    card_diff_year,
-    card_faq,
-    card_about,
-    card_table_compare_plans,
-    card_table_budgets,
+    create_card_main_compare,
+    create_card_paris,
+    create_card_diff_year,
+    create_card_faq,
+    card_imprint,
+    create_card_table_compare_plans,
+    create_card_table_budgets,
 )
 
-app, main_compare = card_main_compare(app, co2d)
-app, card_paris = card_paris(app, co2d)
-card_diff_year = card_diff_year(app, co2d)
-card_faq = card_faq(app, co2d)
-card_about = card_about()
-card_table_compare_plans = card_table_compare_plans(app, co2d)
-app, card_table_budgets = card_table_budgets(app, co2d)
+app, main_compare = create_card_main_compare(app, co2d)
+app, card_paris = create_card_paris(app, co2d)
+card_diff_year = create_card_diff_year(app, co2d)
+card_faq = create_card_faq(app, co2d)
+card_about = card_imprint()
+card_table_compare_plans = create_card_table_compare_plans(app, co2d)
+app, card_table_budgets = create_card_table_budgets(app, co2d)
 
 
-def square(x):
-    s = x * x
-    return
+# container_details_budget = html.Div(
+#     [
+#         header,
+#         dbc.Container(
+#             [
+#                 html.P(),
+#                 dbc.Row(
+#                     [
+#                         dbc.Col([card_paris, html.P(), card_faq], lg=4),
+#                         dbc.Col(
+#                             [
+#                                 main_compare,
+#                                 html.P(),
+#                                 card_table_budgets,
+#                                 html.P(),
+#                             ],
+#                             lg=8,
+#                         ),
+#                     ]
+#                 ),
+#                 dcc.Interval(
+#                     id="interval-component",
+#                     interval=1 * 1000,  # in milliseconds
+#                     n_intervals=0,
+#                 ),
+#             ],
+#             fluid=True,
+#         ),
+#         html.P(),
+#         html.Footer(card_about),
+#     ]
+# )
 
-
-a = html.Div(
-    [
-        header,
-        dbc.Container(
-            [
-                html.P(),
-                dbc.Row(
-                    [
-                        dbc.Col([card_paris, html.P(), card_faq], lg=4),
-                        dbc.Col(
-                            [
-                                main_compare,
-                                html.P(),
-                                card_table_budgets,
-                                html.P(),
-                            ],
-                            lg=8,
-                        ),
-                    ]
-                ),
-                dcc.Interval(
-                    id="interval-component",
-                    interval=1 * 1000,  # in milliseconds
-                    n_intervals=0,
-                ),
-            ],
-            fluid=True,
-        ),
-        html.P(),
-        html.Footer(card_about),
-    ]
+from components.container.container_details_budget import (
+    create_container_details_budget,
 )
-app.layout = a
+
+container_details_budget = create_container_details_budget(app)
+
+
+app.layout = container_details_budget
 
 
 if __name__ == "__main__":

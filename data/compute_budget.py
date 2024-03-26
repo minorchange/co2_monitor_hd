@@ -2,7 +2,10 @@ import os, sys
 import datetime
 from dateutil.relativedelta import relativedelta
 from data.read_data import read_bisko_budget
-from scenarios import emissions_measured_or_planned, when_budget_is_spend_plan
+from components.scenarios import (
+    emissions_measured_or_planned,
+    when_budget_is_spend_plan,
+)
 import numpy as np
 
 
@@ -10,7 +13,7 @@ def get_remaining_paris_budget_next_deadline(co2d):
 
     now = datetime.datetime.now()
 
-    # df_date = co2d.df_budget_hd_bisko_kt.applymap(
+    # df_date = co2d.df_budget_hd_bisko_kt.map(
     #     lambda x: when_budget_is_spend_plan(co2d, x)
     # )
     # next_deadline = df_date[df_date > now].min().min()

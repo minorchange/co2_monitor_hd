@@ -11,7 +11,7 @@ from data.read_data import (
 )
 from data.target import add_targets
 from data.trend import add_trend
-from scenarios import (
+from components.scenarios import (
     add_scenarios,
     when_scenario_0,
     cumulated_emissions,

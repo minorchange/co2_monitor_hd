@@ -1,16 +1,18 @@
 import numpy as np
 import pandas as pd
-import dash_html_components as html
-import dash_table
+from dash import dash_table, html
 from dash.dependencies import Input, Output, State
-import dash_core_components as dcc
+from dash import dcc
 import dash_bootstrap_components as dbc
-from dash_html_components import H4
-from figures import fig_emissions_measured_vs_plan, fig_target_diff_year
-from custom_components import collapse_button, led
+from dash.html import H4
+from components.figures import fig_emissions_measured_vs_plan, fig_target_diff_year
+
+# from components.custom_components import collapse_button, led
+from components.custom_components.custom_collapse_button import create_collapse_button
+from components.custom_components.custom_led import create_led
 from data.compute_budget import get_remaining_paris_budget_next_deadline
 from data.read_data import read_bisko_budget
-from scenarios import (
+from components.scenarios import (
     cumulated_emissions,
     when_budget_is_spend,
     when_budget_is_spend_plan_nicestr,
@@ -21,26 +23,39 @@ from scenarios import (
 
 header = dbc.Navbar(
     html.A(
-        dbc.Row(
-            [
-                dbc.Col(html.Img(src="/assets/klimaentscheid-logo.jpg", height="45px")),
-                dbc.Col(
-                    dbc.NavbarBrand(
-                        "CO₂-Monitor Heidelberg",
-                        className="ml-2",
-                        # style={"color": "red", "font-weight": "bold"},
-                    )
-                ),
-            ],
-            align="center",
+        dbc.NavbarBrand(
+            "CO₂-Monitor Heidelberg",
+            className="ml-auto mr-auto text-center",
         ),
-        href="https://klimaentscheid-heidelberg.de",
         className="g-0",  # no gutters
     ),
     sticky="top",
     color="white",
     style={"border-width": "0px", "box-shadow": "0 6px 6px -6px #999"},
 )
+
+# header = dbc.Navbar(
+#     html.A(
+#         dbc.Row(
+#             [
+#                 dbc.Col(html.Img(src="/assets/klimaentscheid-logo.jpg", height="45px")),
+#                 dbc.Col(
+#                     dbc.NavbarBrand(
+#                         "CO₂-Monitor Heidelberg",
+#                         className="ml-2",
+#                         # style={"color": "red", "font-weight": "bold"},
+#                     )
+#                 ),
+#             ],
+#             align="center",
+#         ),
+#         href="https://klimaentscheid-heidelberg.de",
+#         className="g-0",  # no gutters
+#     ),
+#     sticky="top",
+#     color="white",
+#     style={"border-width": "0px", "box-shadow": "0 6px 6px -6px #999"},
+# )
 link_ifeu18 = html.A(
     '"CO2-Bilanzierung bis 2018 für die Stadt Heidelberg"',
     href="https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents_E2103137505/heidelberg/Objektdatenbank/31/PDF/01_Ifeu_Studie_CO2_Bilanzierung_bis_2018_fuer_die_Stadt_Heidelberg.pdf",
@@ -57,7 +72,7 @@ link_bisko = html.A(
 )
 
 
-def card_main_compare(app, co2d):
+def create_card_main_compare(app, co2d):
     link_ifeu_homepage = html.A(
         "Institut für Energie und Umweltforschung Heidelberg (ifeu)",
         href="https://www.ifeu.de/",
@@ -121,7 +136,7 @@ def card_main_compare(app, co2d):
         ),
     ]
 
-    app, cbutton_maincompare = collapse_button(
+    app, cbutton_maincompare = create_collapse_button(
         app,
         "Weitere Infos",
         dbc.CardBody(details_data + details_targets),
@@ -147,7 +162,7 @@ def card_main_compare(app, co2d):
     return app, card_main_compare
 
 
-def card_paris(app, co2d):
+def create_card_paris(app, co2d):
     link_umweltrat_budget_de = html.A(
         "Deutsche Umweltrat",
         href="https://www.umweltrat.de/SharedDocs/Downloads/EN/01_Environmental_Reports/2020_08_environmental_report_chapter_02.pdf?__blob=publicationFile&v=5",
@@ -180,7 +195,7 @@ def card_paris(app, co2d):
         remaining_budget_t = remaining_budget_kt * 1000
         remaining_budget_t_str = "{:.2f}".format(remaining_budget_t)
 
-        return [led(remaining_budget_t_str)]
+        return [create_led(remaining_budget_t_str)]
 
     @app.callback(
         Output("led_endyear", "children"),
@@ -219,9 +234,13 @@ def card_paris(app, co2d):
             [
                 dbc.Row(
                     [
-                        html.Div((led(str(when_budget_is_depleted.day).zfill(2)))),
-                        html.Div(led(str(when_budget_is_depleted.month).zfill(2))),
-                        html.Div(led(str(when_budget_is_depleted.year))),
+                        html.Div(
+                            (create_led(str(when_budget_is_depleted.day).zfill(2)))
+                        ),
+                        html.Div(
+                            create_led(str(when_budget_is_depleted.month).zfill(2))
+                        ),
+                        html.Div(create_led(str(when_budget_is_depleted.year))),
                     ],
                     style={"marginLeft": "0px"},
                 ),
@@ -232,7 +251,7 @@ def card_paris(app, co2d):
             ]
         )
 
-        # return led(led_content)
+        # return create_led(led_content)
 
     details = [
         html.H5("Das CO₂-Budget der Stadt Heidelberg"),
@@ -285,7 +304,9 @@ def card_paris(app, co2d):
             ]
         ),
     ]
-    app, cbutton_paris = collapse_button(app, "Weitere Infos", dbc.CardBody(details))
+    # app, cbutton_paris = create_collapse_button(
+    #     app, "Weitere Infos", dbc.CardBody(details)
+    # )
 
     card_paris = dbc.Card(
         dbc.CardBody(
@@ -314,7 +335,7 @@ def card_paris(app, co2d):
     return app, card_paris
 
 
-def card_faq(app, co2d):
+def create_card_faq(app, co2d):
     teaser_tex = html.Div(
         [
             html.H5("Bewertbarkeit von Klimapolitik"),
@@ -360,7 +381,7 @@ def card_faq(app, co2d):
     return card_faq
 
 
-def card_diff_year(app, co2d):
+def create_card_diff_year(app, co2d):
     g_compare_abs = dcc.Graph(
         id="gcomp_abs_year", figure=fig_target_diff_year(co2d.df_emissions_hd)
     )
@@ -370,14 +391,16 @@ def card_diff_year(app, co2d):
             "Die beiden Graphen zeigen die Entwicklung der jährlichen Differenz (in Kilotonnen) zwischen den gemessenen Emissionen und den linearen Zielpfade zur Klimaneutralität im Jahr 2030 bzw. 2040. Die CO₂-Emissionen der Stadt Heidelberg weichen, bis zum Jahr 2018 immer stärker von den Zielpfaden ab. Danach sehen wir eine Annäherung an beide Zielpfade. Wir notieren allerdings weiterhin eine Untererfüllung der Ziele. Würden die tatsächlichen Emissionen die Zielvorgaben immer erreichen wäre der entsprechende Graph hier immer auf Null. Da es sich mit der Klimaerwärmung um ein kumulatives Problem handelt ist ein Erreichen der Nullline nicht mehr genug. Um vergangene Versäumnisse zu kompensieren müssen wir unsere Ziele in Zukunft übererfüllen. Im Falle einer Übererfüllung sähen wir negative Werte."
         ),
     )
-    app, cbutton_diff = collapse_button(app, "Weitere Infos", dbc.CardBody(details))
+    # app, cbutton_diff = create_collapse_button(
+    #     app, "Weitere Infos", dbc.CardBody(details)
+    # )
 
     card_diff_year = dbc.Card(dbc.CardBody([g_compare_abs, cbutton_diff]))
 
     return card_diff_year
 
 
-def card_about():
+def card_imprint():
     link_klimaentscheidhd = html.A(
         "Klimaentscheid Heidelberg",
         href="ttp://klimaentscheid-heidelberg.de",
@@ -413,7 +436,28 @@ def card_about():
     return card_imprint
 
 
-def card_table_compare_plans(app, co2d):
+footer = html.Footer(
+    card_imprint(),
+    style={
+        "position": "fixed",
+        "bottom": 0,
+        "width": "100%",
+        # "background-color": "#f8f9fa",
+        # "padding": "10px",
+        "text-align": "center",
+    },
+)
+
+# footer = dbc.Navbar(
+#     card_imprint(),
+#     # sticky="bottom",
+#     fixed="bottom",
+#     # color="white",
+#     # style={"border-width": "0px", "box-shadow": "0 -6px 6px -6px #999"},
+# )
+
+
+def create_card_table_compare_plans(app, co2d):
     budget_start_year, bisko_budget_start_value_kt = read_bisko_budget()
 
     df_t = pd.DataFrame()
@@ -474,11 +518,11 @@ def card_table_compare_plans(app, co2d):
         ),
     ]
 
-    app, cbutton_table = collapse_button(
-        app,
-        "Weitere Infos",
-        dbc.CardBody(details_table),
-    )
+    # app, cbutton_table = create_collapse_button(
+    #     app,
+    #     "Weitere Infos",
+    #     dbc.CardBody(details_table),
+    # )
 
     card_table = dbc.Card(
         dbc.CardBody(
@@ -487,7 +531,7 @@ def card_table_compare_plans(app, co2d):
                 html.P(),
                 table,
                 html.P(),
-                cbutton_table,
+                # cbutton_table,
             ]
         )
     )
@@ -515,7 +559,7 @@ def nice_temp_precent_table(df, id):
     return table
 
 
-def card_table_budgets(app, co2d):
+def create_card_table_budgets(app, co2d):
     # Global Budget (latest numbers from ipcc)
     table_glob_latest = nice_temp_precent_table(
         co2d.df_budget_latest_global_kt.round(2).astype(str) + " kt",
@@ -607,7 +651,7 @@ def card_table_budgets(app, co2d):
     text_hd_remaining = html.P("Blubb BLubb HD Bisko Remaining")
 
     # HD Deplation Date
-    df_date = co2d.df_budget_hd_bisko_kt.applymap(
+    df_date = co2d.df_budget_hd_bisko_kt.map(
         lambda x: when_budget_is_spend_plan_nicestr(co2d, x)
     )
     table_hd_deplation_date = nice_temp_precent_table(
@@ -629,7 +673,7 @@ def card_table_budgets(app, co2d):
     t = html.Div(
         [
             dcc.Tabs(
-                id="tabs",
+                id="tabs-123",
                 value="tab-6",
                 children=[
                     dcc.Tab(
@@ -654,7 +698,7 @@ def card_table_budgets(app, co2d):
     # TODO: Somehow it does not work with both inputs. only tabs is working
     @app.callback(
         Output("tabs-content", "children"),
-        [Input("interval-component", "n_intervals"), Input("tabs", "value")],
+        [Input("interval-component", "n_intervals"), Input("tabs-123", "value")],
     )
     def render_content(n_intervals, tab):
         if tab == "tab-1":

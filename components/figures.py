@@ -1,5 +1,5 @@
 import plotly.graph_objs as go
-from colors import *
+from components.colors import *
 
 
 def fig_emissions_measured_vs_plan(co2d):

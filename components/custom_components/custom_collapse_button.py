@@ -1,12 +1,12 @@
 import uuid
 import dash_daq as daq
 from dash.dependencies import Input, Output, State
-import dash_html_components as html
+from dash import html
 import dash_bootstrap_components as dbc
-from colors import *
+from components.colors import *
 
 
-def collapse_button(app, button_text, cardbody_collapse):
+def create_collapse_button(app, button_text, cardbody_collapse):
     myuuid = uuid.uuid4()
     button_id = f"button_{myuuid}"
     collapse_id = f"collapse_{myuuid}"
@@ -32,8 +32,3 @@ def collapse_button(app, button_text, cardbody_collapse):
         ]
     )
     return app, div
-
-
-def led(nstr):
-    led = daq.LEDDisplay(value=nstr, color=trend_color, size=30)
-    return led

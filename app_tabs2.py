@@ -34,8 +34,8 @@ app, container_tldr = create_container_tldr(app)
 app, tabcomponent = create_tabcomponent(
     app,
     [
-        ("tl;dr", container_tldr),
-        ("Zahlen, Zahlen, Zahlen...", container_details_budget),
+        ("Kurze Zusammenfassung", container_tldr),
+        ("Details und Datengrundlage", container_details_budget),
     ],
 )
 app.layout = html.Div([header, tabcomponent])

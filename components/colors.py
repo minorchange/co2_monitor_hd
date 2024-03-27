@@ -18,8 +18,10 @@ text_color = "#212529"
 # target_50_color = "#ff2303"
 # trend_color = dark_accent
 
-_default_hyperlink_color = "#d9230f"
-trend_color = _default_hyperlink_color
+_default_hyperlink_color = "#fdfc01"
+# _default_hyperlink_color = "#d9230f"
+# trend_color = _default_hyperlink_color
+trend_color = "#d9230f"
 
 
 # barcolors = ["#cad2c5", "#84a98c", "#52796f", "#354f52", "#2f3e46"]

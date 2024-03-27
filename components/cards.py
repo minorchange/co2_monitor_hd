@@ -21,12 +21,56 @@ from components.scenarios import (
 )
 
 
+# header = dbc.Navbar(
+#     html.A(
+#         dbc.NavbarBrand(
+#             "CO₂-Monitor Heidelberg",
+#             className="mx-auto",  # Centering the text horizontally
+#             # style={
+#             #     "position": "absolute",
+#             #     "left": "50%",
+#             #     "transform": "translateX(-50%)",
+#             # },  # Centering the text absolutely
+#         ),
+#         style={
+#             "position": "absolute",
+#             "left": "50%",
+#             "transform": "translateX(-50%)",
+#             "zIndex": "1",
+#         },  # Adding positioning styles directly to html.A
+#         className="g-0",  # no gutters
+#         # dbc.NavbarBrand(
+#         #     "CO₂-Monitor Heidelberg",
+#         #     className="text-center w-100",
+#         # ),
+#         # className="g-0",  # no gutters
+#     ),
+#     sticky="top",
+#     color="white",
+#     style={"border-width": "0px", "box-shadow": "0 6px 6px -6px #999"},
+# )
+
 header = dbc.Navbar(
     html.A(
-        dbc.NavbarBrand(
-            "CO₂-Monitor Heidelberg",
-            className="ml-auto mr-auto text-center",
+        dbc.Row(
+            [
+                dbc.Col(
+                    html.Img(src="/assets/klimaentscheid-logo.jpg", height="45px"),
+                ),
+                dbc.Col(
+                    html.Img(src="assets/yx2.jpg", height="45px"),
+                ),
+                dbc.Col(
+                    dbc.NavbarBrand(
+                        "CO₂-Monitor Heidelberg",
+                        className="ml-2",
+                        # style={"color": "red", "font-weight": "bold"},
+                    )
+                ),
+            ],
+            align="center",
         ),
+        href="https://klimanetz-heidelberg.de/",
         className="g-0",  # no gutters
     ),
     sticky="top",
@@ -34,28 +78,7 @@ header = dbc.Navbar(
     style={"border-width": "0px", "box-shadow": "0 6px 6px -6px #999"},
 )
 
-# header = dbc.Navbar(
-#     html.A(
-#         dbc.Row(
-#             [
-#                 dbc.Col(html.Img(src="/assets/klimaentscheid-logo.jpg", height="45px")),
-#                 dbc.Col(
-#                     dbc.NavbarBrand(
-#                         "CO₂-Monitor Heidelberg",
-#                         className="ml-2",
-#                         # style={"color": "red", "font-weight": "bold"},
-#                     )
-#                 ),
-#             ],
-#             align="center",
-#         ),
-#         href="https://klimaentscheid-heidelberg.de",
-#         className="g-0",  # no gutters
-#     ),
-#     sticky="top",
-#     color="white",
-#     style={"border-width": "0px", "box-shadow": "0 6px 6px -6px #999"},
-# )
+
 link_ifeu18 = html.A(
     '"CO2-Bilanzierung bis 2018 für die Stadt Heidelberg"',
     href="https://www.heidelberg.de/site/Heidelberg_ROOT/get/documents_E2103137505/heidelberg/Objektdatenbank/31/PDF/01_Ifeu_Studie_CO2_Bilanzierung_bis_2018_fuer_die_Stadt_Heidelberg.pdf",
@@ -403,15 +426,19 @@ def create_card_diff_year(app, co2d):
 def card_imprint():
     link_klimaentscheidhd = html.A(
         "Klimaentscheid Heidelberg",
-        href="ttp://klimaentscheid-heidelberg.de",
+        href="http://klimaentscheid-heidelberg.de",
+    )
+    link_klimanetz = html.A(
+        "Klimanetz-Heidelberg",
+        href="https://klimanetz-heidelberg.de/",
     )
     link_github = html.A(
         "github",
         href="https://github.com/minorchange/co2_monitor_hd",
     )
     link_contactmail = html.A(
-        "info@klimaentscheid-heidelberg.de",
-        href="mailto: info@klimaentscheid-heidelberg.de",
+        "admin@klimanetz-heidelberg.de",
+        href="mailto: admin@klimanetz-heidelberg.de",
     )
 
     card_imprint = dbc.Card(
@@ -419,10 +446,11 @@ def card_imprint():
             [
                 html.P(
                     [
-                        "Dieses Dashboard wurde vom ",
+                        "Dieses Dashboard wurde initial vom ",
                         link_klimaentscheidhd,
-                        " erstellt.",
-                        "Der Quellcode ist frei verfügbar und kann  auf ",
+                        " erstellt und wird mittlerweile vom ",
+                        link_klimanetz,
+                        "betrieben und gewartet. Der Quellcode ist frei verfügbar und kann  auf ",
                         link_github,
                         " eingesehen werden.",
                         " Bei Fragen und Anregungen wenden Sie sich bitte an: ",
@@ -576,6 +604,33 @@ def create_card_table_budgets(app, co2d):
         ]
     )
 
+    text_emissions_global_from2016 = html.P(
+        [
+            "In Tab 3) werden wir die Globalen Emissionen zwischen 2016 und 2019 benötigen. Hier verwenden wir Daten von ",
+            html.A(
+                "ourworldindata.org",
+                href="https://ourworldindata.org/co2-emissions",
+            ),
+            f".",
+        ]
+    )
+
+    text_global_budget_2016 = html.P(
+        [
+            'Das Pariser Klimaabkommen wurde Ende 2015 während der UN-Klimakonferenz in Paris verabschiedet. In diesem Abkommen verpflichten sich die Staaten dazu, die globale Erwärmung auf "deutlich unter" zwei Grad Celsius im Vergleich zur vorindustriellen Zeit zu begrenzen und Anstrengungen für eine Begrenzung auf 1,5 Grad Celsius zu unternehmen. Dies bildet die Grundlage dafür, dass jedem Emittenten die Verantwortung für die Bewältigung eines Teils des globalen Problems zugeschrieben wird. Quantifizierbar wir das durch ein Budget. \n Einerseits möchten wir für die konkrete Bestimmung des Budgets berücksichtigen, dass der Zeitpunkt des Pariser Abkommens nahelegt, das globale Budget ab 2016 aufzuteilen. Andererseits streben wir danach, die aktuellsten und genauesten Berechnungen des tatsächlichen globalen Budgets einzubeziehen, um die Erfüllung der primären Temperaturziele wahrscheinlicher zu machen. Die derzeit aussagekräftigste Information über das globale Budget von 2016 ergibt sich aus der Summe des aktuellsten verfügbaren Budgets aus 1) und der seitdem emittierten Menge an CO2 aus 2).'
+        ]
+    )
+
+    text_glob_2016 = html.P(
+        [
+            "Aus einem ",
+            html.A(
+                "Bericht des IPCCs von 2021",
+                href="https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_SPM.pdf",
+            ),
+            f" (S.29) geht hervor, welche Menenge CO₂ die gesamte Menschheit ab dem Jahr {co2d.budget_latest_start_date.year} noch emittieren darf um die entsprechenden Temperaturziele (+1.5°C, +1.7°C, +2.0°C) mit einer entsprechenden Wahrscheinlichkeit (17%-83%) zu erreichen.",
+        ]
+    )
     table_emissions_glob_2016_to_latest = nice_temp_precent_table(
         co2d.df_emissions_glob_between_2016_and_latest.astype(str) + " kt",
         "table_emissions_global_from_2016_to_latest",
@@ -588,7 +643,7 @@ def create_card_table_budgets(app, co2d):
     table_hd = nice_temp_precent_table(
         co2d.df_budget_hd_kt.round(2).astype(str) + " kt", "table_budgets_hd"
     )
-    text_hd = html.P(
+    text_regional_budget = html.P(
         [
             "In einer ",
             html.A(
@@ -612,7 +667,7 @@ def create_card_table_budgets(app, co2d):
                 "Statista",
                 href="https://de.statista.com/statistik/daten/studie/375849/umfrage/entwicklung-der-gesamtbevoelkerung-in-heidelberg/",
             ),
-            " bekommen wir die Zahl der Heidelberger Bürger*innen (Im Jahr 2020: 158741). Daraus ergibt sich dass Heidelberg einen Anteil von c.a. 0,002% der Weltbevölkerung stellt. Das oben gezeigte Budget ist entsprechend anteilig vom globalen Budget aus 1) gerechnet.",
+            " bekommen wir die Zahl der Heidelberger Bürger*innen (Im Jahr 2020: 158741). Daraus ergibt sich dass Heidelberg einen Anteil von c.a. 0,002% der Weltbevölkerung stellt. Das oben gezeigte Budget ist entsprechend anteilig vom globalen Budget aus 3) gerechnet.",
         ]
     )
 
@@ -685,8 +740,8 @@ def create_card_table_budgets(app, co2d):
                         value="tab-2",
                     ),
                     dcc.Tab(label="3) Globales Budget ab 2016", value="tab-3"),
-                    dcc.Tab(label="4) Gesammt Budget HD", value="tab-4"),
-                    dcc.Tab(label="5) Bisko Budget HD", value="tab-5"),
+                    dcc.Tab(label="4) Gesammt Budget HD ab 2016", value="tab-4"),
+                    dcc.Tab(label="5) Bisko Budget HD ab 2016", value="tab-5"),
                     dcc.Tab(label="6) Budget Ende", value="tab-6"),
                     # dcc.Tab(label="Remaining Budget", value="tab-6"),
                 ],
@@ -705,12 +760,17 @@ def create_card_table_budgets(app, co2d):
             return html.Div([html.P(), table_glob_latest, html.P(), text_glob_latest])
         elif tab == "tab-2":
             return html.Div(
-                [html.P(), table_emissions_glob_2016_to_latest, html.P(), text_hd]
+                [
+                    html.P(),
+                    table_emissions_glob_2016_to_latest,
+                    html.P(),
+                    text_emissions_global_from2016,
+                ]
             )
         elif tab == "tab-3":
-            return html.Div([html.P(), table_hd, html.P(), text_hd])
+            return html.Div([html.P(), table_hd, html.P(), text_global_budget_2016])
         elif tab == "tab-4":
-            return html.Div([html.P(), table_hd, html.P(), text_hd])
+            return html.Div([html.P(), table_hd, html.P(), text_regional_budget])
         elif tab == "tab-5":
             return html.Div([html.P(), table_hd_bisko, html.P(), text_hd_bisko])
         elif tab == "tab-6":
@@ -725,7 +785,9 @@ def create_card_table_budgets(app, co2d):
             [
                 html.P(),
                 html.H5("CO₂ Budgets"),
-                html.P(),
+                html.P(
+                    'Die interessanten Informationen sind im hier im Tab "6) Budget Ende" dargestellt. Zur Gewährleistung der Transparenz werden die Berechnungslogik sowie sämtliche Quellen und Zwischenergebnisse optional in den Tabs 1) bis 5) dargestellt.'
+                ),
                 t,
             ]
         )

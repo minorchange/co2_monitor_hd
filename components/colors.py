@@ -21,7 +21,8 @@ text_color = "#212529"
 _default_hyperlink_color = "#fdfc01"
 # _default_hyperlink_color = "#d9230f"
 # trend_color = _default_hyperlink_color
-trend_color = "#d9230f"
+trend_color = "#d9230f"  # red
+# trend_color = "#FFC90C"  # key
 
 
 # barcolors = ["#cad2c5", "#84a98c", "#52796f", "#354f52", "#2f3e46"]
@@ -29,3 +30,13 @@ trend_color = "#d9230f"
 barcolors = ["#cb997e", "#ddbea9", "#b7b7a4", "#a5a58d", "#6b705c"]
 # barcolors = ["#a37d25", "#31250b", "#000000", "#594414", "#7c5f1c"]
 # barcolors = ["#506050", "#202010", "#040404", "#303040", "#504050"]
+
+
+# mint
+# 18BC9C
+
+# x yellow
+# FEFF03
+
+# ke yellow
+# #FFC90C

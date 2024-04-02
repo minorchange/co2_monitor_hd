@@ -450,7 +450,7 @@ def card_imprint():
                         link_klimaentscheidhd,
                         " erstellt und wird mittlerweile vom ",
                         link_klimanetz,
-                        "betrieben und gewartet. Der Quellcode ist frei verfügbar und kann  auf ",
+                        " betrieben und gewartet. Der Quellcode ist frei verfügbar und kann  auf ",
                         link_github,
                         " eingesehen werden.",
                         " Bei Fragen und Anregungen wenden Sie sich bitte an: ",
@@ -472,7 +472,7 @@ footer = html.Footer(
         "width": "100%",
         # "background-color": "#f8f9fa",
         # "padding": "10px",
-        "text-align": "center",
+        # "text-align": "center",
     },
 )
 
@@ -615,6 +615,10 @@ def create_card_table_budgets(app, co2d):
         ]
     )
 
+    table_global_budget_2016 = nice_temp_precent_table(
+        co2d.df_budget_2016_global_kt.round(2).astype(str) + " kt",
+        "table_global_budget_2016",
+    )
     text_global_budget_2016 = html.P(
         [
             'Das Pariser Klimaabkommen wurde Ende 2015 während der UN-Klimakonferenz in Paris verabschiedet. In diesem Abkommen verpflichten sich die Staaten dazu, die globale Erwärmung auf "deutlich unter" zwei Grad Celsius im Vergleich zur vorindustriellen Zeit zu begrenzen und Anstrengungen für eine Begrenzung auf 1,5 Grad Celsius zu unternehmen. Dies bildet die Grundlage dafür, dass jedem Emittenten die Verantwortung für die Bewältigung eines Teils des globalen Problems zugeschrieben wird. Quantifizierbar wir das durch ein Budget. \n Einerseits möchten wir für die konkrete Bestimmung des Budgets berücksichtigen, dass der Zeitpunkt des Pariser Abkommens nahelegt, das globale Budget ab 2016 aufzuteilen. Andererseits streben wir danach, die aktuellsten und genauesten Berechnungen des tatsächlichen globalen Budgets einzubeziehen, um die Erfüllung der primären Temperaturziele wahrscheinlicher zu machen. Die derzeit aussagekräftigste Information über das globale Budget von 2016 ergibt sich aus der Summe des aktuellsten verfügbaren Budgets aus 1) und der seitdem emittierten Menge an CO2 aus 2).'
@@ -723,8 +727,6 @@ def create_card_table_budgets(app, co2d):
         ]
     )
 
-    print()
-
     t = html.Div(
         [
             dcc.Tabs(
@@ -768,7 +770,9 @@ def create_card_table_budgets(app, co2d):
                 ]
             )
         elif tab == "tab-3":
-            return html.Div([html.P(), table_hd, html.P(), text_global_budget_2016])
+            return html.Div(
+                [html.P(), table_global_budget_2016, html.P(), text_global_budget_2016]
+            )
         elif tab == "tab-4":
             return html.Div([html.P(), table_hd, html.P(), text_regional_budget])
         elif tab == "tab-5":

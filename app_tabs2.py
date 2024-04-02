@@ -24,6 +24,9 @@ app = dash.Dash(
     title=title_for_tab,
     update_title=None,
     external_stylesheets=[dbc.themes.SIMPLEX],
+    # external_stylesheets=[dbc.themes.BOOTSTRAP],
+    # external_stylesheets=[dbc.themes.FLATLY],
+    # external_stylesheets=[dbc.themes.LUX],
     suppress_callback_exceptions=True,
 )
 

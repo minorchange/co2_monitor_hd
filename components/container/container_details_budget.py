@@ -57,9 +57,9 @@ def create_container_details_budget(app):
             html.P(),
             html.Footer(
                 card_imprint(),
-                style={
-                    "text-align": "center",
-                },
+                # style={
+                #     "text-align": "center",
+                # },
             ),
         ]
     )

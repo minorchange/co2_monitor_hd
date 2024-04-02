@@ -710,7 +710,7 @@ def create_card_table_budgets(app, co2d):
     text_hd_remaining = html.P("Blubb BLubb HD Bisko Remaining")
 
     # HD Deplation Date
-    df_date = co2d.df_budget_hd_bisko_kt.map(
+    df_date = co2d.df_budget_hd_bisko_kt.applymap(
         lambda x: when_budget_is_spend_plan_nicestr(co2d, x)
     )
     table_hd_deplation_date = nice_temp_precent_table(
